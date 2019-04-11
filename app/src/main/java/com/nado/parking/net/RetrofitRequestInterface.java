@@ -68,6 +68,35 @@ public interface RetrofitRequestInterface {
     Call<String> getCanPhonePay(@FieldMap Map<String, String> params);
 
 
+    /*新增油卡*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=petrol&a=add_card")
+    Call<String> addYouKaCard(@FieldMap Map<String, String> params);
+
+
+    /*设置默认油卡*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=petrol&a=set_card")
+    Call<String> setDefaultCard(@FieldMap Map<String, String> params);
+
+
+    /*获得油卡列表*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=petrol&a=card_list")
+    Call<String> getYouKaList(@FieldMap Map<String, String> params);
+
+
+    /*油卡下单*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=petrol&a=create_order")
+    Call<String> sendYouKaOrder(@FieldMap Map<String, String> params);
+
+    /*查找是否绑定油卡*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=petrol&a=index")
+    Call<String> checkHasBindYouKa(@FieldMap Map<String, String> params);
+
+
     /*水费充值订单*/
     @FormUrlEncoded
     @POST("index.php?g=app&m=life&a=create_order")

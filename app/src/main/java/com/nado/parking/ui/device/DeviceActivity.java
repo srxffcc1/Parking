@@ -1,19 +1,31 @@
 package com.nado.parking.ui.device;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Pair;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.amap.api.fence.GeoFenceClient;
+import com.amap.api.location.DPoint;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.Circle;
+import com.amap.api.maps.model.CircleOptions;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Poi;
+import com.amap.api.maps.model.PolylineOptions;
+import com.amap.api.maps.utils.SpatialRelationUtil;
+import com.amap.api.maps.utils.overlay.SmoothMoveMarker;
 import com.amap.api.navi.AmapNaviPage;
 import com.amap.api.navi.AmapNaviParams;
 import com.amap.api.navi.AmapNaviType;
@@ -65,6 +77,7 @@ public class DeviceActivity extends BaseActivity {
     private LinearLayout liJc;
     private LinearLayout liCk;
     private LinearLayout liBj;
+    private Circle circle;
 
     @Override
     protected int getContentViewId() {
@@ -199,7 +212,8 @@ public class DeviceActivity extends BaseActivity {
         liGj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initGuiJi();
+//                initGuiJi();
+                initWeiLan();
             }
         });
         liDh.setOnClickListener(new View.OnClickListener() {
@@ -218,13 +232,32 @@ public class DeviceActivity extends BaseActivity {
         return beginOfDate.getTime();
     }
 
+    private void initWeiLan() {
+
+        LatLng latLng = new LatLng(Double.parseDouble(bean.weidu),Double.parseDouble(bean.jingdu));
+        circle = aMap.addCircle(new CircleOptions().
+                center(latLng).
+                radius(1000).
+                fillColor(Color.RED).
+                strokeColor(Color.GRAY).
+                strokeWidth(15));
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                circle.setRadius(500);
+            }
+        },2000);
+    }
+
+
     private void initGuiJi() {
         aMap.clear();
         Map<String, String> map = new HashMap<>();
-        map.put("method", "getStrokeV3");
-        map.put("beginTime", getTimesmorning()+"");
-        map.put("endTime", new Date().getTime()+"");
-        map.put("method", "getStrokeV3");
+        map.put("method", "getHistoryMByMUtc");
+        map.put("from", getTimesmorning()+"");
+        map.put("to", new Date().getTime()+"");
+        map.put("playLBS","true");
+        map.put("mapType","GAODE");
         map.put("macid", AccountManager.sUserBean.obd_macid);
         map.put("mds", AccountManager.sUserBean.obd_mds);
         System.out.println(map);
@@ -232,6 +265,36 @@ public class DeviceActivity extends BaseActivity {
 
             @Override
             public void onSuccess(String response) {
+                List<LatLng> latLngs = new ArrayList<LatLng>();
+                String[] array=response.replace("\"","").split(";");
+                for (int i = 0; i <array.length ; i++) {
+                    String[] ltarray=array[i].split(",");
+                    latLngs.add(new LatLng(Double.parseDouble(ltarray[1]),Double.parseDouble(ltarray[0])));
+                }
+                aMap.addPolyline(new PolylineOptions().
+                        addAll(latLngs).width(10).color(Color.argb(255, 1, 1, 1)));
+
+
+                LatLngBounds bounds = new LatLngBounds(latLngs.get(0), latLngs.get(latLngs.size() - 2));
+                aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50));
+
+                SmoothMoveMarker smoothMarker = new SmoothMoveMarker(aMap);
+// 设置滑动的图标
+                smoothMarker.setDescriptor(BitmapDescriptorFactory.fromResource(R.drawable.icon_car));
+
+                LatLng drivePoint = latLngs.get(0);
+                Pair<Integer, LatLng> pair = SpatialRelationUtil.calShortestDistancePoint(latLngs, drivePoint);
+                latLngs.set(pair.first, drivePoint);
+                List<LatLng> subList = latLngs.subList(pair.first, latLngs.size());
+
+// 设置滑动的轨迹左边点
+                smoothMarker.setPoints(subList);
+// 设置滑动的总时间
+                smoothMarker.setTotalDuration(40);
+// 开始滑动
+                smoothMarker.startSmoothMove();
+
+                smoothMarker.stopMove();
 
             }
 

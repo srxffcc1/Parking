@@ -5,14 +5,14 @@ import java.util.regex.Pattern;
 
 public class MyClass {
     public static void main(String[] args) {
-        String org="\"esupordernumber\": \"01011032591904091423598632840630\",\n" +
-                "        \"failmessage\": \"\",\n" +
-                "        \"finishedtime\": \"2019-04-09 14:24:00\",\n" +
-                "        \"searchstatus\": 4,\n" +
-                "        \"stockordernumber\": \"shuidian1554791038250\",\n" +
-                "        \"totalamount\": 0,\n" +
-                "        \"useraddress\": \"*开全\",\n" +
-                "        \"wecbalance\": 88.8";
+        String org="            \"id\": \"1\",\n" +
+                "            \"card_number\": \"11111111111111111\",\n" +
+                "            \"uid\": \"1\",\n" +
+                "            \"add_time\": \"2019-04-09 15:42:48\",\n" +
+                "            \"update_time\": \"2019-04-09 15:42:48\",\n" +
+                "            \"state\": \"1\",\n" +
+                "            \"type\": \"0\",\n" +
+                "            \"is_default\": \"1\"";
         //parm参数
         Pattern pattern=null;
         Matcher matcher=null;

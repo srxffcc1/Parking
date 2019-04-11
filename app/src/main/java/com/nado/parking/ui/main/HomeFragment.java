@@ -22,6 +22,7 @@ import com.nado.parking.net.RetrofitCallBack;
 import com.nado.parking.net.RetrofitRequestInterface;
 import com.nado.parking.ui.pay.PhonePayActivity;
 import com.nado.parking.ui.pay.ShuiDianPayMenuActivity;
+import com.nado.parking.ui.pay.YouKaPayActivity;
 import com.nado.parking.util.DisplayUtil;
 import com.nado.parking.util.LogUtil;
 import com.nado.parking.util.NetworkUtil;
@@ -158,6 +159,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 //                            }
 //                        })
 //                        .show();
+            }
+        });
+        liYkcz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(), YouKaPayActivity.class));
             }
         });
     }

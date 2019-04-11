@@ -152,6 +152,15 @@
         <activity android:name=".ui.user.MyOrderActivity" />
         <activity android:name=".ui.pay.DianBindActivity" />
         <activity android:name=".ui.pay.ShuiChoseJGActivity" />
+        <activity android:name=".ui.pay.YouKaAddActivity" />
+        <activity android:name=".ui.pay.YouKaListActivity" />
+        <activity android:name=".ui.pay.ShuiPayActivity" />
+        <activity android:name=".ui.pay.ShuiHuPayListActivity" />
+        <activity android:name=".ui.pay.ShuiChoseHuActivity" />
+        <activity android:name=".ui.pay.ShuiBindActivity" />
+        <activity android:name=".ui.pay.DianPayActivity" />
+        <activity android:name=".ui.pay.DianHuPayListActivity" />
+        <activity android:name=".ui.pay.DianChoseJGActivity" />
     </application>
 
 </manifest>

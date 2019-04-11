@@ -1,5 +1,6 @@
 package com.nado.parking.ui.pay;
 
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,9 +15,12 @@ import com.nado.parking.adapter.recycler.RecyclerCommonAdapter;
 import com.nado.parking.adapter.recycler.base.ViewHolder;
 import com.nado.parking.base.BaseActivity;
 import com.nado.parking.bean.CarChoiceBean;
+import com.nado.parking.bean.SupportMoney;
+import com.nado.parking.manager.AccountManager;
 import com.nado.parking.manager.RequestManager;
 import com.nado.parking.net.RetrofitCallBack;
 import com.nado.parking.net.RetrofitRequestInterface;
+import com.nado.parking.ui.main.PayAllActivity;
 import com.nado.parking.util.DisplayUtil;
 import com.nado.parking.util.LogUtil;
 import com.nado.parking.util.NetworkUtil;
@@ -33,22 +37,21 @@ import java.util.List;
 import java.util.Map;
 
 public class YouKaPayActivity extends BaseActivity {
-    private static final String TAG = "YouKaPayActivity";
-    private android.widget.RelativeLayout rlLayoutTopBackBar;
-    private android.widget.LinearLayout llLayoutTopBackBarBack;
-    private android.widget.TextView tvLayoutTopBackBarTitle;
-    private android.widget.TextView tvLayoutTopBackBarEnd;
-    private android.widget.TextView tvLayoutBackTopBarOperate;
-    private com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout tflActivityParkLot;
-    private android.widget.LinearLayout needchange;
-    private android.widget.TextView youkaadd;
-    private android.support.v7.widget.RecyclerView rvPayAll;
-    private RecyclerCommonAdapter<CarChoiceBean> mCarBeanAdapter;
-    private List<CarChoiceBean> mCarChoiceList = new ArrayList<>();
-    private int mDataStatus = STATUS_REFRESH;
-    private static final int STATUS_REFRESH = 1;
-    private static final int STATUS_LOAD = 2;
 
+    private static final String TAG = "YouKaPayActivity";
+    private RelativeLayout rlLayoutTopBackBar;
+    private LinearLayout llLayoutTopBackBarBack;
+    private TextView tvLayoutTopBackBarTitle;
+    private TextView tvLayoutTopBackBarEnd;
+    private TextView tvLayoutBackTopBarOperate;
+    private TwinklingRefreshLayout tflActivityParkLot;
+    private LinearLayout needchange;
+    private TextView youkaadd;
+    private RecyclerView rvPayAll;
+    private List<SupportMoney> mCarChoiceList = new ArrayList<>();
+    private RecyclerCommonAdapter<SupportMoney> mCarBeanAdapter;
+    private String card_number="";
+    private String card_id="";
     @Override
     protected int getContentViewId() {
         return R.layout.activity_ykpay;
@@ -66,104 +69,78 @@ public class YouKaPayActivity extends BaseActivity {
         needchange = (LinearLayout) findViewById(R.id.needchange);
         youkaadd = (TextView) findViewById(R.id.youkaadd);
         rvPayAll = (RecyclerView) findViewById(R.id.rv_pay_all);
-        tvLayoutTopBackBarTitle.setText("油卡充值");
     }
 
     @Override
     public void initData() {
-
+        checkHasBindYouKa();
     }
 
-    @Override
-    public void initEvent() {
-
-    }
-    private void getTestList() {
+    private void checkHasBindYouKa() {
         Map<String, String> map = new HashMap<>();
-        map.put("limit", "2");
-        RequestManager.mRetrofitManager.createRequest(RetrofitRequestInterface.class).getCanPhonePay(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
+        map.put("customer_id", AccountManager.sUserBean.getId());
+        RequestManager.mRetrofitManager3.createRequest(RetrofitRequestInterface.class).checkHasBindYouKa(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
             @Override
             public void onSuccess(String response) {
-
-            }
-
-            @Override
-            public void onError(Throwable t) {
-
-            }
-        });
-    }
-
-    /**
-     * 检查手机和充值金额是否正确
-     */
-    private void checkPay() {
-        Map<String, String> map = new HashMap<>();
-        map.put("limit", "2");
-        RequestManager.mRetrofitManager.createRequest(RetrofitRequestInterface.class).checkPhonePay(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
-            @Override
-            public void onSuccess(String response) {
-
-            }
-
-            @Override
-            public void onError(Throwable t) {
-
-            }
-        });
-    }
-
-    /**
-     * 生成订单
-     */
-    private void buildOrder() {
-        Map<String, String> map = new HashMap<>();
-        map.put("limit", "2");
-        RequestManager.mRetrofitManager.createRequest(RetrofitRequestInterface.class).buildOrder(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
-            @Override
-            public void onSuccess(String response) {
-
-            }
-
-            @Override
-            public void onError(Throwable t) {
-
-            }
-        });
-    }
-    private void getCanPayList() {
-        Map<String, String> map = new HashMap<>();
-        map.put("limit", "2");
-        RequestManager.mRetrofitManager.createRequest(RetrofitRequestInterface.class).getCanPhonePay(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
-            @Override
-            public void onSuccess(String response) {
-                LogUtil.e(TAG, response);
-                switch (mDataStatus) {
-                    case STATUS_REFRESH:
-                        tflActivityParkLot.finishRefreshing();
-                        break;
-//                    case STATUS_LOAD:
-//                        tflActivityParkLot.finishLoadmore();
-//                        break;
-                }
                 try {
                     JSONObject res = new JSONObject(response);
                     int code = res.getInt("code");
                     String info = res.getString("info");
                     mCarChoiceList.clear();
                     if (code == 0) {
-                        JSONArray data = res.getJSONArray("data");
-                        for (int i = 0; i < data.length(); i++) {
-                            JSONObject dataItem = data.getJSONObject(i);
-                            CarChoiceBean beanCarChoice = new CarChoiceBean();
-                            beanCarChoice.setId(dataItem.getString("id"));
-                            beanCarChoice.setPicture(dataItem.getString("picture"));
-                            beanCarChoice.setShow_price(dataItem.getString("show_price"));
-                            beanCarChoice.setTitle(dataItem.getString("title"));
-                            mCarChoiceList.add(beanCarChoice);
-                        }
-                        showCarChoiceRecycleView();
+                        card_number=res.getJSONObject("data").getJSONObject("card").getString("card_number");
+                        card_id=res.getJSONObject("data").getJSONObject("card").getString("id");
+                    }else{
+                        passToBindYouKa();
+                    }
+                    JSONArray data = res.getJSONObject("data").getJSONArray("money_list");
+                    for (int i = 0; i < data.length(); i++) {
+                        JSONObject dataItem = data.getJSONObject(i);
+                        SupportMoney bean = new SupportMoney();
+                        bean.proid=dataItem.getString("proid");
+                        bean.money=dataItem.getString("money");
+                        bean.cardnum=dataItem.getString("cardnum");
 
+                        mCarChoiceList.add(bean);
+                    }
+                    showRecycleView();
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable t) {
+
+            }
+        });
+    }
+
+
+
+    private void passToBindYouKa() {
+        Map<String, String> map = new HashMap<>();
+        map.put("customer_id", AccountManager.sUserBean.getId());
+        map.put("page", "1");
+        map.put("limit", "10");
+        RequestManager.mRetrofitManager.createRequest(RetrofitRequestInterface.class).getYouKaList(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    JSONObject res = new JSONObject(response);
+                    int code = res.getInt("code");
+                    String info = res.getString("info");
+                    if (code == 0) {
+                        JSONArray jsonArray=res.getJSONArray("data");
+                        if(jsonArray.length()>0){
+
+                            passToChangeYouKa();
+                        }else{
+                            passToAddYouKa();
+                        }
                     }
 
                 } catch (JSONException e) {
@@ -173,33 +150,39 @@ public class YouKaPayActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable t) {
-                if (!NetworkUtil.isConnected()) {
-                    ToastUtil.showShort(mActivity, R.string.net_error);
-                } else {
-                    ToastUtil.showShort(mActivity, getString(R.string.net_error));
-                }
+
             }
         });
     }
-    /**
-     * 车主精选
-     */
-    private void showCarChoiceRecycleView() {
+
+    private void passToChangeYouKa() {
+        startActivityForResult(new Intent(getBaseContext(),YouKaListActivity.class),100);
+    }
+
+    private void passToAddYouKa() {
+        startActivityForResult(new Intent(getBaseContext(),YouKaAddActivity.class),200);
+    }
+
+    @Override
+    public void initEvent() {
+
+    }
+
+    private void showRecycleView() {
         if (mCarBeanAdapter == null) {
 
 
-            mCarBeanAdapter = new RecyclerCommonAdapter<CarChoiceBean>(mActivity, R.layout.item_ykpay, mCarChoiceList) {
+            mCarBeanAdapter = new RecyclerCommonAdapter<SupportMoney>(mActivity, R.layout.item_hfpay, mCarChoiceList) {
 
                 @Override
-                protected void convert(ViewHolder holder, CarChoiceBean carChoiceBean, int position) {
-                    holder.setText(R.id.show_price, "￥"+carChoiceBean.show_price);
-                    holder.setText(R.id.title, carChoiceBean.title);
+                protected void convert(ViewHolder holder, final SupportMoney carChoiceBean, int position) {
+                    holder.setText(R.id.price, carChoiceBean.money + "元");
 //                    new GlideImageLoader().displayImage(mActivity,carChoiceBean.picture, (ImageView) holder.getView(R.id.picture));
 //                    new GlideImageLoader().displayImage(mActivity,carChoiceBean.picture, (ImageView) holder.getView(R.id.picture));
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
+                            sendOrder(carChoiceBean);
                         }
                     });
 
@@ -209,15 +192,55 @@ public class YouKaPayActivity extends BaseActivity {
             };
 
 
-
-
             rvPayAll.addItemDecoration(new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST, (int) DisplayUtil.dpToPx(mActivity, 1), ContextCompat.getColor(mActivity, R.color.colorLine), false, 2));
             rvPayAll.setAdapter(mCarBeanAdapter);
-            rvPayAll.setLayoutManager(new GridLayoutManager(mActivity,2));
-        }else{
+            rvPayAll.setLayoutManager(new GridLayoutManager(mActivity, 3));
+        } else {
 
             mCarBeanAdapter.notifyDataSetChanged();
         }
 
     }
+
+    private void sendOrder(final SupportMoney carChoiceBean) {
+        Map<String, String> map = new HashMap<>();
+        map.put("card_id", card_id);
+        map.put("proid", carChoiceBean.proid);
+        map.put("cardnum", card_number);
+        map.put("order_amount", carChoiceBean.money);
+        map.put("goods_amount", carChoiceBean.money);
+        map.put("customer_id", AccountManager.sUserBean.getId());
+        RequestManager.mRetrofitManager.createRequest(RetrofitRequestInterface.class).sendYouKaOrder(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    JSONObject res = new JSONObject(response);
+                    int code = res.getInt("code");
+                    String info = res.getString("info");
+                    if (code == 0) {
+                        String orderid = res.get("data").toString();//获得的本司订单号
+                        String paytypekey = "pay_type";
+                        String pervalue = carChoiceBean.money;//充值金额
+                        String url = "index.php?g=app&m=petrol&a=goodsPay";
+                        Map<String, String> postmap = new HashMap<>();
+                        postmap.put("paymm",pervalue);
+                        postmap.put("url",url);
+                        postmap.put("paytypekey",paytypekey);
+                        postmap.put("order_id",orderid);
+                        postmap.put("customer_id", AccountManager.sUserBean.getId());
+                        PayAllActivity.open(YouKaPayActivity.this, postmap);//打开充值界面 选择支付类型 然后会访问url交换对应的sign或appid来完成充值
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable t) {
+
+            }
+        });
+    }
+
 }

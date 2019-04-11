@@ -5,4 +5,7 @@ package com.nado.parking.bean;
  */
 public class SupportMoney {
     public String price;
+    public String proid;
+    public String money;
+    public String cardnum;
 }
