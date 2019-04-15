@@ -9,12 +9,12 @@ public class ShuiHuHao {
     public String type;
     public String productid;
     public String company;
-//    bean.id=jsonObject.getString("id");
-//    bean.product_id=jsonObject.getString("product_id");
-//    bean.uid=jsonObject.getString("uid");
-//    bean.wecaccount=jsonObject.getString("wecaccount");
-//    bean.add_time=jsonObject.getString("add_time");
-//    bean.type=jsonObject.getString("type");
-//    bean.productid=jsonObject.getString("productid");
-//    bean.company=jsonObject.getString("company");
+//    bean.id=jsonObject.optString("id");
+//    bean.product_id=jsonObject.optString("product_id");
+//    bean.uid=jsonObject.optString("uid");
+//    bean.wecaccount=jsonObject.optString("wecaccount");
+//    bean.add_time=jsonObject.optString("add_time");
+//    bean.type=jsonObject.optString("type");
+//    bean.productid=jsonObject.optString("productid");
+//    bean.company=jsonObject.optString("company");
 }

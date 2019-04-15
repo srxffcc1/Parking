@@ -98,4 +98,5 @@ dependencies {
     //高德
     compile 'com.amap.api:navi-3dmap:6.6.0_3dmap6.7.0'
     compile 'com.amap.api:location:4.5.1'
+    compile 'com.amap.api:search:latest.integration'
 }

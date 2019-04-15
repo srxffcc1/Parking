@@ -82,7 +82,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/ykcz"/>
+                            android:src="@drawable/device_daohang"/>
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/hfcz"/>
+                            android:src="@drawable/device_weilan"/>
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -116,7 +116,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/sdcz"/>
+                            android:src="@drawable/device_guiji"/>
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/wzcx"/>
+                            android:src="@drawable/device_xiangqing"/>
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -156,7 +156,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/wbjl"/>
+                            android:src="@drawable/device_xingcheng"/>
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -173,7 +173,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/wzdj"/>
+                            android:src="@drawable/device_jiance"/>
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -190,7 +190,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/gzcx"/>
+                            android:src="@drawable/device_chekuang"/>
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -207,7 +207,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/cljy"/>
+                            android:src="@drawable/device_baojing"/>
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

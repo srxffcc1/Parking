@@ -84,12 +84,12 @@ public class DianHuPayListActivity extends BaseActivity {
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             DianHuHao bean = new DianHuHao();
-                            bean.id = jsonObject.getString("id");
-                            bean.user_id = jsonObject.getString("user_id");
-                            bean.company = jsonObject.getString("company");
-                            bean.wecacount = jsonObject.getString("wecacount");
-                            bean.productid = jsonObject.getString("productid");
-                            bean.status = jsonObject.getString("status");
+                            bean.id = jsonObject.optString("id");
+                            bean.user_id = jsonObject.optString("user_id");
+                            bean.company = jsonObject.optString("company");
+                            bean.wecacount = jsonObject.optString("wecacount");
+                            bean.productid = jsonObject.optString("productid");
+                            bean.status = jsonObject.optString("status");
                             mBeanList.add(bean);
                         }
 
@@ -198,18 +198,18 @@ public class DianHuPayListActivity extends BaseActivity {
                     if (code == 0) {
 
                         JSONObject jsonObject = res.getJSONObject("data");
-                        String totalamount = jsonObject.getString("totalamount");
+                        String totalamount = jsonObject.optString("totalamount");
 
                         DianQianFei bean = new DianQianFei();
 
-                        bean.esupordernumber = jsonObject.getString("esupordernumber");
-                        bean.failmessage = jsonObject.getString("failmessage");
-                        bean.finishedtime = jsonObject.getString("finishedtime");
-                        bean.searchstatus = jsonObject.getString("searchstatus");
-                        bean.stockordernumber = jsonObject.getString("stockordernumber");
-                        bean.totalamount = jsonObject.getString("totalamount");
-                        bean.useraddress = jsonObject.getString("useraddress");
-                        bean.wecbalance = jsonObject.getString("wecbalance");
+                        bean.esupordernumber = jsonObject.optString("esupordernumber");
+                        bean.failmessage = jsonObject.optString("failmessage");
+                        bean.finishedtime = jsonObject.optString("finishedtime");
+                        bean.searchstatus = jsonObject.optString("searchstatus");
+                        bean.stockordernumber = jsonObject.optString("stockordernumber");
+                        bean.totalamount = jsonObject.optString("totalamount");
+                        bean.useraddress = jsonObject.optString("useraddress");
+                        bean.wecbalance = jsonObject.optString("wecbalance");
 
                         Intent intent = new Intent(getBaseContext(), DianPayActivity.class);
                         buildIntent(intent, bean);

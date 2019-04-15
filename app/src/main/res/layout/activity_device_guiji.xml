@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.nado.parking.ui.main.MainActivity">
+
+    <include layout="@layout/layout_top_back_bar" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.amap.api.maps.MapView
+
+            android:id="@+id/map"
+
+            android:layout_width="match_parent"
+
+            android:layout_height="match_parent" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:gravity="right" />
+
+            <LinearLayout
+                android:background="#ececec"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_alignParentBottom="true"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/playkey"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/device_play" />
+
+                    <SeekBar
+                        android:id="@+id/seek"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:clickable="false" />
+
+                    <ImageView
+                        android:visibility="gone"
+                        android:id="@+id/speedkey"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/device_speed" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:padding="5dp"
+                    android:gravity="center_vertical"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:textSize="16sp"
+                        android:layout_height="wrap_content"
+                        android:text="画面跟随"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="     "/>
+                    <Switch
+                        android:id="@+id/device_switch"
+                        android:paddingLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </RelativeLayout>
+
+    </FrameLayout>
+</LinearLayout>
+

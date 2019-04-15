@@ -84,14 +84,14 @@ public class ShuiHuPayListActivity extends BaseActivity {
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             ShuiHuHao bean = new ShuiHuHao();
-                            bean.id = jsonObject.getString("id");
-                            bean.product_id = jsonObject.getString("product_id");
-                            bean.uid = jsonObject.getString("uid");
-                            bean.wecaccount = jsonObject.getString("wecaccount");
-                            bean.add_time = jsonObject.getString("add_time");
-                            bean.type = jsonObject.getString("type");
-                            bean.productid = jsonObject.getString("productid");
-                            bean.company = jsonObject.getString("company");
+                            bean.id = jsonObject.optString("id");
+                            bean.product_id = jsonObject.optString("product_id");
+                            bean.uid = jsonObject.optString("uid");
+                            bean.wecaccount = jsonObject.optString("wecaccount");
+                            bean.add_time = jsonObject.optString("add_time");
+                            bean.type = jsonObject.optString("type");
+                            bean.productid = jsonObject.optString("productid");
+                            bean.company = jsonObject.optString("company");
                             mBeanList.add(bean);
                         }
 
@@ -193,16 +193,16 @@ public class ShuiHuPayListActivity extends BaseActivity {
                     if (code == 0) {
 
                         JSONObject jsonObject=res.getJSONObject("data");
-                        String totalamount=jsonObject.getString("totalamount");
+                        String totalamount=jsonObject.optString("totalamount");
 
                         ShuiQianFei bean=new ShuiQianFei();
 
-                        bean.totalamount=jsonObject.getString("totalamount");
-                        bean.wecbalance=jsonObject.getString("wecbalance");
-                        bean.useraddress=jsonObject.getString("useraddress");
-                        bean.company=jsonObject.getString("company");
-                        bean.company_id=jsonObject.getString("company_id");
-                        bean.wecaccount=jsonObject.getString("wecaccount");
+                        bean.totalamount=jsonObject.optString("totalamount");
+                        bean.wecbalance=jsonObject.optString("wecbalance");
+                        bean.useraddress=jsonObject.optString("useraddress");
+                        bean.company=jsonObject.optString("company");
+                        bean.company_id=jsonObject.optString("company_id");
+                        bean.wecaccount=jsonObject.optString("wecaccount");
 
                         Intent intent=new Intent(getBaseContext(),ShuiPayActivity.class);
                         buildIntent(intent,bean);

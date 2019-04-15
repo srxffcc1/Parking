@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.Checkable;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
@@ -264,6 +265,14 @@ public class ViewHolder extends RecyclerView.ViewHolder
     {
         View view = getView(viewId);
         view.setOnLongClickListener(listener);
+        return this;
+    }
+
+    public ViewHolder setOnCheckedChangeListener(int viewId,
+                                             CompoundButton.OnCheckedChangeListener listener)
+    {
+        CompoundButton view = getView(viewId);
+        view.setOnCheckedChangeListener(listener);
         return this;
     }
 

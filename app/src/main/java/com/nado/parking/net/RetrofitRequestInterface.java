@@ -62,10 +62,28 @@ public interface RetrofitRequestInterface {
 
 
 
+    /*删除围栏*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=appv1&a=DeleteRail")
+    Call<String> deleteWeiLan(@FieldMap Map<String, String> params);
+
+
     /*获得充值金额*/
     @FormUrlEncoded
     @POST("index.php?g=app&m=telephone&a=telephone_note")
     Call<String> getCanPhonePay(@FieldMap Map<String, String> params);
+
+
+    /*保存围栏*/
+    @FormUrlEncoded
+    @POST
+    Call<String> saveWeiLanDy(@Url String url,@FieldMap Map<String, String> params);
+
+
+    /*汽车检测*/
+    @FormUrlEncoded
+    @POST("GetDateServices.asmx/GetDate")
+    Call<String> checkCar(@FieldMap Map<String, String> params);
 
 
     /*新增油卡*/
@@ -140,6 +158,12 @@ public interface RetrofitRequestInterface {
     @FormUrlEncoded
     @POST("index.php?g=app&m=telephone&a=checkphone")
     Call<String> checkPhonePay(@FieldMap Map<String, String> params);
+
+    /*围栏列表*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=appv1&a=GetRailList")
+    Call<String> getWeiLanList(@FieldMap Map<String, String> params);
+
 
     /*水机构列表*/
     @FormUrlEncoded

@@ -112,15 +112,15 @@ public class ChooseCityActivity extends BaseActivity {
                                     JSONObject jsonObject=jsonArray.getJSONObject(i);
                                     String pinyin= null;
                                     try {
-                                        pinyin = PinyinHelper.getShortPinyin(jsonObject.getString("city"));
+                                        pinyin = PinyinHelper.getShortPinyin(jsonObject.optString("city"));
                                     } catch (PinyinException e) {
                                         e.printStackTrace();
                                     }
-                                    CompanyCity bean=new CompanyCity(jsonObject.getString("city"),jsonObject.getString("city"),pinyin,i+"");
-                                    bean.city=jsonObject.getString("city");
-                                    bean.company=jsonObject.getString("company");
-                                    bean.letter=jsonObject.getString("letter");
-                                    bean.is_hot=jsonObject.getString("is_hot");
+                                    CompanyCity bean=new CompanyCity(jsonObject.optString("city"),jsonObject.optString("city"),pinyin,i+"");
+                                    bean.city=jsonObject.optString("city");
+                                    bean.company=jsonObject.optString("company");
+                                    bean.letter=jsonObject.optString("letter");
+                                    bean.is_hot=jsonObject.optString("is_hot");
                                     list.add(bean);
                                 }
 

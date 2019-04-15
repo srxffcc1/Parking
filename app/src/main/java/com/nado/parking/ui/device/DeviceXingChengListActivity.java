@@ -1,6 +1,5 @@
 package com.nado.parking.ui.device;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,8 +10,6 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.amap.api.fence.GeoFenceClient;
-import com.amap.api.location.DPoint;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
@@ -56,7 +53,7 @@ import java.util.Map;
  * 作者：Constantine on 2018/9/5.
  * 邮箱：2534159288@qq.com
  */
-public class DeviceActivity extends BaseActivity {
+public class DeviceXingChengListActivity extends BaseActivity {
 
     private RelativeLayout rlLayoutTopBackBar;
     private LinearLayout llLayoutTopBackBarBack;
@@ -184,7 +181,7 @@ public class DeviceActivity extends BaseActivity {
         aMap.setInfoWindowAdapter(new AMap.InfoWindowAdapter() {
             @Override
             public View getInfoWindow(Marker marker) {
-                TextView info = new TextView(DeviceActivity.this);
+                TextView info = new TextView(DeviceXingChengListActivity.this);
                 String infostring = ""
                         + "名称：" + bean.user_name + "\n"
                         + "设备号：" + bean.sim_id + "\n"
@@ -205,6 +202,7 @@ public class DeviceActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         map.onCreate(savedInstanceState);
+        initView();
     }
 
     @Override
@@ -213,27 +211,13 @@ public class DeviceActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 //                initGuiJi();
-//                initWeiLan();
-                startActivity(new Intent(v.getContext(),DeviceGuiJiActivity.class));
+                initWeiLan();
             }
         });
         liDh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Nav();
-            }
-        });
-        liJc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(v.getContext(),DeviceCheckActivity.class));
-            }
-        });
-        liWl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(v.getContext(),DeviceWeiLanListActivity.class));
-
             }
         });
 
@@ -322,7 +306,7 @@ public class DeviceActivity extends BaseActivity {
         Poi start = new Poi("我的位置", new LatLng(HomepageConstant.mLatitude,HomepageConstant.mLongitude), "");
         Poi end = new Poi("我的车", new LatLng(Double.parseDouble(bean.weidu), Double.parseDouble(bean.jingdu)), "");
         List<Poi> wayList = new ArrayList();//途径点目前最多支持3个。
-        AmapNaviPage.getInstance().showRouteActivity(DeviceActivity.this, new AmapNaviParams(start, wayList, end, AmapNaviType.DRIVER), new INaviInfoCallback() {
+        AmapNaviPage.getInstance().showRouteActivity(DeviceXingChengListActivity.this, new AmapNaviParams(start, wayList, end, AmapNaviType.DRIVER), new INaviInfoCallback() {
             @Override
             public void onInitNaviFailure() {
 

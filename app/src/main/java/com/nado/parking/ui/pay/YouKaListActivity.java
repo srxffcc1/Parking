@@ -86,14 +86,14 @@ public class YouKaListActivity extends BaseActivity {
                         for (int i = 0; i <jsonArray.length() ; i++) {
                             JSONObject jsonObject=jsonArray.getJSONObject(i);
                             YouKa bean=new YouKa();
-                            bean.id = jsonObject.getString("id");
-                            bean.card_number = jsonObject.getString("card_number");
-                            bean.uid = jsonObject.getString("uid");
-                            bean.add_time = jsonObject.getString("add_time");
-                            bean.update_time = jsonObject.getString("update_time");
-                            bean.state = jsonObject.getString("state");
-                            bean.type = jsonObject.getString("type");
-                            bean.is_default = jsonObject.getString("is_default");
+                            bean.id = jsonObject.optString("id");
+                            bean.card_number = jsonObject.optString("card_number");
+                            bean.uid = jsonObject.optString("uid");
+                            bean.add_time = jsonObject.optString("add_time");
+                            bean.update_time = jsonObject.optString("update_time");
+                            bean.state = jsonObject.optString("state");
+                            bean.type = jsonObject.optString("type");
+                            bean.is_default = jsonObject.optString("is_default");
                             mBeanList.add(bean);
                         }
 

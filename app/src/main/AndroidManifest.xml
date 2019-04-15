@@ -161,6 +161,10 @@
         <activity android:name=".ui.pay.DianPayActivity" />
         <activity android:name=".ui.pay.DianHuPayListActivity" />
         <activity android:name=".ui.pay.DianChoseJGActivity" />
+        <activity android:name=".ui.device.DeviceCheckActivity" />
+        <activity android:name=".ui.device.DeviceWeiLanActivity" />
+        <activity android:name=".ui.device.DeviceWeiLanListActivity" />
+        <activity android:name=".ui.device.DeviceGuiJiActivity" />
     </application>
 
 </manifest>

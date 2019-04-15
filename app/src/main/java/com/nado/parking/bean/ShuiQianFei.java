@@ -7,10 +7,10 @@ public class ShuiQianFei {
     public String company;
     public String company_id;
     public String wecaccount;
-//    bean.totalamount=jsonObject.getString("totalamount");
-//    bean.wecbalance=jsonObject.getString("wecbalance");
-//    bean.useraddress=jsonObject.getString("useraddress");
-//    bean.company=jsonObject.getString("company");
-//    bean.company_id=jsonObject.getString("company_id");
-//    bean.wecaccount=jsonObject.getString("wecaccount");
+//    bean.totalamount=jsonObject.optString("totalamount");
+//    bean.wecbalance=jsonObject.optString("wecbalance");
+//    bean.useraddress=jsonObject.optString("useraddress");
+//    bean.company=jsonObject.optString("company");
+//    bean.company_id=jsonObject.optString("company_id");
+//    bean.wecaccount=jsonObject.optString("wecaccount");
 }

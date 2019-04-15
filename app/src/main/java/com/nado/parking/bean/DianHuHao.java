@@ -7,10 +7,10 @@ public class DianHuHao {
     public String wecacount;
     public String productid;
     public String status;
-//    bean.id=jsonObject.getString("id");
-//    bean.user_id=jsonObject.getString("user_id");
-//    bean.company=jsonObject.getString("company");
-//    bean.wecacount=jsonObject.getString("wecacount");
-//    bean.productid=jsonObject.getString("productid");
-//    bean.status=jsonObject.getString("status");
+//    bean.id=jsonObject.optString("id");
+//    bean.user_id=jsonObject.optString("user_id");
+//    bean.company=jsonObject.optString("company");
+//    bean.wecacount=jsonObject.optString("wecacount");
+//    bean.productid=jsonObject.optString("productid");
+//    bean.status=jsonObject.optString("status");
 }

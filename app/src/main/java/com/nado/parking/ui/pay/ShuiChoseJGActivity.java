@@ -95,11 +95,11 @@ public class ShuiChoseJGActivity extends BaseActivity {
                         for (int i = 0; i <jsonArray.length() ; i++) {
                             JSONObject jsonObject=jsonArray.getJSONObject(i);
                             ShuiCompany bean=new ShuiCompany();
-                            bean.id=jsonObject.getString("id");
-                            bean.city=jsonObject.getString("city");
-                            bean.company=jsonObject.getString("company");
-                            bean.letter=jsonObject.getString("letter");
-                            bean.is_hot=jsonObject.getString("is_hot");
+                            bean.id=jsonObject.optString("id");
+                            bean.city=jsonObject.optString("city");
+                            bean.company=jsonObject.optString("company");
+                            bean.letter=jsonObject.optString("letter");
+                            bean.is_hot=jsonObject.optString("is_hot");
                             mBeanList.add(bean);
                         }
                     }

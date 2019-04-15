@@ -9,12 +9,12 @@ public class DianQianFei {
     public String totalamount;
     public String useraddress;
     public String wecbalance;
-//    bean.esupordernumber=jsonObject.getString("esupordernumber");
-//    bean.failmessage=jsonObject.getString("failmessage");
-//    bean.finishedtime=jsonObject.getString("finishedtime");
-//    bean.searchstatus=jsonObject.getString("searchstatus");
-//    bean.stockordernumber=jsonObject.getString("stockordernumber");
-//    bean.totalamount=jsonObject.getString("totalamount");
-//    bean.useraddress=jsonObject.getString("useraddress");
-//    bean.wecbalance=jsonObject.getString("wecbalance");
+//    bean.esupordernumber=jsonObject.optString("esupordernumber");
+//    bean.failmessage=jsonObject.optString("failmessage");
+//    bean.finishedtime=jsonObject.optString("finishedtime");
+//    bean.searchstatus=jsonObject.optString("searchstatus");
+//    bean.stockordernumber=jsonObject.optString("stockordernumber");
+//    bean.totalamount=jsonObject.optString("totalamount");
+//    bean.useraddress=jsonObject.optString("useraddress");
+//    bean.wecbalance=jsonObject.optString("wecbalance");
 }

@@ -5,14 +5,11 @@ import java.util.regex.Pattern;
 
 public class MyClass {
     public static void main(String[] args) {
-        String org="            \"id\": \"1\",\n" +
-                "            \"card_number\": \"11111111111111111\",\n" +
-                "            \"uid\": \"1\",\n" +
-                "            \"add_time\": \"2019-04-09 15:42:48\",\n" +
-                "            \"update_time\": \"2019-04-09 15:42:48\",\n" +
-                "            \"state\": \"1\",\n" +
-                "            \"type\": \"0\",\n" +
-                "            \"is_default\": \"1\"";
+        String org="\"id\":\"1\",\n" +
+                "            \"rail_name\":\"测试围栏666\",\n" +
+                "            \"radii\":\"100\",\n" +
+                "            \"address\":\"创意产业园10栋\",\n" +
+                "            \"report_type\":\"1\"";
         //parm参数
         Pattern pattern=null;
         Matcher matcher=null;
@@ -68,7 +65,7 @@ public class MyClass {
         while (matcher.find()){
             try {
                 String tmp1=matcher.group(1).replace("\"","").trim();
-                System.out.println("bean."+tmp1+"=jsonObject.getString(\""+tmp1+"\");");
+                System.out.println("bean."+tmp1+"=jsonObject.optString(\""+tmp1+"\");");
             } catch (Exception e) {
                 e.printStackTrace();
             }
