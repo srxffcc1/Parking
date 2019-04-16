@@ -2,6 +2,7 @@ package com.nado.parking.ui.device;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,6 +33,7 @@ import com.nado.parking.manager.AccountManager;
 import com.nado.parking.manager.RequestManager;
 import com.nado.parking.net.RetrofitCallBack;
 import com.nado.parking.net.RetrofitRequestInterface;
+import com.nado.parking.util.DialogUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -101,12 +103,12 @@ public class DeviceGuiJiActivity extends BaseActivity {
         if (aMap == null) {
             aMap = map.getMap();
         }
+
         if (getIntent().getStringExtra("from") != null) {
 
             initGuiJi(getIntent().getStringExtra("from"), getIntent().getStringExtra("to"));
             tvLayoutTopBackBarEnd.setVisibility(View.GONE);
         } else {
-
             initGuiJi(getTimeZero(0) + "", new Date().getTime() + "");
         }
     }
@@ -196,6 +198,12 @@ public class DeviceGuiJiActivity extends BaseActivity {
     }
 
     private void initGuiJi(String from, String to) {
+        ispaly=false;
+        iscomplete = false;
+        deviceSwitch.setEnabled(true);
+        index=0;
+        playkey.setImageResource(R.drawable.device_play);
+        DialogUtil.showUnCancelableProgress(mActivity, getString(R.string.location_setting));
         aMap.clear();
         Map<String, String> map = new HashMap<>();
         map.put("method", "getHistoryMByMUtc");
@@ -212,6 +220,7 @@ public class DeviceGuiJiActivity extends BaseActivity {
             public void onSuccess(String response) {
 
                 try {
+                    guijierrorneedhide.setVisibility(View.VISIBLE);
                     latLngs = new ArrayList<LatLng>();
                     String[] array = response.replace("\"", "").split(";");
                     for (int i = 0; i < array.length; i++) {
@@ -220,13 +229,16 @@ public class DeviceGuiJiActivity extends BaseActivity {
                     }
 
                     initDeviceMark(latLngs.get(0).latitude, latLngs.get(0).longitude);
+
                     aMap.addPolyline(new PolylineOptions().
                             addAll(latLngs).width(10).color(Color.argb(255, 1, 1, 1)));
                 } catch (Exception e) {
-                    Toast.makeText(getBaseContext(), "未获得到轨迹", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "未获得到轨迹，请选择正确时间", Toast.LENGTH_SHORT).show();
                     guijierrorneedhide.setVisibility(View.GONE);
                     e.printStackTrace();
                 }
+
+                DialogUtil.hideProgress();
 
             }
 
@@ -238,14 +250,24 @@ public class DeviceGuiJiActivity extends BaseActivity {
     }
 
     boolean ispaly = false;
+    boolean iscomplete = false;
+    double smlat;
+    double smlot;
     int index = 0;
-
-    public void playGuiJi() {
-//        index=0;
-        if (index + 10 > latLngs.size()) {
-            index = 0;
+    double maxdes=0;
+    public  int checkNowIndex(){
+        if(index==0){
+            return 0;
+        }else{
+            for (int i = 0; i < latLngs.size(); i++) {
+                if((int)smlat==(int)latLngs.get(i).latitude&&(int)smlot==(int)latLngs.get(i).longitude){
+                    return i;
+                }
+            }
         }
-
+        return 0;
+    }
+    public void playGuiJi() {
         if (!ispaly) {
             if (smoothMarker != null) {
                 smoothMarker.removeMarker();
@@ -267,27 +289,44 @@ public class DeviceGuiJiActivity extends BaseActivity {
             smoothMarker.setPoints(subList);
 // 设置滑动的总时间
             smoothMarker.setTotalDuration(80);
-            seek.setProgress(index);
-            seek.setMax(subList.size());
+            if(iscomplete){
+                seek.setProgress(0);
+            }
+            System.out.println("总长"+latLngs.size()+":"+subList.size());
             smoothMarker.setMoveListener(new SmoothMoveMarker.MoveListener() {
                 @Override
                 public void move(double v) {
-                    index++;
-                    System.out.println("步进" + index);
-                    if (index + 6 <= subList.size()) {
-                        syncCamera(subList.get(index).latitude, subList.get(index).longitude);
-                        seek.setProgress(index + 1);
-                    } else {
-                        seek.setProgress(subList.size());
+                    if(v<100){
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                iscomplete=true;
+                                seek.setProgress(1000);
+                                deviceSwitch.setEnabled(true);
+                                playkey.setImageResource(R.drawable.device_play);
+                                smoothMarker.stopMove();
+                                ispaly=false;
+                                index=0;
+                            }
+                        });
                     }
+                    if(index==0){
+                        maxdes=v;
+                    }
+                    seek.setProgress((int) (((maxdes-v)*1.0/maxdes)*1000));
+                    index++;
+                    System.out.println("步进" + index+":"+v);
+                    smlat=smoothMarker.getPosition().latitude;
+                    smlot=smoothMarker.getPosition().longitude;
+                    syncCamera(smoothMarker.getPosition().latitude, smoothMarker.getPosition().longitude);
 
 
                 }
             });
+
 // 开始滑动
             smoothMarker.startSmoothMove();
         } else {
-            index = index;
             deviceSwitch.setEnabled(true);
             playkey.setImageResource(R.drawable.device_play);
             smoothMarker.stopMove();
@@ -300,6 +339,11 @@ public class DeviceGuiJiActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         //在activity执行onDestroy时执行mMapView.onDestroy()，销毁地图
+        if(smoothMarker!=null){
+            smoothMarker.destroy();
+            smoothMarker=null;
+        }
+        aMap.clear();
         map.onDestroy();
     }
 

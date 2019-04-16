@@ -10,9 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.nado.parking.global.LocalApplication;
+import com.nado.parking.manager.AccountManager;
 import com.nado.parking.manager.RequestManager;
 import com.nado.parking.net.RetrofitCallBack;
 import com.nado.parking.net.RetrofitRequestInterface;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,11 +45,21 @@ public abstract class BaseFragment extends Fragment implements BaseView {
 
     private void getTestList() {
         Map<String, String> map = new HashMap<>();
-        map.put("limit", "2");
+        map.put("customer_id", AccountManager.sUserBean.getId());
         RequestManager.mRetrofitManager.createRequest(RetrofitRequestInterface.class).getCanPhonePay(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
             @Override
             public void onSuccess(String response) {
+                try {
+                    JSONObject res = new JSONObject(response);
+                    int code = res.getInt("code");
+                    String info = res.getString("info");
+                    if (code == 0) {
 
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override

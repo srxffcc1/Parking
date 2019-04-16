@@ -5,9 +5,39 @@ import java.util.regex.Pattern;
 
 public class MyClass {
     public static void main(String[] args) {
-        String org="\"Number\": \"P_21\",\n" +
-                "\t\t\"Key\": \"刹车状态\",\n" +
-                "\t\t\"Value\": \"刹车不动作\"\n";
+        String org="        \"id\":\"12\",\n" +
+                "        \"out_trade_no\":\"20181211434538\",\n" +
+                "        \"trade_no\":\"\",\n" +
+                "        \"user_id\":\"10\",\n" +
+                "        \"goods_id\":\"3\",\n" +
+                "        \"format_id\":\"0\",\n" +
+                "        \"goods_price\":\"10.00\",\n" +
+                "        \"goods_all_price\":\"20.00\",\n" +
+                "        \"goods_name\":\"测试停车场\",\n" +
+                "        \"goods_number\":\"2\",\n" +
+                "        \"goods_img\":\"http://img.buyantang.cn/2018-12-06_5c0888ed10015.png\",\n" +
+                "        \"goods_format\":\"30*30\",\n" +
+                "        \"goods_unit\":\"把\",\n" +
+                "        \"order_status\":\"12\",\n" +
+                "        \"pay_status\":\"0\",\n" +
+                "        \"pay_type\":\"0\",\n" +
+                "        \"postage\":\"0.00\",\n" +
+                "        \"address_id\":\"0\",\n" +
+                "        \"receiver_name\":\"\",\n" +
+                "        \"receiver_address\":\"\",\n" +
+                "        \"receiver_mobile\":\"\",\n" +
+                "        \"express_name\":\"\",\n" +
+                "        \"express_no\":\"\",\n" +
+                "        \"pay_fee\":\"0.00\",\n" +
+                "        \"note\":\"\",\n" +
+                "        \"cutoff_time\":\"1546592896\",\n" +
+                "        \"take_time\":\"\",\n" +
+                "        \"auto_take_time\":\"0\",\n" +
+                "        \"create_time\":\"2018-12-11 17:08:16\",\n" +
+                "        \"pay_time\":\"\",\n" +
+                "        \"isdelete\":\"0\",\n" +
+                "        \"action\":\"已取消\",\n" +
+                "        \"order_status_text\":\"交易关闭\"";
         //parm参数
         Pattern pattern=null;
         Matcher matcher=null;

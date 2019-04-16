@@ -49,6 +49,11 @@ public interface RetrofitRequestInterface {
     @POST(RequestManager.mInterfacePrefix + "GetAllOrder")
     Call<String> getGoodOrder(@FieldMap Map<String, String> params);
 
+    /*取消订单*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=appv1&a=CancelOrder")
+    Call<String> cancelOrder(@FieldMap Map<String, String> params);
+
 
     /*水费查询订单*/
     @FormUrlEncoded
@@ -72,6 +77,17 @@ public interface RetrofitRequestInterface {
     @FormUrlEncoded
     @POST("index.php?g=app&m=telephone&a=telephone_note")
     Call<String> getCanPhonePay(@FieldMap Map<String, String> params);
+
+
+    /*获得首页商品*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=appv1&a=getGoodDetails")
+    Call<String> getGoodDetail(@FieldMap Map<String, String> params);
+
+    /*获得订单详情*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=appv1&a=GetOrderDetails")
+    Call<String> getOrderDetail(@FieldMap Map<String, String> params);
 
 
     /*获得设备详情*/

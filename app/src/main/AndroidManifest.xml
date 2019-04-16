@@ -170,6 +170,8 @@
         <activity android:name=".ui.device.DevicePostionActivity" />
         <activity android:name=".ui.device.DeviceDetailActivity" />
         <activity android:name=".ui.device.DeviceCarDetailActivity" />
+        <activity android:name=".ui.user.OrderDetailActivity" />
+        <activity android:name=".ui.main.MainGoodDetailActivity" />
     </application>
 
 </manifest>

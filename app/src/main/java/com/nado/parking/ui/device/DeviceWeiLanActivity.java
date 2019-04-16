@@ -33,6 +33,7 @@ import com.nado.parking.manager.AccountManager;
 import com.nado.parking.manager.RequestManager;
 import com.nado.parking.net.RetrofitCallBack;
 import com.nado.parking.net.RetrofitRequestInterface;
+import com.nado.parking.util.DialogUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -327,12 +328,18 @@ public class DeviceWeiLanActivity extends BaseActivity {
     }
 
     private void initDeviceMark(double latitude, double longitude) {
+
+
+
+        DialogUtil.showUnCancelableProgress(mActivity, getString(R.string.location_setting));
         aMap.clear();
         lng = longitude + "";
         lat = latitude + "";
         //设置中心点和缩放比例
         initWeiLan(latitude, longitude);
         getAddress(new LatLonPoint(latitude, longitude));
+
+        DialogUtil.hideProgress();
     }
 
     protected void onDestroy() {

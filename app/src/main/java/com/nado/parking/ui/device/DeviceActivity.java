@@ -6,15 +6,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Pair;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.amap.api.fence.GeoFenceClient;
-import com.amap.api.location.DPoint;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
@@ -48,6 +46,7 @@ import com.nado.parking.manager.AccountManager;
 import com.nado.parking.manager.RequestManager;
 import com.nado.parking.net.RetrofitCallBack;
 import com.nado.parking.net.RetrofitRequestInterface;
+import com.nado.parking.util.DialogUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -75,7 +74,7 @@ public class DeviceActivity extends BaseActivity {
     private RadioButton mapmap;
     private RadioButton mapmoom;
     private LinearLayout hidedevicemenu;
-    private List<LatLng> latLngs=new ArrayList<>();
+    private List<LatLng> latLngs = new ArrayList<>();
 
     private DeviceBean bean;
     private AMap aMap;
@@ -90,6 +89,10 @@ public class DeviceActivity extends BaseActivity {
     private Circle circle;
     private String address;
     private GeocodeSearch geocoderSearch;
+    private TextView tvLayoutTopBackBarStart;
+    private TextView tvLayoutTopBackBarEnd;
+    private ImageView hideimage;
+    private LinearLayout needhide;
 
     @Override
     protected int getContentViewId() {
@@ -116,6 +119,10 @@ public class DeviceActivity extends BaseActivity {
         liJc = (LinearLayout) findViewById(R.id.li_jc);
         liCk = (LinearLayout) findViewById(R.id.li_ck);
         liBj = (LinearLayout) findViewById(R.id.li_bj);
+        tvLayoutTopBackBarStart = (TextView) findViewById(R.id.tv_layout_top_back_bar_start);
+        tvLayoutTopBackBarEnd = (TextView) findViewById(R.id.tv_layout_top_back_bar_end);
+        hideimage = (ImageView) findViewById(R.id.hideimage);
+        needhide = (LinearLayout) findViewById(R.id.needhide);
     }
 
     @Override
@@ -127,6 +134,8 @@ public class DeviceActivity extends BaseActivity {
         }
 
         geocoderSearch = new GeocodeSearch(this);
+
+        DialogUtil.showUnCancelableProgress(mActivity, getString(R.string.location_setting));
         initDevice();
     }
 
@@ -173,8 +182,13 @@ public class DeviceActivity extends BaseActivity {
                         bean.sim = array.get(Integer.parseInt(data.getString("sim"))).toString();
                         bean.precision = array.get(Integer.parseInt(data.getString("precision"))).toString();
                         getAddress(new LatLonPoint(Double.parseDouble(bean.weidu), Double.parseDouble(bean.jingdu)));
+                    } else {
+
+                        DialogUtil.hideProgress();
                     }
                 } catch (JSONException e) {
+
+                    DialogUtil.hideProgress();
                     e.printStackTrace();
                 }
             }
@@ -188,6 +202,8 @@ public class DeviceActivity extends BaseActivity {
     }
 
     private void initDeviceMark() {
+
+        DialogUtil.hideProgress();
         LatLng marker1 = new LatLng(Double.parseDouble(bean.weidu), Double.parseDouble(bean.jingdu));
         //设置中心点和缩放比例
         aMap.moveCamera(CameraUpdateFactory.changeLatLng(marker1));
@@ -199,11 +215,11 @@ public class DeviceActivity extends BaseActivity {
             public View getInfoWindow(Marker marker) {
                 TextView info = new TextView(DeviceActivity.this);
                 String infostring = ""
-                        + "名称：" + AccountManager.sUserBean.obd_macid + "\n"
+//                        + "名称：" + AccountManager.sUserBean.obd_macid + "\n"
                         + "设备号：" + bean.sim_id + "\n"
                         + "ACC状态：" + bean.status2String(1) + "\n"
                         + "设防状态：" + bean.status2String(2) + "\n"
-                        + "总里程：" + bean.statusNumber2String(1) + "\n"
+                        + "总里程：" + bean.statusNumber2String(1) + "km\n"
                         + "主电源电压：" + bean.statusNumber2String(6) + "(V)\n"
                         + "GPS颗数：" + bean.statusNumber2String(7) + "\n"
                         + "经度：" + bean.jingdu + "纬度：" + bean.weidu + "\n"
@@ -230,6 +246,7 @@ public class DeviceActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         map.onCreate(savedInstanceState);
+        initView();
     }
 
     @Override
@@ -239,7 +256,7 @@ public class DeviceActivity extends BaseActivity {
             public void onClick(View v) {
 //                initGuiJi();
 //                initWeiLan();
-                startActivity(new Intent(v.getContext(),DeviceGuiJiActivity.class));
+                startActivity(new Intent(v.getContext(), DeviceGuiJiActivity.class));
             }
         });
         liDh.setOnClickListener(new View.OnClickListener() {
@@ -251,13 +268,13 @@ public class DeviceActivity extends BaseActivity {
         liJc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(),DeviceCheckActivity.class));
+                startActivity(new Intent(v.getContext(), DeviceCheckActivity.class));
             }
         });
         liWl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(),DeviceWeiLanListActivity.class));
+                startActivity(new Intent(v.getContext(), DeviceWeiLanListActivity.class));
 
             }
         });
@@ -265,27 +282,27 @@ public class DeviceActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                startActivity(new Intent(v.getContext(),DeviceXingChengListActivity.class));
+                startActivity(new Intent(v.getContext(), DeviceXingChengListActivity.class));
             }
         });
         liBj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(),DeviceBaoJingListActivity.class));
+                startActivity(new Intent(v.getContext(), DeviceBaoJingListActivity.class));
             }
         });
         liXq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                startActivity(new Intent(v.getContext(),DeviceDetailActivity.class));
+                startActivity(new Intent(v.getContext(), DeviceDetailActivity.class));
             }
         });
         liCk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                startActivity(new Intent(v.getContext(),DeviceCarDetailActivity.class));
+                startActivity(new Intent(v.getContext(), DeviceCarDetailActivity.class));
             }
         });
         geocoderSearch.setOnGeocodeSearchListener(new GeocodeSearch.OnGeocodeSearchListener() {
@@ -311,7 +328,9 @@ public class DeviceActivity extends BaseActivity {
         mapmap.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+                if (isChecked) {
+                    mapmap.setTextColor(Color.BLACK);
+                    mapmoom.setTextColor(Color.BLACK);
                     aMap.setMapType(AMap.MAP_TYPE_NORMAL);
                 }
             }
@@ -319,13 +338,31 @@ public class DeviceActivity extends BaseActivity {
         mapmoom.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+                if (isChecked) {
+                    mapmap.setTextColor(Color.WHITE);
+                    mapmoom.setTextColor(Color.WHITE);
                     aMap.setMapType(AMap.MAP_TYPE_SATELLITE);
                 }
             }
         });
+        hidedevicemenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isshow) {
+                    hideimage.setImageResource(R.drawable.device_up);
+                    findViewById(R.id.needhide).setVisibility(View.GONE);
+                } else {
+
+                    hideimage.setImageResource(R.drawable.device_down);
+                    findViewById(R.id.needhide).setVisibility(View.VISIBLE);
+                }
+                isshow = !isshow;
+            }
+        });
 
     }
+
+    boolean isshow = true;
 
     /**
      * 响应逆地理编码
@@ -346,7 +383,7 @@ public class DeviceActivity extends BaseActivity {
 
     private void initWeiLan() {
 
-        LatLng latLng = new LatLng(Double.parseDouble(bean.weidu),Double.parseDouble(bean.jingdu));
+        LatLng latLng = new LatLng(Double.parseDouble(bean.weidu), Double.parseDouble(bean.jingdu));
         circle = aMap.addCircle(new CircleOptions().
                 center(latLng).
                 radius(1000).
@@ -358,7 +395,7 @@ public class DeviceActivity extends BaseActivity {
             public void run() {
                 circle.setRadius(500);
             }
-        },2000);
+        }, 2000);
     }
 
 
@@ -366,10 +403,10 @@ public class DeviceActivity extends BaseActivity {
         aMap.clear();
         Map<String, String> map = new HashMap<>();
         map.put("method", "getHistoryMByMUtc");
-        map.put("from", getTimesmorning()+"");
-        map.put("to", new Date().getTime()+"");
-        map.put("playLBS","true");
-        map.put("mapType","GAODE");
+        map.put("from", getTimesmorning() + "");
+        map.put("to", new Date().getTime() + "");
+        map.put("playLBS", "true");
+        map.put("mapType", "GAODE");
         map.put("macid", AccountManager.sUserBean.obd_macid);
         map.put("mds", AccountManager.sUserBean.obd_mds);
         System.out.println(map);
@@ -378,10 +415,10 @@ public class DeviceActivity extends BaseActivity {
             @Override
             public void onSuccess(String response) {
                 List<LatLng> latLngs = new ArrayList<LatLng>();
-                String[] array=response.replace("\"","").split(";");
-                for (int i = 0; i <array.length ; i++) {
-                    String[] ltarray=array[i].split(",");
-                    latLngs.add(new LatLng(Double.parseDouble(ltarray[1]),Double.parseDouble(ltarray[0])));
+                String[] array = response.replace("\"", "").split(";");
+                for (int i = 0; i < array.length; i++) {
+                    String[] ltarray = array[i].split(",");
+                    latLngs.add(new LatLng(Double.parseDouble(ltarray[1]), Double.parseDouble(ltarray[0])));
                 }
                 aMap.addPolyline(new PolylineOptions().
                         addAll(latLngs).width(10).color(Color.argb(255, 1, 1, 1)));
@@ -416,8 +453,9 @@ public class DeviceActivity extends BaseActivity {
             }
         });
     }
-    public void Nav(){
-        Poi start = new Poi("我的位置", new LatLng(HomepageConstant.mLatitude,HomepageConstant.mLongitude), "");
+
+    public void Nav() {
+        Poi start = new Poi("我的位置", new LatLng(HomepageConstant.mLatitude, HomepageConstant.mLongitude), "");
         Poi end = new Poi("我的车", new LatLng(Double.parseDouble(bean.weidu), Double.parseDouble(bean.jingdu)), "");
         List<Poi> wayList = new ArrayList();//途径点目前最多支持3个。
         AmapNaviPage.getInstance().showRouteActivity(DeviceActivity.this, new AmapNaviParams(start, wayList, end, AmapNaviType.DRIVER), new INaviInfoCallback() {
@@ -492,6 +530,7 @@ public class DeviceActivity extends BaseActivity {
             }
         });
     }
+
     protected void onDestroy() {
         super.onDestroy();
         //在activity执行onDestroy时执行mMapView.onDestroy()，销毁地图

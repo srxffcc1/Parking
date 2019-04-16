@@ -70,8 +70,12 @@ public class DeviceFragment extends BaseFragment implements View.OnClickListener
     public void initDevice(){
         if (AccountManager.sUserBean != null) {
             if(AccountManager.sUserBean.obd_id!=null){
-                device.setText("跳转吧");
+                device.setText("查看OBD详情");
+            }else{
+                passdevice.setBackgroundResource(R.drawable.noobd);
             }
+        }else{
+            passdevice.setBackgroundResource(R.drawable.noobd);
         }
     }
 
@@ -80,7 +84,13 @@ public class DeviceFragment extends BaseFragment implements View.OnClickListener
         passdevice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), DeviceActivity.class));
+                if(device.getText().toString().contains("绑定")){
+
+                    startActivity(new Intent(v.getContext(), DeviceActivity.class));
+                }else{
+
+                    startActivity(new Intent(v.getContext(), DeviceActivity.class));
+                }
             }
         });
     }

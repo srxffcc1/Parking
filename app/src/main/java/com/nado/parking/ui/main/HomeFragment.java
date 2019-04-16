@@ -5,9 +5,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.nado.parking.R;
@@ -229,9 +233,22 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             mCarBeanAdapter = new RecyclerCommonAdapter<CarChoiceBean>(mActivity, R.layout.item_carchoice, mCarChoiceList) {
 
                 @Override
-                protected void convert(ViewHolder holder, CarChoiceBean carChoiceBean, int position) {
+                protected void convert(ViewHolder holder, final CarChoiceBean carChoiceBean, int position) {
                     holder.setText(R.id.show_price, "￥"+carChoiceBean.show_price);
                     holder.setText(R.id.title, carChoiceBean.title);
+
+                    RequestOptions options = new RequestOptions()
+                            .fitCenter()
+                            .diskCacheStrategy(DiskCacheStrategy.NONE);//缓存全尺寸
+
+                    Glide.with(mActivity).load(carChoiceBean.picture).apply(options).into((ImageView) holder.getView(R.id.picture));
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startActivity(new Intent(mActivity,MainGoodDetailActivity.class).putExtra("id",carChoiceBean.id));
+                        }
+                    });
+
 //                    new GlideImageLoader().displayImage(mActivity,carChoiceBean.picture, (ImageView) holder.getView(R.id.picture));
 //                    new GlideImageLoader().displayImage(mActivity,carChoiceBean.picture, (ImageView) holder.getView(R.id.picture));
                 }
