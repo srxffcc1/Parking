@@ -25,4 +25,18 @@ public class DeviceBean {
     public String describe;
     public String sim;
     public String precision;
+
+
+    public String status2String(int index){
+        String result=status.substring(index-1,index);
+        if("0".equals(result)){
+            return "闭";
+        }else{
+            return "开";
+        }
+    }
+    public String statusNumber2String(int index){
+        String result=statenumber.split(",")[index-1];
+        return result;
+    }
 }

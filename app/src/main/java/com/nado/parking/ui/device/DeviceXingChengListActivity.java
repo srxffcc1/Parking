@@ -1,10 +1,17 @@
 package com.nado.parking.ui.device;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
@@ -29,19 +36,28 @@ import com.amap.api.navi.AmapNaviParams;
 import com.amap.api.navi.AmapNaviType;
 import com.amap.api.navi.INaviInfoCallback;
 import com.amap.api.navi.model.AMapNaviLocation;
+import com.bigkoo.pickerview.TimePickerView;
 import com.nado.parking.R;
+import com.nado.parking.adapter.recycler.RecyclerCommonAdapter;
+import com.nado.parking.adapter.recycler.base.ViewHolder;
 import com.nado.parking.base.BaseActivity;
 import com.nado.parking.bean.DeviceBean;
+import com.nado.parking.bean.WeiLan;
+import com.nado.parking.bean.XingCheng;
 import com.nado.parking.constant.HomepageConstant;
 import com.nado.parking.manager.AccountManager;
 import com.nado.parking.manager.RequestManager;
 import com.nado.parking.net.RetrofitCallBack;
 import com.nado.parking.net.RetrofitRequestInterface;
+import com.nado.parking.util.DisplayUtil;
+import com.nado.parking.widget.DividerItemDecoration;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -55,31 +71,26 @@ import java.util.Map;
  */
 public class DeviceXingChengListActivity extends BaseActivity {
 
+
     private RelativeLayout rlLayoutTopBackBar;
     private LinearLayout llLayoutTopBackBarBack;
+    private TextView tvLayoutTopBackBarStart;
     private TextView tvLayoutTopBackBarTitle;
+    private TextView tvLayoutTopBackBarEnd;
     private TextView tvLayoutBackTopBarOperate;
-    private MapView map;
-    private RadioButton mapmap;
-    private RadioButton mapmoom;
-    private LinearLayout hidedevicemenu;
-    private List<LatLng> latLngs=new ArrayList<>();
-
-    private DeviceBean bean;
-    private AMap aMap;
-    private LinearLayout liDh;
-    private LinearLayout liWl;
-    private LinearLayout liGj;
-    private LinearLayout liXq;
-    private LinearLayout liXc;
-    private LinearLayout liJc;
-    private LinearLayout liCk;
-    private LinearLayout liBj;
-    private Circle circle;
+    private TextView sumlicheng;
+    private TextView sumyouhao;
+    private TextView sumxingshishijian;
+    private TextView sumxiaofei;
+    private android.widget.ImageView deviceEdit;
+    private android.support.v7.widget.RecyclerView recycler;
+    private RecyclerCommonAdapter<XingCheng> myAdapter;
+    private List<XingCheng> mBeanList = new ArrayList<>();
+    private TextView time;
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_device;
+        return R.layout.activity_device_xingcheng;
     }
 
     @Override
@@ -87,212 +98,166 @@ public class DeviceXingChengListActivity extends BaseActivity {
 
         rlLayoutTopBackBar = (RelativeLayout) findViewById(R.id.rl_layout_top_back_bar);
         llLayoutTopBackBarBack = (LinearLayout) findViewById(R.id.ll_layout_top_back_bar_back);
+        tvLayoutTopBackBarStart = (TextView) findViewById(R.id.tv_layout_top_back_bar_start);
         tvLayoutTopBackBarTitle = (TextView) findViewById(R.id.tv_layout_top_back_bar_title);
+        tvLayoutTopBackBarEnd = (TextView) findViewById(R.id.tv_layout_top_back_bar_end);
         tvLayoutBackTopBarOperate = (TextView) findViewById(R.id.tv_layout_back_top_bar_operate);
-        map = (MapView) findViewById(R.id.map);
-        mapmap = (RadioButton) findViewById(R.id.mapmap);
-        mapmoom = (RadioButton) findViewById(R.id.mapmoom);
-        hidedevicemenu = (LinearLayout) findViewById(R.id.hidedevicemenu);
+        sumlicheng = (TextView) findViewById(R.id.sumlicheng);
+        sumyouhao = (TextView) findViewById(R.id.sumyouhao);
+        sumxingshishijian = (TextView) findViewById(R.id.sumxingshishijian);
+        sumxiaofei = (TextView) findViewById(R.id.sumxiaofei);
+        deviceEdit = (ImageView) findViewById(R.id.device_edit);
+        recycler = (RecyclerView) findViewById(R.id.recycler);
+        time = (TextView) findViewById(R.id.time);
+        tvLayoutTopBackBarTitle.setText("行程");
+    }
+    public void startTimePicker(Activity activity, TimePickerView.OnTimeSelectListener listener){
+//        long tenYears = 10L * 365 * 1000 * 60 * 60 * 24L;
+//        new TimePickerDialog.Builder()
+//                .setCallBack(back)
+//                .setCancelStringId("取消")
+//                .setSureStringId("确认")
+//                .setTitleStringId("时间选择器")
+//                .setYearText("年")
+//                .setMonthText("月")
+//                .setDayText("日")
+//                .setHourText("时")
+//                .setMinuteText("分")
+//                .setCyclic(true)
+//                .setMinMillseconds(System.currentTimeMillis())
+//                .setMaxMillseconds(System.currentTimeMillis() + tenYears)
+//                .setCurrentMillseconds(System.currentTimeMillis())
+//                .setThemeColor(activity.getResources().getColor(R.color.timepicker_dialog_bg))
+//                .setType(Type.ALL)
+//                .setWheelItemTextNormalColor(activity.getResources().getColor(R.color.timetimepicker_default_text_color))
+//                .setWheelItemTextSelectorColor(activity.getResources().getColor(R.color.timepicker_toolbar_bg))
+//                .setWheelItemTextSize(12)
+//                .build()
+//        .show(((FragmentActivity)activity).getSupportFragmentManager(),"timepicker");
 
-        liDh = (LinearLayout) findViewById(R.id.li_dh);
-        liWl = (LinearLayout) findViewById(R.id.li_wl);
-        liGj = (LinearLayout) findViewById(R.id.li_gj);
-        liXq = (LinearLayout) findViewById(R.id.li_xq);
-        liXc = (LinearLayout) findViewById(R.id.li_xc);
-        liJc = (LinearLayout) findViewById(R.id.li_jc);
-        liCk = (LinearLayout) findViewById(R.id.li_ck);
-        liBj = (LinearLayout) findViewById(R.id.li_bj);
+        Calendar selectedDate = Calendar.getInstance();
+        Calendar startDate = Calendar.getInstance();
+        startDate.set(Integer.parseInt(new SimpleDateFormat("yyyy").format(new Date()))-2,1,1);
+        Calendar endDate = Calendar.getInstance();
+        endDate.set(Integer.parseInt(new SimpleDateFormat("yyyy").format(new Date()))+2,1,1);
+
+        //正确设置方式 原因：注意事项有说明
+//        startDate.set(2013,0,1);
+//        endDate.set(2020,11,31);
+        TimePickerView timePickerView=new TimePickerView.Builder(activity, listener).setType(new boolean[]{true, true, true, false, false, false})// 默认全部显示
+                .setCancelText("取消")//取消按钮文字
+                .setSubmitText("确认")//确认按钮文字
+//                .setContentSize(18)//滚轮文字大小
+//                .setTitleSize(20)//标题文字大小
+                .setTitleText("时间")//标题文字
+                .setOutSideCancelable(false)//点击屏幕，点在控件外部范围时，是否取消显示
+                .isCyclic(true)//是否循环滚动
+                .setDividerColor(Color.DKGRAY)
+                .setDate(selectedDate)// 如果不设置的话，默认是系统时间*/
+                .setRangDate(startDate,endDate)//起始终止年月日设定
+                .setLabel("","","","","","")//默认设置为年月日时分秒
+                .isCenterLabel(true) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                .setDecorView(null)
+                .build();
+        timePickerView.show();
     }
 
-    @Override
-    public void initData() {
-        //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
-        aMap = null;
-        if (aMap == null) {
-            aMap = map.getMap();
+    private static Long getTimeZero(String specifiedDay,int fix) {
+        System.out.println(specifiedDay);
+        Date date=null;
+        try {
+            date= new SimpleDateFormat("yyyy-MM-dd").parse(specifiedDay);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        initDevice();
-    }
-
-    private void initDevice() {
-        aMap.clear();
-        Map<String, String> map = new HashMap<>();
-        map.put("method", "getUserAndGpsInfoByIDsUtc");
-        map.put("mapType", "GAODE");
-        map.put("macid", AccountManager.sUserBean.obd_macid);
-        map.put("user_id", AccountManager.sUserBean.obd_user_id);
-        map.put("mds", AccountManager.sUserBean.obd_mds);
-        RequestManager.mRetrofitManager2.createRequest(RetrofitRequestInterface.class).getDeviceDate(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
-
-            @Override
-            public void onSuccess(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONObject data = jsonObject.getJSONObject("key");
-                    JSONArray array = jsonObject.getJSONArray("records").getJSONArray(0);
-                    if (data != null) {
-                        bean = new DeviceBean();
-                        bean.sys_time = array.get(Integer.parseInt(data.getString("sys_time"))).toString();
-                        bean.user_name = array.get(Integer.parseInt(data.getString("user_name"))).toString();
-                        bean.jingdu = array.get(Integer.parseInt(data.getString("jingdu"))).toString();
-                        bean.weidu = array.get(Integer.parseInt(data.getString("weidu"))).toString();
-                        bean.ljingdu = array.get(Integer.parseInt(data.getString("ljingdu"))).toString();
-                        bean.lweidu = array.get(Integer.parseInt(data.getString("lweidu"))).toString();
-                        bean.datetime = array.get(Integer.parseInt(data.getString("datetime"))).toString();
-                        bean.heart_time = array.get(Integer.parseInt(data.getString("heart_time"))).toString();
-                        bean.su = array.get(Integer.parseInt(data.getString("su"))).toString();
-                        bean.status = array.get(Integer.parseInt(data.getString("status"))).toString();
-                        bean.hangxiang = array.get(Integer.parseInt(data.getString("hangxiang"))).toString();
-                        bean.sim_id = array.get(Integer.parseInt(data.getString("sim_id"))).toString();
-                        bean.user_id = array.get(Integer.parseInt(data.getString("user_id"))).toString();
-                        bean.sale_type = array.get(Integer.parseInt(data.getString("sale_type"))).toString();
-                        bean.iconType = array.get(Integer.parseInt(data.getString("iconType"))).toString();
-                        bean.server_time = array.get(Integer.parseInt(data.getString("server_time"))).toString();
-                        bean.product_type = array.get(Integer.parseInt(data.getString("product_type"))).toString();
-                        bean.expire_date = array.get(Integer.parseInt(data.getString("expire_date"))).toString();
-                        bean.group_id = array.get(Integer.parseInt(data.getString("group_id"))).toString();
-                        bean.statenumber = array.get(Integer.parseInt(data.getString("statenumber"))).toString();
-                        bean.electric = array.get(Integer.parseInt(data.getString("electric"))).toString();
-                        bean.describe = array.get(Integer.parseInt(data.getString("describe"))).toString();
-                        bean.sim = array.get(Integer.parseInt(data.getString("sim"))).toString();
-                        bean.precision = array.get(Integer.parseInt(data.getString("precision"))).toString();
-                        initDeviceMark();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onError(Throwable t) {
-
-            }
-        });
-
-    }
-
-    private void initDeviceMark() {
-        LatLng marker1 = new LatLng(Double.parseDouble(bean.weidu), Double.parseDouble(bean.jingdu));
-        //设置中心点和缩放比例
-        aMap.moveCamera(CameraUpdateFactory.changeLatLng(marker1));
-        aMap.moveCamera(CameraUpdateFactory.zoomTo(15));
-        final Marker marker = aMap.addMarker(new MarkerOptions().position(marker1).title("北京").snippet("DefaultMarker"));
-
-        aMap.setInfoWindowAdapter(new AMap.InfoWindowAdapter() {
-            @Override
-            public View getInfoWindow(Marker marker) {
-                TextView info = new TextView(DeviceXingChengListActivity.this);
-                String infostring = ""
-                        + "名称：" + bean.user_name + "\n"
-                        + "设备号：" + bean.sim_id + "\n"
-                        + "设备类型：" + bean.product_type + "\n";
-                info.setText(infostring);
-                return info;
-            }
-
-            @Override
-            public View getInfoContents(Marker marker) {
-                return null;
-            }
-        });
-        marker.showInfoWindow();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        map.onCreate(savedInstanceState);
-        initView();
-    }
-
-    @Override
-    public void initEvent() {
-        liGj.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                initGuiJi();
-                initWeiLan();
-            }
-        });
-        liDh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Nav();
-            }
-        });
-
-    }
-    private static Long getTimesmorning() {
         Calendar cal = Calendar.getInstance();
-        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+        cal.setTime(date);
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)+fix, 0, 0, 0);
         Date beginOfDate = cal.getTime();
 
         return beginOfDate.getTime();
     }
 
-    private void initWeiLan() {
 
-        LatLng latLng = new LatLng(Double.parseDouble(bean.weidu),Double.parseDouble(bean.jingdu));
-        circle = aMap.addCircle(new CircleOptions().
-                center(latLng).
-                radius(1000).
-                fillColor(Color.RED).
-                strokeColor(Color.GRAY).
-                strokeWidth(15));
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                circle.setRadius(500);
-            }
-        },2000);
+    @Override
+    public void initData() {
+        time.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        initList(getTimeZero(new SimpleDateFormat("yyyy-MM-dd").format(new Date()),0)+"",getTimeZero(new SimpleDateFormat("yyyy-MM-dd").format(new Date()),1)+"");
     }
 
+    @Override
+    public void initEvent() {
+        time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startTimePicker(DeviceXingChengListActivity.this, new TimePickerView.OnTimeSelectListener() {
+                    @Override
+                    public void onTimeSelect(Date date, View v) {
+                        time.setText(new SimpleDateFormat("yyyy-MM-dd").format(date));
+                        initList(getTimeZero(new SimpleDateFormat("yyyy-MM-dd").format(date),0)+"",getTimeZero(new SimpleDateFormat("yyyy-MM-dd").format(date),1)+"");
+                    }
+                });
+            }
+        });
+    }
 
-    private void initGuiJi() {
-        aMap.clear();
+    private void initList(String begintime, String endtime) {
         Map<String, String> map = new HashMap<>();
-        map.put("method", "getHistoryMByMUtc");
-        map.put("from", getTimesmorning()+"");
-        map.put("to", new Date().getTime()+"");
-        map.put("playLBS","true");
-        map.put("mapType","GAODE");
+        map.put("method", "getStrokeV3");
+        map.put("beginTime", begintime);
+        map.put("endTime", endtime);
+        map.put("mapType", "GAODE");
         map.put("macid", AccountManager.sUserBean.obd_macid);
         map.put("mds", AccountManager.sUserBean.obd_mds);
-        System.out.println(map);
         RequestManager.mRetrofitManager2.createRequest(RetrofitRequestInterface.class).getGuiJiDate(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
 
             @Override
             public void onSuccess(String response) {
-                List<LatLng> latLngs = new ArrayList<LatLng>();
-                String[] array=response.replace("\"","").split(";");
-                for (int i = 0; i <array.length ; i++) {
-                    String[] ltarray=array[i].split(",");
-                    latLngs.add(new LatLng(Double.parseDouble(ltarray[1]),Double.parseDouble(ltarray[0])));
+
+
+                try {
+                    JSONObject res = new JSONObject(response);
+                    String info = res.getString("success");
+                    mBeanList.clear();
+                    if ("true".equals(info)) {
+                        JSONArray jsonArray = res.getJSONArray("rows");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            XingCheng bean = new XingCheng();
+                            bean.totalfuelUsed = jsonObject.optString("totalfuelUsed");
+                            bean.distance = jsonObject.optString("distance");
+                            bean.fuelHKM = jsonObject.optString("fuelHKM");
+                            bean.totalSpeedoverSeconds = jsonObject.optString("totalSpeedoverSeconds");
+                            bean.maxspeed = jsonObject.optString("maxspeed");
+                            bean.brakeTimes = jsonObject.optString("brakeTimes");
+                            bean.emergencyBrakeTimes = jsonObject.optString("emergencyBrakeTimes");
+                            bean.speedupTimes = jsonObject.optString("speedupTimes");
+                            bean.emergencySpeedupTimes = jsonObject.optString("emergencySpeedupTimes");
+                            bean.speed = jsonObject.optString("speed");
+                            bean.maxTempc = jsonObject.optString("maxTempc");
+                            bean.maxEngRPM = jsonObject.optString("maxEngRPM");
+                            bean.btime = jsonObject.optString("btime");
+                            bean.etime = jsonObject.optString("etime");
+                            bean.strokeTime = jsonObject.optString("strokeTime");
+                            bean.jsType = jsonObject.optString("jsType");
+                            bean.driveTime = jsonObject.optString("driveTime");
+                            bean.fraction = jsonObject.optString("fraction");
+                            bean.random = jsonObject.optString("random");
+                            bean.coulometric = jsonObject.optString("coulometric");
+                            bean.powerv = jsonObject.optString("powerv");
+                            bean.overtimeDriverMinutes = jsonObject.optString("overtimeDriverMinutes");
+                            bean.BeginTime = jsonObject.optString("BeginTime");
+                            bean.EndTime = jsonObject.optString("EndTime");
+                            bean.IdlingTime = jsonObject.optString("IdlingTime");
+                            mBeanList.add(bean);
+                        }
+                    }
+                    showRecycleView();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                aMap.addPolyline(new PolylineOptions().
-                        addAll(latLngs).width(10).color(Color.argb(255, 1, 1, 1)));
 
-
-                LatLngBounds bounds = new LatLngBounds(latLngs.get(0), latLngs.get(latLngs.size() - 2));
-                aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50));
-
-                SmoothMoveMarker smoothMarker = new SmoothMoveMarker(aMap);
-// 设置滑动的图标
-                smoothMarker.setDescriptor(BitmapDescriptorFactory.fromResource(R.drawable.icon_car));
-
-                LatLng drivePoint = latLngs.get(0);
-                Pair<Integer, LatLng> pair = SpatialRelationUtil.calShortestDistancePoint(latLngs, drivePoint);
-                latLngs.set(pair.first, drivePoint);
-                List<LatLng> subList = latLngs.subList(pair.first, latLngs.size());
-
-// 设置滑动的轨迹左边点
-                smoothMarker.setPoints(subList);
-// 设置滑动的总时间
-                smoothMarker.setTotalDuration(40);
-// 开始滑动
-                smoothMarker.startSmoothMove();
-
-                smoothMarker.stopMove();
 
             }
 
@@ -302,106 +267,40 @@ public class DeviceXingChengListActivity extends BaseActivity {
             }
         });
     }
-    public void Nav(){
-        Poi start = new Poi("我的位置", new LatLng(HomepageConstant.mLatitude,HomepageConstant.mLongitude), "");
-        Poi end = new Poi("我的车", new LatLng(Double.parseDouble(bean.weidu), Double.parseDouble(bean.jingdu)), "");
-        List<Poi> wayList = new ArrayList();//途径点目前最多支持3个。
-        AmapNaviPage.getInstance().showRouteActivity(DeviceXingChengListActivity.this, new AmapNaviParams(start, wayList, end, AmapNaviType.DRIVER), new INaviInfoCallback() {
-            @Override
-            public void onInitNaviFailure() {
 
-            }
+    private void showRecycleView() {
+        if (myAdapter == null) {
 
-            @Override
-            public void onGetNavigationText(String s) {
+            myAdapter = new RecyclerCommonAdapter<XingCheng>(mActivity, R.layout.item_device_xingcheng, mBeanList) {
+                @Override
+                protected void convert(ViewHolder holder, final XingCheng carChoiceBean, int position) {
+                    holder.setText(R.id.devide_time_text,carChoiceBean.btime+" - "+carChoiceBean.etime);
 
-            }
+                    holder.setText(R.id.licheng,carChoiceBean.distance+"km");
+                    holder.setText(R.id.youhao,carChoiceBean.fuelHKM+"L");
+                    holder.setText(R.id.pingjunsudu,carChoiceBean.speed+"km/h");
+                    holder.setText(R.id.jijiasu,carChoiceBean.emergencySpeedupTimes+"次");
+                    holder.setText(R.id.jijiansu,carChoiceBean.emergencyBrakeTimes+"次");
+                    holder.setOnClickListener(R.id.device_hf, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
-            @Override
-            public void onLocationChange(AMapNaviLocation aMapNaviLocation) {
+                            startActivity(new Intent(v.getContext(),DeviceGuiJiActivity.class).putExtra("from",carChoiceBean.BeginTime).putExtra("to",carChoiceBean.EndTime));
+                        }
+                    });
 
-            }
 
-            @Override
-            public void onArriveDestination(boolean b) {
 
-            }
+                }
 
-            @Override
-            public void onStartNavi(int i) {
+            };
 
-            }
-
-            @Override
-            public void onCalculateRouteSuccess(int[] ints) {
-
-            }
-
-            @Override
-            public void onCalculateRouteFailure(int i) {
-
-            }
-
-            @Override
-            public void onStopSpeaking() {
-
-            }
-
-            @Override
-            public void onReCalculateRoute(int i) {
-
-            }
-
-            @Override
-            public void onExitPage(int i) {
-
-            }
-
-            @Override
-            public void onStrategyChanged(int i) {
-
-            }
-
-            @Override
-            public View getCustomNaviBottomView() {
-                return null;
-            }
-
-            @Override
-            public View getCustomNaviView() {
-                return null;
-            }
-
-            @Override
-            public void onArrivedWayPoint(int i) {
-
-            }
-        });
-    }
-    protected void onDestroy() {
-        super.onDestroy();
-        //在activity执行onDestroy时执行mMapView.onDestroy()，销毁地图
-        map.onDestroy();
+            recycler.addItemDecoration(new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST, (int) DisplayUtil.dpToPx(mActivity, 1), ContextCompat.getColor(mActivity, R.color.colorLine), false, 2));
+            recycler.setAdapter(myAdapter);
+            recycler.setLayoutManager(new LinearLayoutManager(mActivity));
+        } else {
+            myAdapter.notifyDataSetChanged();
+        }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //在activity执行onResume时执行mMapView.onResume ()，重新绘制加载地图
-        map.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //在activity执行onPause时执行mMapView.onPause ()，暂停地图的绘制
-        map.onPause();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        //在activity执行onSaveInstanceState时执行mMapView.onSaveInstanceState (outState)，保存地图当前的状态
-        map.onSaveInstanceState(outState);
-    }
 }

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Pair;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
@@ -32,6 +34,12 @@ import com.amap.api.navi.AmapNaviParams;
 import com.amap.api.navi.AmapNaviType;
 import com.amap.api.navi.INaviInfoCallback;
 import com.amap.api.navi.model.AMapNaviLocation;
+import com.amap.api.services.core.AMapException;
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.geocoder.GeocodeResult;
+import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeQuery;
+import com.amap.api.services.geocoder.RegeocodeResult;
 import com.nado.parking.R;
 import com.nado.parking.base.BaseActivity;
 import com.nado.parking.bean.DeviceBean;
@@ -45,6 +53,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -79,6 +88,8 @@ public class DeviceActivity extends BaseActivity {
     private LinearLayout liCk;
     private LinearLayout liBj;
     private Circle circle;
+    private String address;
+    private GeocodeSearch geocoderSearch;
 
     @Override
     protected int getContentViewId() {
@@ -114,6 +125,8 @@ public class DeviceActivity extends BaseActivity {
         if (aMap == null) {
             aMap = map.getMap();
         }
+
+        geocoderSearch = new GeocodeSearch(this);
         initDevice();
     }
 
@@ -159,7 +172,7 @@ public class DeviceActivity extends BaseActivity {
                         bean.describe = array.get(Integer.parseInt(data.getString("describe"))).toString();
                         bean.sim = array.get(Integer.parseInt(data.getString("sim"))).toString();
                         bean.precision = array.get(Integer.parseInt(data.getString("precision"))).toString();
-                        initDeviceMark();
+                        getAddress(new LatLonPoint(Double.parseDouble(bean.weidu), Double.parseDouble(bean.jingdu)));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -186,9 +199,21 @@ public class DeviceActivity extends BaseActivity {
             public View getInfoWindow(Marker marker) {
                 TextView info = new TextView(DeviceActivity.this);
                 String infostring = ""
-                        + "名称：" + bean.user_name + "\n"
+                        + "名称：" + AccountManager.sUserBean.obd_macid + "\n"
                         + "设备号：" + bean.sim_id + "\n"
-                        + "设备类型：" + bean.product_type + "\n";
+                        + "ACC状态：" + bean.status2String(1) + "\n"
+                        + "设防状态：" + bean.status2String(2) + "\n"
+                        + "总里程：" + bean.statusNumber2String(1) + "\n"
+                        + "主电源电压：" + bean.statusNumber2String(6) + "(V)\n"
+                        + "GPS颗数：" + bean.statusNumber2String(7) + "\n"
+                        + "经度：" + bean.jingdu + "纬度：" + bean.weidu + "\n"
+
+                        + "定位类型：GPS+北斗" + "\n"
+//                        + "定位类型：" + bean.statusNumber2String(16) + "\n"
+                        + "参数：" + bean.sim_id + "\n"
+                        + "信号时间：" + new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date(Long.parseLong(bean.sys_time))) + "\n"
+                        + "定位时间：" + new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date(Long.parseLong(bean.sys_time))) + "\n"
+                        + "" + address + "\n";
                 info.setText(infostring);
                 return info;
             }
@@ -236,8 +261,81 @@ public class DeviceActivity extends BaseActivity {
 
             }
         });
+        liXc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(v.getContext(),DeviceXingChengListActivity.class));
+            }
+        });
+        liBj.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(),DeviceBaoJingListActivity.class));
+            }
+        });
+        liXq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(v.getContext(),DeviceDetailActivity.class));
+            }
+        });
+        liCk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(v.getContext(),DeviceCarDetailActivity.class));
+            }
+        });
+        geocoderSearch.setOnGeocodeSearchListener(new GeocodeSearch.OnGeocodeSearchListener() {
+            @Override
+            public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
+                if (i == AMapException.CODE_AMAP_SUCCESS) {
+                    if (regeocodeResult != null && regeocodeResult.getRegeocodeAddress() != null
+                            && regeocodeResult.getRegeocodeAddress().getFormatAddress() != null) {
+                        address = regeocodeResult.getRegeocodeAddress().getFormatAddress()
+                                + "附近";
+                        initDeviceMark();
+                    } else {
+                    }
+                } else {
+                }
+            }
+
+            @Override
+            public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
+
+            }
+        });
+        mapmap.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    aMap.setMapType(AMap.MAP_TYPE_NORMAL);
+                }
+            }
+        });
+        mapmoom.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    aMap.setMapType(AMap.MAP_TYPE_SATELLITE);
+                }
+            }
+        });
 
     }
+
+    /**
+     * 响应逆地理编码
+     */
+    public void getAddress(final LatLonPoint latLonPoint) {
+        RegeocodeQuery query = new RegeocodeQuery(latLonPoint, 200,
+                GeocodeSearch.AMAP);// 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
+        geocoderSearch.getFromLocationAsyn(query);// 设置异步逆地理编码请求
+    }
+
     private static Long getTimesmorning() {
         Calendar cal = Calendar.getInstance();
         cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);

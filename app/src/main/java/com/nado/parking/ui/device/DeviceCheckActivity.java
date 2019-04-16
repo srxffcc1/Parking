@@ -1,38 +1,15 @@
 package com.nado.parking.ui.device;
 
-import android.graphics.Color;
-import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.amap.api.maps.AMap;
-import com.amap.api.maps.CameraUpdateFactory;
-import com.amap.api.maps.MapView;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.Circle;
-import com.amap.api.maps.model.CircleOptions;
-import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.LatLngBounds;
-import com.amap.api.maps.model.Marker;
-import com.amap.api.maps.model.MarkerOptions;
-import com.amap.api.maps.model.Poi;
-import com.amap.api.maps.model.PolylineOptions;
-import com.amap.api.maps.utils.SpatialRelationUtil;
-import com.amap.api.maps.utils.overlay.SmoothMoveMarker;
-import com.amap.api.navi.AmapNaviPage;
-import com.amap.api.navi.AmapNaviParams;
-import com.amap.api.navi.AmapNaviType;
-import com.amap.api.navi.INaviInfoCallback;
-import com.amap.api.navi.model.AMapNaviLocation;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -40,15 +17,11 @@ import com.nado.parking.R;
 import com.nado.parking.adapter.recycler.RecyclerCommonAdapter;
 import com.nado.parking.adapter.recycler.base.ViewHolder;
 import com.nado.parking.base.BaseActivity;
-import com.nado.parking.bean.DeviceBean;
 import com.nado.parking.bean.DeviceCheck;
-import com.nado.parking.bean.ShuiCompany;
-import com.nado.parking.constant.HomepageConstant;
 import com.nado.parking.manager.AccountManager;
 import com.nado.parking.manager.RequestManager;
 import com.nado.parking.net.RetrofitCallBack;
 import com.nado.parking.net.RetrofitRequestInterface;
-import com.nado.parking.ui.main.MainActivity;
 import com.nado.parking.util.DisplayUtil;
 import com.nado.parking.widget.DividerItemDecoration;
 
@@ -57,8 +30,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,7 +56,7 @@ public class DeviceCheckActivity extends BaseActivity {
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_devicejiance;
+        return R.layout.activity_device_jiance;
     }
 
     @Override
@@ -223,6 +194,6 @@ public class DeviceCheckActivity extends BaseActivity {
 
                 checkCar();
             }
-        }, 5000);
+        }, 2000);
     }
 }

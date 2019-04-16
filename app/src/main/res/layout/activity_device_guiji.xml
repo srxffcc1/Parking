@@ -10,6 +10,7 @@
     <include layout="@layout/layout_top_back_bar" />
 
     <FrameLayout
+        android:id="@+id/guijierrorneedhide"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

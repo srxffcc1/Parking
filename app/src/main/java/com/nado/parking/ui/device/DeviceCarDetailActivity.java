@@ -2,46 +2,23 @@ package com.nado.parking.ui.device;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.amap.api.maps.AMap;
-import com.amap.api.maps.CameraUpdateFactory;
-import com.amap.api.maps.MapView;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.Circle;
-import com.amap.api.maps.model.CircleOptions;
-import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.LatLngBounds;
-import com.amap.api.maps.model.Marker;
-import com.amap.api.maps.model.MarkerOptions;
-import com.amap.api.maps.model.Poi;
-import com.amap.api.maps.model.PolylineOptions;
-import com.amap.api.maps.utils.SpatialRelationUtil;
-import com.amap.api.maps.utils.overlay.SmoothMoveMarker;
-import com.amap.api.navi.AmapNaviPage;
-import com.amap.api.navi.AmapNaviParams;
-import com.amap.api.navi.AmapNaviType;
-import com.amap.api.navi.INaviInfoCallback;
-import com.amap.api.navi.model.AMapNaviLocation;
+import com.fondesa.recyclerviewdivider.RecyclerViewDivider;
 import com.nado.parking.R;
 import com.nado.parking.adapter.recycler.RecyclerCommonAdapter;
 import com.nado.parking.adapter.recycler.base.ViewHolder;
 import com.nado.parking.base.BaseActivity;
-import com.nado.parking.bean.BaoJing;
-import com.nado.parking.bean.DeviceBean;
+import com.nado.parking.bean.CheKuang;
+import com.nado.parking.bean.DeviceDetail;
 import com.nado.parking.bean.WeiLan;
-import com.nado.parking.constant.HomepageConstant;
 import com.nado.parking.manager.AccountManager;
 import com.nado.parking.manager.RequestManager;
 import com.nado.parking.net.RetrofitCallBack;
@@ -54,8 +31,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,35 +39,37 @@ import java.util.Map;
  * 作者：Constantine on 2018/9/5.
  * 邮箱：2534159288@qq.com
  */
-public class DeviceBaoJingListActivity extends BaseActivity {
+public class DeviceCarDetailActivity extends BaseActivity {
 
 
+
+    private RecyclerCommonAdapter<CheKuang> myAdapter;
+    private List<CheKuang> mBeanList = new ArrayList<>();
+    private android.support.v7.widget.RecyclerView recycler;
     private RelativeLayout rlLayoutTopBackBar;
     private LinearLayout llLayoutTopBackBarBack;
     private TextView tvLayoutTopBackBarStart;
     private TextView tvLayoutTopBackBarTitle;
     private TextView tvLayoutTopBackBarEnd;
     private TextView tvLayoutBackTopBarOperate;
-    private android.support.v7.widget.RecyclerView recycler;
-    private RecyclerCommonAdapter<BaoJing> myAdapter;
-    private List<BaoJing> mBeanList = new ArrayList<>();
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_device_baojing;
+        return R.layout.activity_device_chekuang;
     }
+
 
     @Override
     public void initView() {
 
+
+        recycler = (RecyclerView) findViewById(R.id.recycler);
         rlLayoutTopBackBar = (RelativeLayout) findViewById(R.id.rl_layout_top_back_bar);
         llLayoutTopBackBarBack = (LinearLayout) findViewById(R.id.ll_layout_top_back_bar_back);
         tvLayoutTopBackBarStart = (TextView) findViewById(R.id.tv_layout_top_back_bar_start);
         tvLayoutTopBackBarTitle = (TextView) findViewById(R.id.tv_layout_top_back_bar_title);
         tvLayoutTopBackBarEnd = (TextView) findViewById(R.id.tv_layout_top_back_bar_end);
         tvLayoutBackTopBarOperate = (TextView) findViewById(R.id.tv_layout_back_top_bar_operate);
-        recycler = (RecyclerView) findViewById(R.id.recycler);
-        tvLayoutTopBackBarTitle.setText("报警");
     }
 
     @Override
@@ -106,11 +83,10 @@ public class DeviceBaoJingListActivity extends BaseActivity {
     }
     private void initList() {
         Map<String, String> map = new HashMap<>();
-        map.put("customer_id", AccountManager.sUserBean.getId());
-        map.put("obd_macid", AccountManager.sUserBean.obd_macid);
-        map.put("page", "1");
-        map.put("limit", "10");
-        RequestManager.mRetrofitManager.createRequest(RetrofitRequestInterface.class).getAlarmList(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
+        map.put("method", "OBDLatestCarCondition");
+        map.put("mds", AccountManager.sUserBean.obd_mds);
+        map.put("macid", AccountManager.sUserBean.obd_macid);
+        RequestManager.mRetrofitManager2.createRequest(RetrofitRequestInterface.class).getCheKuang(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
 
             @Override
             public void onSuccess(String response) {
@@ -118,18 +94,16 @@ public class DeviceBaoJingListActivity extends BaseActivity {
 
                 try {
                     JSONObject res = new JSONObject(response);
-                    int code = res.getInt("code");
-                    String info = res.getString("info");
+                    String info = res.getString("success");
                     mBeanList.clear();
-                    if (code == 0) {
+                    if ("true".equals(info)) {
                         JSONArray jsonArray=res.getJSONArray("data");
                         for (int i = 0; i <jsonArray.length() ; i++) {
                             JSONObject jsonObject=jsonArray.getJSONObject(i);
-                            BaoJing bean=new BaoJing();
-                            bean.id = jsonObject.optString("id");
-                            bean.classify = jsonObject.optString("classify");
-                            bean.pt_time = jsonObject.optString("pt_time");
-                            bean.phone = jsonObject.optString("phone");
+                            CheKuang bean=new CheKuang();
+                            bean.Number = jsonObject.optString("Number");
+                            bean.Key = jsonObject.optString("Key");
+                            bean.Value = jsonObject.optString("Value");
                             mBeanList.add(bean);
                         }
                     }
@@ -151,30 +125,23 @@ public class DeviceBaoJingListActivity extends BaseActivity {
     private void showRecycleView() {
         if (myAdapter == null) {
 
-            myAdapter = new RecyclerCommonAdapter<BaoJing>(mActivity, R.layout.item_device_baojing, mBeanList) {
+            myAdapter = new RecyclerCommonAdapter<CheKuang>(mActivity, R.layout.item_device_chekuang, mBeanList) {
                 @Override
-                protected void convert(ViewHolder holder, final BaoJing carChoiceBean, int position) {
-                    holder.setText(R.id.phone,carChoiceBean.phone);
-                    holder.setText(R.id.time,carChoiceBean.pt_time);
-                    holder.setText(R.id.status,carChoiceBean.classify);
-                    holder.itemView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+                protected void convert(ViewHolder holder, final CheKuang carChoiceBean, int position) {
+                    holder.setText(R.id.carkey,carChoiceBean.Key);
+                    holder.setText(R.id.carvalue,carChoiceBean.Value);
 
-                            startActivity(new Intent(v.getContext(),DevicePostionActivity.class).putExtra("id",carChoiceBean.id));
-                        }
-                    });
 
                 }
 
             };
-
-//            recycler.addItemDecoration(new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST, (int) DisplayUtil.dpToPx(mActivity, 1), ContextCompat.getColor(mActivity, R.color.colorLine), false, 2));
+            recycler.addItemDecoration(RecyclerViewDivider.with(this).color(Color.parseColor("#909090")).build());
             recycler.setAdapter(myAdapter);
             recycler.setLayoutManager(new LinearLayoutManager(mActivity));
         }else{
             myAdapter.notifyDataSetChanged();
         }
     }
+
 
 }

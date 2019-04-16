@@ -5,11 +5,9 @@ import java.util.regex.Pattern;
 
 public class MyClass {
     public static void main(String[] args) {
-        String org="\"id\":\"1\",\n" +
-                "            \"rail_name\":\"测试围栏666\",\n" +
-                "            \"radii\":\"100\",\n" +
-                "            \"address\":\"创意产业园10栋\",\n" +
-                "            \"report_type\":\"1\"";
+        String org="\"Number\": \"P_21\",\n" +
+                "\t\t\"Key\": \"刹车状态\",\n" +
+                "\t\t\"Value\": \"刹车不动作\"\n";
         //parm参数
         Pattern pattern=null;
         Matcher matcher=null;

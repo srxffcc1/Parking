@@ -74,6 +74,23 @@ public interface RetrofitRequestInterface {
     Call<String> getCanPhonePay(@FieldMap Map<String, String> params);
 
 
+    /*获得设备详情*/
+    @FormUrlEncoded
+    @POST("GetDateServices.asmx/GetDate")
+    Call<String> getOBDDetail(@FieldMap Map<String, String> params);
+
+
+    /*获得车况详情*/
+    @FormUrlEncoded
+    @POST("GetDateServices.asmx/GetDate")
+    Call<String> getCheKuang(@FieldMap Map<String, String> params);
+
+    /*获得报警详情*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=appv1&a=Alarm_Details")
+    Call<String> getAlarmDetails(@FieldMap Map<String, String> params);
+
+
     /*保存围栏*/
     @FormUrlEncoded
     @POST
@@ -163,6 +180,12 @@ public interface RetrofitRequestInterface {
     @FormUrlEncoded
     @POST("index.php?g=app&m=appv1&a=GetRailList")
     Call<String> getWeiLanList(@FieldMap Map<String, String> params);
+
+    /*报警列表*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=appv1&a=Alarm_List")
+    Call<String> getAlarmList(@FieldMap Map<String, String> params);
+
 
 
     /*水机构列表*/

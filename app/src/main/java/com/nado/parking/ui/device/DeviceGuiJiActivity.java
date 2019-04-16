@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
@@ -52,13 +54,14 @@ public class DeviceGuiJiActivity extends BaseActivity {
     private TextView tvLayoutTopBackBarEnd;
     private TextView tvLayoutBackTopBarOperate;
     private MapView map;
-    private android.widget.Switch deviceSwitch;
+    private Switch deviceSwitch;
     private AMap aMap;
     private List<LatLng> latLngs;
-    private android.widget.ImageView playkey;
-    private android.widget.ImageView speedkey;
-    private android.widget.SeekBar seek;
+    private ImageView playkey;
+    private ImageView speedkey;
+    private SeekBar seek;
     private SmoothMoveMarker smoothMarker;
+    private FrameLayout guijierrorneedhide;
 
     @Override
     protected int getContentViewId() {
@@ -69,6 +72,7 @@ public class DeviceGuiJiActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         map.onCreate(savedInstanceState);
+        initView();
     }
 
     @Override
@@ -85,6 +89,7 @@ public class DeviceGuiJiActivity extends BaseActivity {
         playkey = (ImageView) findViewById(R.id.playkey);
         speedkey = (ImageView) findViewById(R.id.speedkey);
         seek = (SeekBar) findViewById(R.id.seek);
+        guijierrorneedhide = (FrameLayout) findViewById(R.id.guijierrorneedhide);
         tvLayoutTopBackBarTitle.setText("轨迹");
         tvLayoutTopBackBarEnd.setText("选择时间");
     }
@@ -96,7 +101,14 @@ public class DeviceGuiJiActivity extends BaseActivity {
         if (aMap == null) {
             aMap = map.getMap();
         }
-        initGuiJi(getTimeZero(0) + "", new Date().getTime() + "");
+        if (getIntent().getStringExtra("from") != null) {
+
+            initGuiJi(getIntent().getStringExtra("from"), getIntent().getStringExtra("to"));
+            tvLayoutTopBackBarEnd.setVisibility(View.GONE);
+        } else {
+
+            initGuiJi(getTimeZero(0) + "", new Date().getTime() + "");
+        }
     }
 
     private void initDeviceMark(double latitude, double longitude) {
@@ -147,18 +159,18 @@ public class DeviceGuiJiActivity extends BaseActivity {
                 StyledDialog.buildBottomItemDialog(strings, "取消", new MyItemDialogListener() {
                     @Override
                     public void onItemClick(CharSequence charSequence, int i) {
-                        if("前天".equals(charSequence.toString())){
+                        if ("前天".equals(charSequence.toString())) {
 
                             initGuiJi(getTimeZero(2) + "", getTimeZero(1) + "");
                         }
-                        if("昨天".equals(charSequence.toString())){
+                        if ("昨天".equals(charSequence.toString())) {
                             initGuiJi(getTimeZero(1) + "", getTimeZero(0) + "");
 
                         }
-                        if("今天".equals(charSequence.toString())){
+                        if ("今天".equals(charSequence.toString())) {
                             initGuiJi(getTimeZero(0) + "", new Date().getTime() + "");
                         }
-                        if("前一小时".equals(charSequence.toString())){
+                        if ("前一小时".equals(charSequence.toString())) {
                             initGuiJi(getTimeBeforeHour(1) + "", new Date().getTime() + "");
                         }
                     }
@@ -167,16 +179,17 @@ public class DeviceGuiJiActivity extends BaseActivity {
         });
     }
 
-    private static Long getTimeZero(int fixday ) {
+    private static Long getTimeZero(int fixday) {
         Calendar cal = Calendar.getInstance();
-        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)-fixday, 0, 0, 0);
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH) - fixday, 0, 0, 0);
         Date beginOfDate = cal.getTime();
 
         return beginOfDate.getTime();
     }
+
     private static Long getTimeBeforeHour(int fixhour) {
         Calendar cal = Calendar.getInstance();
-        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY)-fixhour, 0, 0);
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY) - fixhour, 0, 0);
         Date beginOfDate = cal.getTime();
 
         return beginOfDate.getTime();
@@ -197,16 +210,23 @@ public class DeviceGuiJiActivity extends BaseActivity {
 
             @Override
             public void onSuccess(String response) {
-                latLngs = new ArrayList<LatLng>();
-                String[] array = response.replace("\"", "").split(";");
-                for (int i = 0; i < array.length; i++) {
-                    String[] ltarray = array[i].split(",");
-                    latLngs.add(new LatLng(Double.parseDouble(ltarray[1]), Double.parseDouble(ltarray[0])));
-                }
 
-                initDeviceMark(latLngs.get(0).latitude, latLngs.get(0).longitude);
-                aMap.addPolyline(new PolylineOptions().
-                        addAll(latLngs).width(10).color(Color.argb(255, 1, 1, 1)));
+                try {
+                    latLngs = new ArrayList<LatLng>();
+                    String[] array = response.replace("\"", "").split(";");
+                    for (int i = 0; i < array.length; i++) {
+                        String[] ltarray = array[i].split(",");
+                        latLngs.add(new LatLng(Double.parseDouble(ltarray[1]), Double.parseDouble(ltarray[0])));
+                    }
+
+                    initDeviceMark(latLngs.get(0).latitude, latLngs.get(0).longitude);
+                    aMap.addPolyline(new PolylineOptions().
+                            addAll(latLngs).width(10).color(Color.argb(255, 1, 1, 1)));
+                } catch (Exception e) {
+                    Toast.makeText(getBaseContext(), "未获得到轨迹", Toast.LENGTH_SHORT).show();
+                    guijierrorneedhide.setVisibility(View.GONE);
+                    e.printStackTrace();
+                }
 
             }
 
@@ -255,7 +275,7 @@ public class DeviceGuiJiActivity extends BaseActivity {
                     index++;
                     System.out.println("步进" + index);
                     if (index + 6 <= subList.size()) {
-                        syncCamera(subList.get(index + 2).latitude, subList.get(index + 2).longitude);
+                        syncCamera(subList.get(index).latitude, subList.get(index).longitude);
                         seek.setProgress(index + 1);
                     } else {
                         seek.setProgress(subList.size());
