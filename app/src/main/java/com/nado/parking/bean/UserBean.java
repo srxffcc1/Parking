@@ -9,6 +9,7 @@ import java.io.Serializable;
 
 public class UserBean implements Serializable {
     private String mId;
+    private String bestGood;
     private String mNickName;
     private String mRegisterTime;
     private String mTelNumber;//手机号码
@@ -30,6 +31,10 @@ public class UserBean implements Serializable {
     private String customer_no;//hui元编号
 
     private double mWealth;//我的财富
+
+    public void setBestGood(String bestGood) {
+        this.bestGood = bestGood;
+    }
 
     private int mIntegerType; //积分类型
     public static final int TYPE_GET_INTEGER_FIRST=1; //获得积分

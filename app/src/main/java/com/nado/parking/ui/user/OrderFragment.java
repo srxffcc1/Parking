@@ -30,7 +30,10 @@ import com.nado.parking.net.RetrofitCallBack;
 import com.nado.parking.net.RetrofitRequestInterface;
 import com.nado.parking.ui.device.DeviceCheckActivity;
 import com.nado.parking.ui.device.DeviceWeiLanActivity;
+import com.nado.parking.ui.main.PayAllActivity;
+import com.nado.parking.ui.main.PayAllReleaseActivity;
 import com.nado.parking.ui.main.PayCompleteActivity;
+import com.nado.parking.ui.pay.DianPayActivity;
 import com.nado.parking.util.DisplayUtil;
 import com.nado.parking.util.LogUtil;
 import com.nado.parking.util.ToastUtil;
@@ -206,6 +209,18 @@ public class OrderFragment extends BaseFragment {
                 @Override
                 protected void convert(ViewHolder holder, final Order carChoiceBean, int position) {
                     holder.setText(R.id.order_status, carChoiceBean.action);
+
+                    holder.setText(R.id.order_id, "订单号:"+carChoiceBean.out_trade_no);
+
+                    holder.setText(R.id.order_count, "x"+carChoiceBean.goods_number);
+
+                    holder.setText(R.id.order_money, ""+carChoiceBean.goods_price+"元");
+
+                    holder.setText(R.id.order_date, ""+carChoiceBean.create_time);
+
+                    holder.setText(R.id.order_name, ""+carChoiceBean.goods_name);
+
+
                     RequestOptions options = new RequestOptions()
                             .fitCenter()
                             .diskCacheStrategy(DiskCacheStrategy.NONE);//缓存全尺寸
@@ -223,16 +238,32 @@ public class OrderFragment extends BaseFragment {
 
                         holder.itemView.findViewById(R.id.order_cancel).setVisibility(View.VISIBLE);
                     }
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startActivity(new Intent(mActivity,OrderDetailActivity.class).putExtra("order_id",carChoiceBean.id));
+                        }
+                    });
                     holder.setOnClickListener(R.id.order_cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             cancelOrder(carChoiceBean.id);
                         }
                     });
-                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+
+                    holder.setOnClickListener(R.id.order_submit, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            startActivity(new Intent(mActivity,OrderDetailActivity.class).putExtra("order_id",carChoiceBean.id));
+                            String order_id = carChoiceBean.id;//获得的本司订单号
+                            String paytypekey = "pay_type";
+                            String url = "index.php?g=app&m=appv1&a=goodsPay";
+                            Map<String, String> postmap = new HashMap<>();
+                            postmap.put("customer_id",AccountManager.sUserBean.getId());
+                            postmap.put("url",url);
+                            postmap.put("paymm",carChoiceBean.goods_all_price);
+                            postmap.put("paytypekey",paytypekey);
+                            postmap.put("order_id",order_id);
+                            PayAllReleaseActivity.open(mActivity, postmap);//打开充值界面 选择支付类型 然后会访问url交换对应的sign或appid来完成充值
                         }
                     });
 

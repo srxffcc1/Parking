@@ -27,6 +27,7 @@ import com.nado.parking.net.RetrofitRequestInterface;
 import com.nado.parking.ui.pay.PhonePayActivity;
 import com.nado.parking.ui.pay.ShuiDianPayMenuActivity;
 import com.nado.parking.ui.pay.YouKaPayActivity;
+import com.nado.parking.ui.user.account.LoginActivity;
 import com.nado.parking.util.DisplayUtil;
 import com.nado.parking.util.LogUtil;
 import com.nado.parking.util.NetworkUtil;
@@ -127,7 +128,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         liHfcz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 startActivity(new Intent(v.getContext(), PhonePayActivity.class));
             }
         });
@@ -135,8 +135,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
 //                startActivity(new Intent(v.getContext(),ChooseCityActivity.class).putExtra("url","index.php?g=app&m=life&a=get_city"));
-
-
 
 
 
@@ -168,6 +166,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         liYkcz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (AccountManager.sUserBean == null) {
+                    startActivity(new Intent(mActivity, LoginActivity.class));
+                    return;
+                }
                 startActivity(new Intent(v.getContext(), YouKaPayActivity.class));
             }
         });
@@ -240,7 +242,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     RequestOptions options = new RequestOptions()
                             .fitCenter()
                             .diskCacheStrategy(DiskCacheStrategy.NONE);//缓存全尺寸
-
+                    AccountManager.setBestGood(carChoiceBean.id);
                     Glide.with(mActivity).load(carChoiceBean.picture).apply(options).into((ImageView) holder.getView(R.id.picture));
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override

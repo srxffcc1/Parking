@@ -60,7 +60,10 @@ public class RegisterActivity extends BaseActivity {
     protected int getContentViewId() {
         return R.layout.activity_register;
     }
-
+    @Override
+    public boolean isLoginActivity() {
+        return true;
+    }
     @Override
     public void initView() {
         mBackLL = byId(R.id.iv_activity_register_close);

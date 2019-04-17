@@ -15,11 +15,18 @@
         android:orientation="vertical"
         android:layout_height="60dp">
         <TextView
+            android:id="@+id/old_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="98元"/>
+        <TextView
             android:id="@+id/price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="100元"/>
+
     </LinearLayout>
 
 </LinearLayout>

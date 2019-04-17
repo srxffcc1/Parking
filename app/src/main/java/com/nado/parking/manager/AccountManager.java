@@ -16,6 +16,8 @@ import org.greenrobot.eventbus.EventBus;
  * 账号管理类
  */
 public class AccountManager {
+
+    public static String bestGood;
     /**
      * 用户
      */
@@ -58,4 +60,7 @@ public class AccountManager {
         EventBus.getDefault().post(new UpdateLoginStateEvent());
     }
 
+    public static void setBestGood(String id) {
+        bestGood=id;
+    }
 }

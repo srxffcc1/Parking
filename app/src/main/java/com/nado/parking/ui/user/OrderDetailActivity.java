@@ -9,11 +9,14 @@ import android.widget.TextView;
 import com.nado.parking.R;
 import com.nado.parking.base.BaseActivity;
 import com.nado.parking.bean.OrderDetail;
+import com.nado.parking.bean.OrderEvent;
 import com.nado.parking.manager.AccountManager;
 import com.nado.parking.manager.RequestManager;
 import com.nado.parking.net.RetrofitCallBack;
 import com.nado.parking.net.RetrofitRequestInterface;
+import com.nado.parking.ui.main.PayAllReleaseActivity;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -83,10 +86,62 @@ public class OrderDetailActivity extends BaseActivity {
     public void initData() {
         getOrderDetail();
     }
+    private void cancelOrder(String order_id) {
+        Map<String, String> map = new HashMap<>();
+        if (AccountManager.sUserBean != null) {
+            map.put("customer_id", AccountManager.sUserBean.getId());
+            map.put("order_id", order_id);
+            RequestManager.mRetrofitManager.createRequest(RetrofitRequestInterface.class).cancelOrder(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
+                @Override
+                public void onSuccess(String response) {
+                    try {
+                        JSONObject res = new JSONObject(response);
+                        int code = res.getInt("code");
+                        String info = res.getString("info");
+                        if (code == 0) {
+                            EventBus.getDefault().post(new OrderEvent());
+                            finish();
+                        }
 
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onError(Throwable t) {
+
+                }
+            });
+        } else {
+
+        }
+
+    }
     @Override
     public void initEvent() {
+        orderCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancelOrder(bean.id);
+            }
+        });
 
+        orderSubmit.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String order_id = bean.id;//获得的本司订单号
+                String paytypekey = "pay_type";
+                String url = "index.php?g=app&m=appv1&a=goodsPay";
+                Map<String, String> postmap = new HashMap<>();
+                postmap.put("customer_id",AccountManager.sUserBean.getId());
+                postmap.put("url",url);
+                postmap.put("paymm",bean.goods_all_price);
+                postmap.put("paytypekey",paytypekey);
+                postmap.put("order_id",order_id);
+                PayAllReleaseActivity.open(mActivity, postmap);//打开充值界面 选择支付类型 然后会访问url交换对应的sign或appid来完成充值
+            }
+        });
     }
     private void getOrderDetail() {
         Map<String, String> map = new HashMap<>();

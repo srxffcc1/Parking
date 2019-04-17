@@ -15,6 +15,7 @@ import com.nado.parking.util.SPUtil;
 import com.nado.parking.widget.GlideImageLoader;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.uuzuche.lib_zxing.ZApplication;
 
 import cn.finalteam.okhttpfinal.OkHttpFinal;
 import cn.finalteam.okhttpfinal.OkHttpFinalConfiguration;
@@ -25,7 +26,7 @@ import cn.finalteam.okhttpfinal.OkHttpFinalConfiguration;
  * Email:2856992713@qq.com
  * LocalApplication
  */
-public class LocalApplication extends Application {
+public class LocalApplication extends ZApplication {
     private static LocalApplication sApp;
     /**
      * 微信相关

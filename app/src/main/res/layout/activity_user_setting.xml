@@ -17,6 +17,86 @@
     <View
         style="@style/HorizontalLine"
         />
+
+
+    <LinearLayout
+        android:id="@+id/ll_activity_user_set_nicheng"
+        style="@style/ItemStyle"
+        android:gravity="center_vertical"
+        android:background="@drawable/selector_item"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="昵称"
+            android:textColor="@color/colorTitle"
+            android:textSize="@dimen/sp_15"
+            />
+
+        <android.support.v4.widget.Space
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+        <TextView
+            android:id="@+id/textnicheng"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10000000000"
+            android:textColor="@color/colorTitle"
+            android:textSize="@dimen/sp_15"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:src="@drawable/right"
+            />
+    </LinearLayout>
+
+    <View
+        style="@style/HorizontalLine"
+        />
+    <LinearLayout
+        android:id="@+id/ll_activity_user_set_phone"
+        style="@style/ItemStyle"
+        android:gravity="center_vertical"
+        android:background="@drawable/selector_item"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="手机号"
+            android:textColor="@color/colorTitle"
+            android:textSize="@dimen/sp_15"
+            />
+
+        <android.support.v4.widget.Space
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+        <TextView
+            android:id="@+id/textphone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10000000000"
+            android:textColor="@color/colorTitle"
+            android:textSize="@dimen/sp_15"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:src="@drawable/right"
+            />
+    </LinearLayout>
+
+    <View
+        style="@style/HorizontalLine"
+        />
     <LinearLayout
         android:id="@+id/ll_activity_user_set_update_pwd"
         style="@style/ItemStyle"
@@ -45,6 +125,39 @@
             android:src="@drawable/right"
             />
     </LinearLayout>
+    <View
+        style="@style/HorizontalLine"
+        />
+
+    <LinearLayout
+        android:id="@+id/ll_activity_user_set_dizhi"
+        style="@style/ItemStyle"
+        android:gravity="center_vertical"
+        android:background="@drawable/selector_item"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="收货地址"
+            android:textColor="@color/colorTitle"
+            android:textSize="@dimen/sp_15"
+            />
+
+        <android.support.v4.widget.Space
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:src="@drawable/right"
+            />
+    </LinearLayout>
+
     <View
         style="@style/HorizontalLine"
         />

@@ -21,6 +21,7 @@ import com.nado.parking.R;
 import com.nado.parking.adapter.recycler.RecyclerCommonAdapter;
 import com.nado.parking.adapter.recycler.base.ViewHolder;
 import com.nado.parking.base.BaseActivity;
+import com.nado.parking.bean.Money;
 import com.nado.parking.bean.SupportMoney;
 import com.nado.parking.manager.AccountManager;
 import com.nado.parking.manager.RequestManager;
@@ -45,8 +46,8 @@ import java.util.Map;
 public class PhonePayActivity extends BaseActivity {
     private static final String TAG = "PhonePayActivity";
 
-    private RecyclerCommonAdapter<SupportMoney> mCarBeanAdapter;
-    private List<SupportMoney> mCarChoiceList = new ArrayList<>();
+    private RecyclerCommonAdapter<Money> mCarBeanAdapter;
+    private List<Money> mCarChoiceList = new ArrayList<>();
     private int mDataStatus = STATUS_REFRESH;
     private static final int STATUS_REFRESH = 1;
     private static final int STATUS_LOAD = 2;
@@ -271,9 +272,10 @@ public class PhonePayActivity extends BaseActivity {
                     if (code == 0) {
                         JSONArray data = res.getJSONArray("data");
                         for (int i = 0; i < data.length(); i++) {
-                            String dataItem = data.get(i) + "";
-                            SupportMoney bean = new SupportMoney();
-                            bean.price = dataItem;
+                            JSONObject jsonObject = data.getJSONObject(i);
+                            Money bean = new Money();
+                            bean.money = jsonObject.optString("money");
+                            bean.old_money = jsonObject.optString("old_money");
                             mCarChoiceList.add(bean);
                         }
                         showRecycleView();
@@ -303,17 +305,18 @@ public class PhonePayActivity extends BaseActivity {
         if (mCarBeanAdapter == null) {
 
 
-            mCarBeanAdapter = new RecyclerCommonAdapter<SupportMoney>(mActivity, R.layout.item_hfpay, mCarChoiceList) {
+            mCarBeanAdapter = new RecyclerCommonAdapter<Money>(mActivity, R.layout.item_hfpay, mCarChoiceList) {
 
                 @Override
-                protected void convert(ViewHolder holder, final SupportMoney carChoiceBean, int position) {
-                    holder.setText(R.id.price, carChoiceBean.price + "元");
+                protected void convert(ViewHolder holder, final Money carChoiceBean, int position) {
+                    holder.setText(R.id.price, "售价："+carChoiceBean.money + "元");
+                    holder.setText(R.id.old_price, carChoiceBean.old_money + "元");
 //                    new GlideImageLoader().displayImage(mActivity,carChoiceBean.picture, (ImageView) holder.getView(R.id.picture));
 //                    new GlideImageLoader().displayImage(mActivity,carChoiceBean.picture, (ImageView) holder.getView(R.id.picture));
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            checkPay(carChoiceBean.price);
+                            checkPay(carChoiceBean.money);
                         }
                     });
 

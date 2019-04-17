@@ -17,26 +17,9 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.amap.api.maps.AMap;
-import com.amap.api.maps.CameraUpdateFactory;
-import com.amap.api.maps.MapView;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.Circle;
-import com.amap.api.maps.model.CircleOptions;
-import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.LatLngBounds;
-import com.amap.api.maps.model.Marker;
-import com.amap.api.maps.model.MarkerOptions;
-import com.amap.api.maps.model.Poi;
-import com.amap.api.maps.model.PolylineOptions;
-import com.amap.api.maps.utils.SpatialRelationUtil;
-import com.amap.api.maps.utils.overlay.SmoothMoveMarker;
-import com.amap.api.navi.AmapNaviPage;
-import com.amap.api.navi.AmapNaviParams;
-import com.amap.api.navi.AmapNaviType;
-import com.amap.api.navi.INaviInfoCallback;
-import com.amap.api.navi.model.AMapNaviLocation;
-import com.bigkoo.pickerview.TimePickerView;
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
+import com.bigkoo.pickerview.view.TimePickerView;
 import com.nado.parking.R;
 import com.nado.parking.adapter.recycler.RecyclerCommonAdapter;
 import com.nado.parking.adapter.recycler.base.ViewHolder;
@@ -111,7 +94,7 @@ public class DeviceXingChengListActivity extends BaseActivity {
         time = (TextView) findViewById(R.id.time);
         tvLayoutTopBackBarTitle.setText("行程");
     }
-    public void startTimePicker(Activity activity, TimePickerView.OnTimeSelectListener listener){
+    public void startTimePicker(Activity activity, OnTimeSelectListener listener){
 //        long tenYears = 10L * 365 * 1000 * 60 * 60 * 24L;
 //        new TimePickerDialog.Builder()
 //                .setCallBack(back)
@@ -144,7 +127,7 @@ public class DeviceXingChengListActivity extends BaseActivity {
         //正确设置方式 原因：注意事项有说明
 //        startDate.set(2013,0,1);
 //        endDate.set(2020,11,31);
-        TimePickerView timePickerView=new TimePickerView.Builder(activity, listener).setType(new boolean[]{true, true, true, false, false, false})// 默认全部显示
+        TimePickerView timePickerView=new TimePickerBuilder(activity, listener).setType(new boolean[]{true, true, true, false, false, false})// 默认全部显示
                 .setCancelText("取消")//取消按钮文字
                 .setSubmitText("确认")//确认按钮文字
 //                .setContentSize(18)//滚轮文字大小
@@ -190,7 +173,7 @@ public class DeviceXingChengListActivity extends BaseActivity {
         time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startTimePicker(DeviceXingChengListActivity.this, new TimePickerView.OnTimeSelectListener() {
+                startTimePicker(DeviceXingChengListActivity.this, new OnTimeSelectListener() {
                     @Override
                     public void onTimeSelect(Date date, View v) {
                         time.setText(new SimpleDateFormat("yyyy-MM-dd").format(date));

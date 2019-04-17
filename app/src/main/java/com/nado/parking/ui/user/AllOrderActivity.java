@@ -15,7 +15,7 @@ import com.nado.parking.manager.AccountManager;
 
 import java.util.ArrayList;
 
-public class MyOrderActivity extends BaseActivity {
+public class AllOrderActivity extends BaseActivity {
     private android.widget.RelativeLayout rlLayoutTopBackBar;
     private android.widget.LinearLayout llLayoutTopBackBarBack;
     private android.widget.TextView tvLayoutTopBackBarTitle;
@@ -56,7 +56,7 @@ public class MyOrderActivity extends BaseActivity {
         mFragments.add(new OrderFragment().setArgumentz("order_status","3"));
         mFragments.add(new OrderFragment().setArgumentz("order_status","5"));
         tl.setTabData(mTabEntities,this,R.id.fl_change,mFragments);
-
+        tl.setCurrentTab(getIntent().getIntExtra("order_status",0));
 
     }
 

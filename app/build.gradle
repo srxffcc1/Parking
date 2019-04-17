@@ -78,7 +78,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
     compile 'pub.devrel:easypermissions:0.4.3'
     compile 'com.lcodecorex:tkrefreshlayout:1.0.7'
-    compile 'com.contrarywind:Android-PickerView:3.2.7'
+    compile 'com.contrarywind:Android-PickerView:4.1.7'
     compile 'com.daimajia.swipelayout:library:1.2.0'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.github.hackware1993:MagicIndicator:+'
@@ -99,6 +99,10 @@ dependencies {
 //    api('com.contrarywind:Android-PickerView:3.2.5') {//时间选择器
 //        exclude group: 'com.android.support'
 //    }
+
+    compile 'cn.yipianfengye.android:zxing-library:2.2'
+
+    compile 'com.google.code.gson:gson:2.7'
     //高德
     compile 'com.amap.api:navi-3dmap:6.6.0_3dmap6.7.0'
     compile 'com.amap.api:location:4.5.1'

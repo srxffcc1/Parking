@@ -89,7 +89,7 @@ public class DeviceFragment extends BaseFragment implements View.OnClickListener
                     startActivity(new Intent(v.getContext(), DeviceActivity.class));
                 }else{
 
-                    startActivity(new Intent(v.getContext(), DeviceActivity.class));
+                    startActivity(new Intent(v.getContext(), MainGoodDetailActivity.class).putExtra("id",AccountManager.bestGood).putExtra("needbind",true));
                 }
             }
         });

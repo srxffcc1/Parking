@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
           package="com.nado.parking">
-
+    <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -42,6 +42,7 @@
 
     <application
         android:name=".global.LocalApplication"
+
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
@@ -149,7 +150,7 @@
         <activity android:name=".ui.pay.PhonePayActivity" />
         <activity android:name=".ui.main.PayAllActivity" />
         <activity android:name=".ui.pay.ShuiDianPayMenuActivity" />
-        <activity android:name=".ui.user.MyOrderActivity" />
+        <activity android:name=".ui.user.AllOrderActivity" />
         <activity android:name=".ui.pay.DianBindActivity" />
         <activity android:name=".ui.pay.ShuiChoseJGActivity" />
         <activity android:name=".ui.pay.YouKaAddActivity" />
@@ -172,6 +173,10 @@
         <activity android:name=".ui.device.DeviceCarDetailActivity" />
         <activity android:name=".ui.user.OrderDetailActivity" />
         <activity android:name=".ui.main.MainGoodDetailActivity" />
+        <activity android:name=".ui.main.PayAllReleaseActivity" />
+        <activity android:name=".ui.user.AddressListActivity" />
+        <activity android:name=".ui.user.AddressActivity" />
+        <activity android:name=".ui.device.DeviceBindActivity" />
     </application>
 
 </manifest>

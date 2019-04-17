@@ -74,6 +74,7 @@ public class UpdatePwdActivity extends BaseActivity {
         mPasswordET = byId(R.id.et_activity_update_pwd_input_pwd);
         mPhoneNumberET = byId(R.id.et_activity_update_pwd_input_phone);
         mShowPwdIV = byId(R.id.iv_activity_update_show_pwd);
+        mTitleTV.setText("修改密码");
     }
 
     @Override

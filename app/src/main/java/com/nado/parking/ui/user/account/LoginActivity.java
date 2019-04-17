@@ -53,6 +53,11 @@ public class LoginActivity extends BaseActivity {
     private long exitTime = 0;
 
     @Override
+    public boolean isLoginActivity() {
+        return true;
+    }
+
+    @Override
     protected void beforeSetContentView() {
         super.beforeSetContentView();
         if (AccountManager.sUserBean!=null){

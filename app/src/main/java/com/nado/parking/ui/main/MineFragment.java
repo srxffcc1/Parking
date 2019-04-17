@@ -38,12 +38,13 @@ import com.nado.parking.manager.AccountManager;
 import com.nado.parking.manager.RequestManager;
 import com.nado.parking.net.RetrofitCallBack;
 import com.nado.parking.net.RetrofitRequestInterface;
-import com.nado.parking.ui.user.MyOrderActivity;
+import com.nado.parking.ui.user.AllOrderActivity;
 import com.nado.parking.ui.user.ParkRecordActivity;
 import com.nado.parking.ui.user.PeccancyQueryActivity;
 import com.nado.parking.ui.user.UserCarActivity;
 import com.nado.parking.ui.user.account.LoginActivity;
 import com.nado.parking.ui.user.account.UpdatePwdActivity;
+import com.nado.parking.ui.user.account.UserSettingActivity;
 import com.nado.parking.util.CommonUtil;
 import com.nado.parking.util.DialogUtil;
 import com.nado.parking.util.ImageUtil;
@@ -171,7 +172,31 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         llFragmentOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), MyOrderActivity.class));
+                startActivity(new Intent(v.getContext(), AllOrderActivity.class));
+            }
+        });
+        daifukuan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(), AllOrderActivity.class).putExtra("order_status",1));
+            }
+        });
+        daifahuo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(), AllOrderActivity.class).putExtra("order_status",2));
+            }
+        });
+        daishouhuo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(), AllOrderActivity.class).putExtra("order_status",3));
+            }
+        });
+        yiwancheng.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(), AllOrderActivity.class).putExtra("order_status",4));
             }
         });
     }
@@ -246,7 +271,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                     UpdatePwdActivity.open(mActivity, UpdatePwdActivity.EXTRA_UPDATE);
                     break;
                 case R.id.ll_fragment_mine_set:
-                    showOutExitPopwindow();
+//                    showOutExitPopwindow();
+
+                    startActivity(new Intent(mActivity, UserSettingActivity.class));
                     break;
 
             }

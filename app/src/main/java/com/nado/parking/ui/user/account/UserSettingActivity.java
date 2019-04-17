@@ -11,12 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nado.parking.R;
 import com.nado.parking.base.BaseActivity;
 import com.nado.parking.event.UpdateLoginStateEvent;
 import com.nado.parking.manager.AccountManager;
+import com.nado.parking.ui.user.AddressListActivity;
 import com.nado.parking.util.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -34,6 +36,24 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
 
     private PopupWindow mBottomPopwindow;
     private TextView mVersionNameTV;
+    private android.widget.RelativeLayout rlLayoutTopBackBar;
+    private LinearLayout llLayoutTopBackBarBack;
+    private TextView tvLayoutTopBackBarStart;
+    private TextView tvLayoutTopBackBarTitle;
+    private TextView tvLayoutTopBackBarEnd;
+    private TextView tvLayoutBackTopBarOperate;
+    private LinearLayout llActivityUserSetNicheng;
+    private TextView textnicheng;
+    private LinearLayout llActivityUserSetPhone;
+    private TextView textphone;
+    private LinearLayout llActivityUserSetUpdatePwd;
+    private LinearLayout llActivityUserSetDizhi;
+    private LinearLayout llActivityUserSetAboutUs;
+    private TextView tvActivityUserAboutUs;
+    private LinearLayout llActivityUserSetFeedBack;
+    private TextView tvActivityUserSettingVersionName;
+    private LinearLayout llActivityUserSetExitLogin;
+    private TextView tvActivityUserSettingExit;
 
     @Override
     protected int getContentViewId() {
@@ -54,11 +74,30 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
         mVersionNameTV=byId(R.id.tv_activity_user_setting_version_name);
         mVersionNameTV.setText("V"+getPackageInfo(mActivity).versionName);
         mAboutUsLL=byId(R.id.ll_activity_user_set_about_us);
+        rlLayoutTopBackBar = (RelativeLayout) findViewById(R.id.rl_layout_top_back_bar);
+        llLayoutTopBackBarBack = (LinearLayout) findViewById(R.id.ll_layout_top_back_bar_back);
+        tvLayoutTopBackBarStart = (TextView) findViewById(R.id.tv_layout_top_back_bar_start);
+        tvLayoutTopBackBarTitle = (TextView) findViewById(R.id.tv_layout_top_back_bar_title);
+        tvLayoutTopBackBarEnd = (TextView) findViewById(R.id.tv_layout_top_back_bar_end);
+        tvLayoutBackTopBarOperate = (TextView) findViewById(R.id.tv_layout_back_top_bar_operate);
+        llActivityUserSetNicheng = (LinearLayout) findViewById(R.id.ll_activity_user_set_nicheng);
+        textnicheng = (TextView) findViewById(R.id.textnicheng);
+        llActivityUserSetPhone = (LinearLayout) findViewById(R.id.ll_activity_user_set_phone);
+        textphone = (TextView) findViewById(R.id.textphone);
+        llActivityUserSetUpdatePwd = (LinearLayout) findViewById(R.id.ll_activity_user_set_update_pwd);
+        llActivityUserSetDizhi = (LinearLayout) findViewById(R.id.ll_activity_user_set_dizhi);
+        llActivityUserSetAboutUs = (LinearLayout) findViewById(R.id.ll_activity_user_set_about_us);
+        tvActivityUserAboutUs = (TextView) findViewById(R.id.tv_activity_user_about_us);
+        llActivityUserSetFeedBack = (LinearLayout) findViewById(R.id.ll_activity_user_set_feed_back);
+        tvActivityUserSettingVersionName = (TextView) findViewById(R.id.tv_activity_user_setting_version_name);
+        llActivityUserSetExitLogin = (LinearLayout) findViewById(R.id.ll_activity_user_set_exit_login);
+        tvActivityUserSettingExit = (TextView) findViewById(R.id.tv_activity_user_setting_exit);
     }
 
     @Override
     public void initData() {
-
+        textnicheng.setText(AccountManager.sUserBean.nicename);
+        textphone.setText(AccountManager.sUserBean.phone);
     }
 
     @Override
@@ -68,6 +107,12 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
         mFeedBackLL.setOnClickListener(this);
         mExitLoginLL.setOnClickListener(this);
         mAboutUsLL.setOnClickListener(this);
+        llActivityUserSetDizhi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mActivity, AddressListActivity.class));
+            }
+        });
     }
 
     @Override

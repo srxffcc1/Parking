@@ -44,6 +44,13 @@ public interface RetrofitRequestInterface {
     //RequestManager.mInterfacePrefix + "getChoice"
 
 
+
+    /*商品下单*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=appv1&a=addgoodOrder")
+    Call<String> buildGoodOrder(@FieldMap Map<String, String> params);
+
+
     /*获得订单*/
     @FormUrlEncoded
     @POST(RequestManager.mInterfacePrefix + "GetAllOrder")
@@ -73,10 +80,32 @@ public interface RetrofitRequestInterface {
     Call<String> deleteWeiLan(@FieldMap Map<String, String> params);
 
 
+    /*获得默认地址*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=appv1&a=get_defaddress_json")
+    Call<String> getDefaultAddress(@FieldMap Map<String, String> params);
+
+    /*获得地址列表*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=appv1&a=get_addressList_json")
+    Call<String> getAddressList(@FieldMap Map<String, String> params);
+
+
+    /*绑定OBD设备*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=appv1&a=BindMac")
+    Call<String> bindOBD(@FieldMap Map<String, String> params);
+
     /*获得充值金额*/
     @FormUrlEncoded
     @POST("index.php?g=app&m=telephone&a=telephone_note")
     Call<String> getCanPhonePay(@FieldMap Map<String, String> params);
+
+
+    /*编辑地址*/
+    @FormUrlEncoded
+    @POST
+    Call<String> saveAddress(@Url String url, @FieldMap Map<String, String> params);
 
 
     /*获得首页商品*/
