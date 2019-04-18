@@ -34,6 +34,8 @@ import com.amap.api.navi.AmapNaviParams;
 import com.amap.api.navi.AmapNaviType;
 import com.amap.api.navi.INaviInfoCallback;
 import com.amap.api.navi.model.AMapNaviLocation;
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.nado.parking.R;
 import com.nado.parking.adapter.recycler.RecyclerCommonAdapter;
 import com.nado.parking.adapter.recycler.base.ViewHolder;
@@ -76,6 +78,8 @@ public class DeviceBaoJingListActivity extends BaseActivity {
     private android.support.v7.widget.RecyclerView recycler;
     private RecyclerCommonAdapter<BaoJing> myAdapter;
     private List<BaoJing> mBeanList = new ArrayList<>();
+    private com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout trlFragmentHome;
+    public int page=1;
 
     @Override
     protected int getContentViewId() {
@@ -91,6 +95,7 @@ public class DeviceBaoJingListActivity extends BaseActivity {
         tvLayoutTopBackBarTitle = (TextView) findViewById(R.id.tv_layout_top_back_bar_title);
         tvLayoutTopBackBarEnd = (TextView) findViewById(R.id.tv_layout_top_back_bar_end);
         tvLayoutBackTopBarOperate = (TextView) findViewById(R.id.tv_layout_back_top_bar_operate);
+        trlFragmentHome = (TwinklingRefreshLayout) findViewById(R.id.trl_fragment_home);
         recycler = (RecyclerView) findViewById(R.id.recycler);
         tvLayoutTopBackBarTitle.setText("报警");
     }
@@ -102,13 +107,36 @@ public class DeviceBaoJingListActivity extends BaseActivity {
 
     @Override
     public void initEvent() {
+        trlFragmentHome.setOnRefreshListener(new RefreshListenerAdapter() {
+            @Override
+            public void onRefresh(TwinklingRefreshLayout refreshLayout) {
+                super.onRefresh(refreshLayout);
+                page=1;
+                isnomore=false;
+                initList();
+                trlFragmentHome.finishLoadmore();
+                trlFragmentHome.finishRefreshing();
+            }
 
+            @Override
+            public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
+                super.onLoadMore(refreshLayout);
+                if(!isnomore){
+
+                    initList();
+                }
+                trlFragmentHome.finishLoadmore();
+                trlFragmentHome.finishRefreshing();
+
+            }
+        });
     }
+    boolean isnomore=false;
     private void initList() {
         Map<String, String> map = new HashMap<>();
         map.put("customer_id", AccountManager.sUserBean.getId());
         map.put("obd_macid", AccountManager.sUserBean.obd_macid);
-        map.put("page", "1");
+        map.put("page", page+"");
         map.put("limit", "10");
         RequestManager.mRetrofitManager.createRequest(RetrofitRequestInterface.class).getAlarmList(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
 
@@ -120,9 +148,16 @@ public class DeviceBaoJingListActivity extends BaseActivity {
                     JSONObject res = new JSONObject(response);
                     int code = res.getInt("code");
                     String info = res.getString("info");
-                    mBeanList.clear();
+                    if(page==1){
+                        mBeanList.clear();
+                    }
                     if (code == 0) {
                         JSONArray jsonArray=res.getJSONArray("data");
+                        if(jsonArray.length()>0){
+                            page++;
+                        }else{
+                            isnomore=true;
+                        }
                         for (int i = 0; i <jsonArray.length() ; i++) {
                             JSONObject jsonObject=jsonArray.getJSONObject(i);
                             BaoJing bean=new BaoJing();

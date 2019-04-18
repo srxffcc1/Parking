@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBgGray"
+    android:background="@color/colorWhite"
     android:orientation="vertical">
 
     <include layout="@layout/layout_top_back_bar"/>
@@ -22,7 +22,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="10dp" />
                 <ImageView
-                    android:id="@+id/passshui"
+                    android:id="@+id/passdian"
                     android:scaleType="fitCenter"
                     android:src="@drawable/fudianfei"
                     android:layout_width="match_parent"
@@ -31,7 +31,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="10dp" />
                 <ImageView
-                    android:id="@+id/passdian"
+                    android:id="@+id/passshui"
                     android:scaleType="fitCenter"
                     android:src="@drawable/fushuifei"
                     android:layout_width="match_parent"

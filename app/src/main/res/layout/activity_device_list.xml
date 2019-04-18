@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <RelativeLayout
+            android:visibility="gone"
             android:id="@+id/hasobd"
             android:layout_width="match_parent"
             android:padding="10dp"

@@ -98,9 +98,11 @@ public class ShuiDianPayMenuActivity extends BaseActivity {
                         int code = res.getInt("code");
                         String info = res.getString("info");
                         if (code == 0) {
-                            JSONArray jsonArray=res.getJSONArray("data");
+                            JSONArray jsonArray=res.getJSONObject("data").getJSONArray("info");
                             if(jsonArray.length()>0){
                                 passCanShuiPay(type);
+                            }else{
+                                passShuiBind(type);
                             }
                         }else{
                             passShuiBind(type);
@@ -132,6 +134,9 @@ public class ShuiDianPayMenuActivity extends BaseActivity {
                             JSONArray jsonArray=res.getJSONArray("data");
                             if(jsonArray.length()>0){
                                 passCanDianPay(type);
+                            }else{
+
+                                passDianBind(type);
                             }
                         }else{
                             passDianBind(type);

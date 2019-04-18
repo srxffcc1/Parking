@@ -23,12 +23,14 @@
                 android:orientation="vertical"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:padding="5dp"
+                    android:padding="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="仅支持中国石油、中国石化加油卡充值"/>
                 <EditText
                     android:id="@+id/et"
+                    android:background="@drawable/text_boder_gray"
+                    android:padding="5dp"
                     android:layout_margin="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -53,6 +55,7 @@
                     android:gravity="center"
                     android:layout_height="wrap_content">
                     <CheckBox
+                        android:id="@+id/needcheck"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <TextView

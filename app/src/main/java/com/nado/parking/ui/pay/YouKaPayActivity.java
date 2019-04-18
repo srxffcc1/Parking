@@ -52,6 +52,9 @@ public class YouKaPayActivity extends BaseActivity {
     private RecyclerCommonAdapter<SupportMoney> mCarBeanAdapter;
     private String card_number="";
     private String card_id="";
+    private TextView tvLayoutTopBackBarStart;
+    private TextView bindcard;
+
     @Override
     protected int getContentViewId() {
         return R.layout.activity_ykpay;
@@ -65,10 +68,12 @@ public class YouKaPayActivity extends BaseActivity {
         tvLayoutTopBackBarTitle = (TextView) findViewById(R.id.tv_layout_top_back_bar_title);
         tvLayoutTopBackBarEnd = (TextView) findViewById(R.id.tv_layout_top_back_bar_end);
         tvLayoutBackTopBarOperate = (TextView) findViewById(R.id.tv_layout_back_top_bar_operate);
-        tflActivityParkLot = (TwinklingRefreshLayout) findViewById(R.id.tfl_activity_park_lot);
         needchange = (LinearLayout) findViewById(R.id.needchange);
         youkaadd = (TextView) findViewById(R.id.youkaadd);
         rvPayAll = (RecyclerView) findViewById(R.id.rv_pay_all);
+        tvLayoutTopBackBarStart = (TextView) findViewById(R.id.tv_layout_top_back_bar_start);
+        bindcard = (TextView) findViewById(R.id.bindcard);
+        tvLayoutTopBackBarTitle.setText("油卡充值");
     }
 
     @Override
@@ -90,6 +95,9 @@ public class YouKaPayActivity extends BaseActivity {
                     if (code == 0) {
                         card_number=res.getJSONObject("data").getJSONObject("card").getString("card_number");
                         card_id=res.getJSONObject("data").getJSONObject("card").getString("id");
+                        youkaadd.setText("");
+                        bindcard.setText("绑定的卡号："+card_number);
+                        youkaadd.setBackgroundResource(R.drawable.jiayouka);
                     }else{
                         passToBindYouKa();
                     }
@@ -165,7 +173,12 @@ public class YouKaPayActivity extends BaseActivity {
 
     @Override
     public void initEvent() {
-
+        youkaadd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                passToBindYouKa();
+            }
+        });
     }
 
     private void showRecycleView() {
@@ -177,6 +190,7 @@ public class YouKaPayActivity extends BaseActivity {
                 @Override
                 protected void convert(ViewHolder holder, final SupportMoney carChoiceBean, int position) {
                     holder.setText(R.id.price, carChoiceBean.money + "元");
+                    holder.setText(R.id.old_price, "售价："+carChoiceBean.money + "元");
 //                    new GlideImageLoader().displayImage(mActivity,carChoiceBean.picture, (ImageView) holder.getView(R.id.picture));
 //                    new GlideImageLoader().displayImage(mActivity,carChoiceBean.picture, (ImageView) holder.getView(R.id.picture));
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -206,7 +220,7 @@ public class YouKaPayActivity extends BaseActivity {
         Map<String, String> map = new HashMap<>();
         map.put("card_id", card_id);
         map.put("proid", carChoiceBean.proid);
-        map.put("cardnum", card_number);
+        map.put("cardnum", carChoiceBean.cardnum);
         map.put("order_amount", carChoiceBean.money);
         map.put("goods_amount", carChoiceBean.money);
         map.put("customer_id", AccountManager.sUserBean.getId());
@@ -218,7 +232,7 @@ public class YouKaPayActivity extends BaseActivity {
                     int code = res.getInt("code");
                     String info = res.getString("info");
                     if (code == 0) {
-                        String orderid = res.get("data").toString();//获得的本司订单号
+                        String orderid = res.getJSONObject("data").optString("order_id");//获得的本司订单号
                         String paytypekey = "pay_type";
                         String pervalue = carChoiceBean.money;//充值金额
                         String url = "index.php?g=app&m=petrol&a=goodsPay";

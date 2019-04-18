@@ -1,11 +1,23 @@
 package com.nado.parking.ui.device;
 
+import android.content.Intent;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nado.parking.R;
 import com.nado.parking.base.BaseActivity;
+import com.nado.parking.manager.AccountManager;
+import com.nado.parking.manager.RequestManager;
+import com.nado.parking.net.RetrofitCallBack;
+import com.nado.parking.net.RetrofitRequestInterface;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class DeviceListActivity extends BaseActivity {
     private android.widget.RelativeLayout rlLayoutTopBackBar;
@@ -41,11 +53,56 @@ public class DeviceListActivity extends BaseActivity {
 
     @Override
     public void initData() {
-
+        if (AccountManager.sUserBean != null) {
+            if(AccountManager.sUserBean.obd_macid!=null&&!"".equals(AccountManager.sUserBean.obd_macid)){
+                hasobd.setVisibility(View.VISIBLE);
+                tvLayoutTopBackBarEnd.setVisibility(View.GONE);
+                obdmacid.setText(AccountManager.sUserBean.obd_macid);
+            }
+        }
     }
 
     @Override
     public void initEvent() {
+        hasobd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unbind();
+            }
+        });
+        tvLayoutTopBackBarEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                startActivity(new Intent(mActivity, DeviceBindActivity.class));
+            }
+        });
+    }
+
+    private void unbind() {
+        Map<String, String> map = new HashMap<>();
+        map.put("customer_id", AccountManager.sUserBean.getId());
+        map.put("obd_macid", AccountManager.sUserBean.obd_macid);
+        RequestManager.mRetrofitManager.createRequest(RetrofitRequestInterface.class).unbindOBD(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    JSONObject res = new JSONObject(response);
+                    int code = res.getInt("code");
+                    String info = res.getString("info");
+                    if (code == 0) {
+                        finish();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable t) {
+
+            }
+        });
     }
 }

@@ -96,10 +96,28 @@ public interface RetrofitRequestInterface {
     @POST("index.php?g=app&m=appv1&a=BindMac")
     Call<String> bindOBD(@FieldMap Map<String, String> params);
 
+
+    /*解绑OBD设备*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=appv1&a=UnBindMac")
+    Call<String> unbindOBD(@FieldMap Map<String, String> params);
+
     /*获得充值金额*/
     @FormUrlEncoded
     @POST("index.php?g=app&m=telephone&a=telephone_note")
     Call<String> getCanPhonePay(@FieldMap Map<String, String> params);
+
+
+    /*绑定水费户号*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=life&a=set_product_user")
+    Call<String> bindShuiHu(@FieldMap Map<String, String> params);
+
+
+    /*绑定电费户号*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=power&a=saveuseriinfo")
+    Call<String> bindDianHu(@FieldMap Map<String, String> params);
 
 
     /*编辑地址*/
@@ -193,6 +211,11 @@ public interface RetrofitRequestInterface {
     @POST("index.php?g=app&m=life&a=get_money")
     Call<String> chechNeedShuiPay(@FieldMap Map<String, String> params);
 
+    /*判断电费是不是欠费*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=power&a=findpowerinfo")
+    Call<String> chechNeedDianiPay(@FieldMap Map<String, String> params);
+
 
     /*获得用户绑定的电公司*/
     @FormUrlEncoded
@@ -226,6 +249,12 @@ public interface RetrofitRequestInterface {
     @POST("index.php?g=app&m=appv1&a=GetRailList")
     Call<String> getWeiLanList(@FieldMap Map<String, String> params);
 
+
+    /*话费列表*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=telephone&a=selectuserdata")
+    Call<String> getHfList(@FieldMap Map<String, String> params);
+
     /*报警列表*/
     @FormUrlEncoded
     @POST("index.php?g=app&m=appv1&a=Alarm_List")
@@ -237,6 +266,12 @@ public interface RetrofitRequestInterface {
     @FormUrlEncoded
     @POST("index.php?g=app&m=life&a=get_company")
     Call<String> getShuiCompany(@FieldMap Map<String, String> params);
+
+
+    /*电机构列表*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=power&a=selectpower")
+    Call<String> getDianCompany(@FieldMap Map<String, String> params);
 
     /*支付检查*/
     @FormUrlEncoded

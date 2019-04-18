@@ -1,6 +1,6 @@
 package com.nado.parking.bean;
 
-public class ShuiCompany {
+public class DianCompany {
     public String id;
     public String city;
     public String company;

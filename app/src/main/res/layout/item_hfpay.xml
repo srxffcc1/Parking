@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:background="@drawable/text_boder"
+        android:background="@drawable/text_boder_r_red3"
         android:layout_margin="3dp"
         android:layout_width="match_parent"
         android:layout_weight="1"
@@ -15,12 +15,14 @@
         android:orientation="vertical"
         android:layout_height="60dp">
         <TextView
+            android:textColor="@color/colorRed"
             android:id="@+id/old_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="98元"/>
         <TextView
+            android:textColor="@color/colorRed"
             android:id="@+id/price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -11,6 +11,13 @@ import com.nado.parking.R;
 import com.nado.parking.base.BaseFragment;
 import com.nado.parking.manager.AccountManager;
 import com.nado.parking.ui.device.DeviceActivity;
+import com.nado.parking.ui.device.DeviceBaoJingListActivity;
+import com.nado.parking.ui.device.DeviceCarDetailActivity;
+import com.nado.parking.ui.device.DeviceCheckActivity;
+import com.nado.parking.ui.device.DeviceDetailActivity;
+import com.nado.parking.ui.device.DeviceGuiJiActivity;
+import com.nado.parking.ui.device.DeviceWeiLanListActivity;
+import com.nado.parking.ui.device.DeviceXingChengListActivity;
 
 /**
  * 主页
@@ -31,6 +38,14 @@ public class DeviceFragment extends BaseFragment implements View.OnClickListener
     private android.widget.LinearLayout liDh;
     private android.widget.LinearLayout dzg;
     private android.widget.LinearLayout jyzj;
+    private LinearLayout needhide;
+    private LinearLayout liWl;
+    private LinearLayout liGj;
+    private LinearLayout liXq;
+    private LinearLayout liXc;
+    private LinearLayout liJc;
+    private LinearLayout liCk;
+    private LinearLayout liBj;
 
 
     @Override
@@ -50,16 +65,16 @@ public class DeviceFragment extends BaseFragment implements View.OnClickListener
         passdevice = (LinearLayout) byId(R.id.passdevice);
         device = (TextView) byId(R.id.device);
         rlMore = (RelativeLayout) byId(R.id.rl_more);
-        liClgz = (LinearLayout) byId(R.id.li_clgz);
-        liCltj = (LinearLayout) byId(R.id.li_cltj);
-        liQcfd = (LinearLayout) byId(R.id.li_qcfd);
-        liDyjk = (LinearLayout) byId(R.id.li_dyjk);
-        liXcgj = (LinearLayout) byId(R.id.li_xcgj);
-        liJscp = (LinearLayout) byId(R.id.li_jscp);
-        liWmjs = (LinearLayout) byId(R.id.li_wmjs);
         liDh = (LinearLayout) byId(R.id.li_dh);
-        dzg = (LinearLayout) byId(R.id.dzg);
-        jyzj = (LinearLayout) byId(R.id.jyzj);
+
+        needhide = (LinearLayout) findViewById(R.id.needhide);
+        liWl = (LinearLayout) findViewById(R.id.li_wl);
+        liGj = (LinearLayout) findViewById(R.id.li_gj);
+        liXq = (LinearLayout) findViewById(R.id.li_xq);
+        liXc = (LinearLayout) findViewById(R.id.li_xc);
+        liJc = (LinearLayout) findViewById(R.id.li_jc);
+        liCk = (LinearLayout) findViewById(R.id.li_ck);
+        liBj = (LinearLayout) findViewById(R.id.li_bj);
     }
 
     @Override
@@ -69,7 +84,7 @@ public class DeviceFragment extends BaseFragment implements View.OnClickListener
     }
     public void initDevice(){
         if (AccountManager.sUserBean != null) {
-            if(AccountManager.sUserBean.obd_id!=null){
+            if(AccountManager.sUserBean.obd_id!=null&&!"".equals(AccountManager.sUserBean.obd_id)){
                 device.setText("查看OBD详情");
             }else{
                 passdevice.setBackgroundResource(R.drawable.noobd);
@@ -84,7 +99,109 @@ public class DeviceFragment extends BaseFragment implements View.OnClickListener
         passdevice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(device.getText().toString().contains("绑定")){
+                if(!device.getText().toString().contains("绑定")){
+
+                    startActivity(new Intent(v.getContext(), DeviceActivity.class));
+                }else{
+
+                    startActivity(new Intent(v.getContext(), MainGoodDetailActivity.class).putExtra("id",AccountManager.bestGood).putExtra("needbind",true));
+                }
+            }
+        });
+
+
+        liGj.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!device.getText().toString().contains("绑定")){
+
+                    startActivity(new Intent(v.getContext(), DeviceActivity.class));
+                }else{
+
+                    startActivity(new Intent(v.getContext(), MainGoodDetailActivity.class).putExtra("id",AccountManager.bestGood).putExtra("needbind",true));
+                }
+            }
+        });
+        liDh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!device.getText().toString().contains("绑定")){
+
+                    startActivity(new Intent(v.getContext(), DeviceActivity.class));
+                }else{
+
+                    startActivity(new Intent(v.getContext(), MainGoodDetailActivity.class).putExtra("id",AccountManager.bestGood).putExtra("needbind",true));
+                }
+            }
+        });
+        liJc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!device.getText().toString().contains("绑定")){
+
+                    startActivity(new Intent(v.getContext(), DeviceActivity.class));
+                }else{
+
+                    startActivity(new Intent(v.getContext(), MainGoodDetailActivity.class).putExtra("id",AccountManager.bestGood).putExtra("needbind",true));
+                }
+            }
+        });
+        liWl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!device.getText().toString().contains("绑定")){
+
+                    startActivity(new Intent(v.getContext(), DeviceActivity.class));
+                }else{
+
+                    startActivity(new Intent(v.getContext(), MainGoodDetailActivity.class).putExtra("id",AccountManager.bestGood).putExtra("needbind",true));
+                }
+
+            }
+        });
+        liXc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(!device.getText().toString().contains("绑定")){
+
+                    startActivity(new Intent(v.getContext(), DeviceActivity.class));
+                }else{
+
+                    startActivity(new Intent(v.getContext(), MainGoodDetailActivity.class).putExtra("id",AccountManager.bestGood).putExtra("needbind",true));
+                }
+            }
+        });
+        liBj.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!device.getText().toString().contains("绑定")){
+
+                    startActivity(new Intent(v.getContext(), DeviceActivity.class));
+                }else{
+
+                    startActivity(new Intent(v.getContext(), MainGoodDetailActivity.class).putExtra("id",AccountManager.bestGood).putExtra("needbind",true));
+                }
+            }
+        });
+        liXq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(!device.getText().toString().contains("绑定")){
+
+                    startActivity(new Intent(v.getContext(), DeviceActivity.class));
+                }else{
+
+                    startActivity(new Intent(v.getContext(), MainGoodDetailActivity.class).putExtra("id",AccountManager.bestGood).putExtra("needbind",true));
+                }
+            }
+        });
+        liCk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(!device.getText().toString().contains("绑定")){
 
                     startActivity(new Intent(v.getContext(), DeviceActivity.class));
                 }else{

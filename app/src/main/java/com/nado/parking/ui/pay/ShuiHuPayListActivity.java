@@ -80,7 +80,7 @@ public class ShuiHuPayListActivity extends BaseActivity {
                     String info = res.getString("info");
                     mBeanList.clear();
                     if (code == 0) {
-                        JSONArray jsonArray = res.getJSONArray("data");
+                        JSONArray jsonArray = res.getJSONObject("data").getJSONArray("info");
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             ShuiHuHao bean = new ShuiHuHao();
@@ -124,8 +124,10 @@ public class ShuiHuPayListActivity extends BaseActivity {
 
                 @Override
                 protected void convert(ViewHolder holder, final ShuiHuHao carChoiceBean, int position) {
-                    holder.setText(R.id.huhao,carChoiceBean.wecaccount);
-                    holder.setText(R.id.jgname,carChoiceBean.company);
+                    holder.setText(R.id.huhao, "户号:"+carChoiceBean.wecaccount);
+                    holder.setImageResource(R.id.huimage,R.drawable.shuifei);
+                    holder.setText(R.id.jgname, "缴费机构:"+carChoiceBean.company);
+
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -158,10 +160,12 @@ public class ShuiHuPayListActivity extends BaseActivity {
             public void onSuccess(String response) {
                 try {
                     JSONObject res = new JSONObject(response);
-                    boolean Status = res.getBoolean("Status");
-                    if (Status) {
+                    int code = res.getInt("code");
+                    String info = res.getString("info");
+                    if (code == 0) {
+                        String stockordernumber=res.getJSONObject("data").getString("stockordernumber");
                         starttime=System.currentTimeMillis();
-                        chechNeedPay(bean);
+                        chechNeedPay(bean,stockordernumber);
                     }else{
                         Toast.makeText(getBaseContext(),"查询不成功",Toast.LENGTH_SHORT).show();
                     }
@@ -179,7 +183,7 @@ public class ShuiHuPayListActivity extends BaseActivity {
 
     }
     //需要先用一个下单id
-    public void chechNeedPay(final ShuiHuHao hubean){
+    public void chechNeedPay(final ShuiHuHao hubean, final String stockordernumber){
         Map<String, String> map = new HashMap<>();
         map.put("customer_id", AccountManager.sUserBean.getId());
         map.put("id", hubean.id);
@@ -206,7 +210,7 @@ public class ShuiHuPayListActivity extends BaseActivity {
 
                         Intent intent=new Intent(getBaseContext(),ShuiPayActivity.class);
                         buildIntent(intent,bean);
-                        if("0".equals(totalamount)){
+                        if (totalamount==null||"0".equals(totalamount)||"null".equals(totalamount)) {
                             intent.putExtra("needpayflag",false);
                         }else{
                             intent.putExtra("needpayflag",true);
@@ -216,7 +220,7 @@ public class ShuiHuPayListActivity extends BaseActivity {
                         if(System.currentTimeMillis()-starttime>10000){//说明查询失败多半第三方问题
 
                         }else{
-                            chechNeedPay(hubean);
+                            chechNeedPay(hubean,stockordernumber);
                         }
                     }
 

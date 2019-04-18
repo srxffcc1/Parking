@@ -18,6 +18,8 @@ import com.nado.parking.R;
 import com.nado.parking.base.BaseActivity;
 import com.nado.parking.event.UpdateLoginStateEvent;
 import com.nado.parking.manager.AccountManager;
+import com.nado.parking.ui.device.DeviceActivity;
+import com.nado.parking.ui.device.DeviceListActivity;
 import com.nado.parking.ui.user.AddressListActivity;
 import com.nado.parking.util.ToastUtil;
 
@@ -54,6 +56,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
     private TextView tvActivityUserSettingVersionName;
     private LinearLayout llActivityUserSetExitLogin;
     private TextView tvActivityUserSettingExit;
+    private LinearLayout llActivityUserSetObd;
 
     @Override
     protected int getContentViewId() {
@@ -92,6 +95,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
         tvActivityUserSettingVersionName = (TextView) findViewById(R.id.tv_activity_user_setting_version_name);
         llActivityUserSetExitLogin = (LinearLayout) findViewById(R.id.ll_activity_user_set_exit_login);
         tvActivityUserSettingExit = (TextView) findViewById(R.id.tv_activity_user_setting_exit);
+        llActivityUserSetObd = (LinearLayout) findViewById(R.id.ll_activity_user_set_obd);
     }
 
     @Override
@@ -111,6 +115,12 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(mActivity, AddressListActivity.class));
+            }
+        });
+        llActivityUserSetObd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mActivity, DeviceListActivity.class));
             }
         });
     }

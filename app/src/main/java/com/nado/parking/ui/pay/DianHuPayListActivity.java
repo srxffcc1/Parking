@@ -69,8 +69,7 @@ public class DianHuPayListActivity extends BaseActivity {
 
     private void getList() {
         Map<String, String> map = new HashMap<>();
-        map.put("customer_id", AccountManager.sUserBean.getId());
-        map.put("type", "水".equals(getIntent().getStringExtra("type")) ? "1" : "2");
+        map.put("userid", AccountManager.sUserBean.getId());
         RequestManager.mRetrofitManager3.createRequest(RetrofitRequestInterface.class).getBindDianPayCompany(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
             @Override
             public void onSuccess(String response) {
@@ -123,8 +122,9 @@ public class DianHuPayListActivity extends BaseActivity {
 
                 @Override
                 protected void convert(ViewHolder holder, final DianHuHao carChoiceBean, int position) {
-                    holder.setText(R.id.huhao, carChoiceBean.wecacount);
-                    holder.setText(R.id.jgname, carChoiceBean.company);
+                    holder.setText(R.id.huhao, "户号:"+carChoiceBean.wecacount);
+                    holder.setImageResource(R.id.huimage,R.drawable.dianfei);
+                    holder.setText(R.id.jgname, "缴费机构:"+carChoiceBean.company);
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -188,7 +188,7 @@ public class DianHuPayListActivity extends BaseActivity {
     public void chechNeedPay(final DianHuHao hubean,String stockordernumber) {
         Map<String, String> map = new HashMap<>();
         map.put("order", stockordernumber);
-        RequestManager.mRetrofitManager.createRequest(RetrofitRequestInterface.class).chechNeedShuiPay(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
+        RequestManager.mRetrofitManager.createRequest(RetrofitRequestInterface.class).chechNeedDianiPay(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
             @Override
             public void onSuccess(String response) {
                 try {
@@ -213,14 +213,17 @@ public class DianHuPayListActivity extends BaseActivity {
 
                         Intent intent = new Intent(getBaseContext(), DianPayActivity.class);
                         buildIntent(intent, bean);
-                        intent.putExtra("delayfee",jsonObject.getJSONObject("wecbilldata").getString("delayfee"));
-                        intent.putExtra("wecbillmoney",jsonObject.getJSONObject("wecbilldata").getString("wecbillmoney"));
+                        if(jsonObject.optJSONObject("wecbilldata")!=null){
+                            intent.putExtra("delayfee",jsonObject.optJSONObject("wecbilldata").getString("delayfee"));
+                            intent.putExtra("wecbillmoney",jsonObject.optJSONObject("wecbilldata").getString("wecbillmoney"));
+                        }
+
                         intent.putExtra("productid",hubean.productid);
                         intent.putExtra("company",hubean.company);
                         intent.putExtra("wecaccount",hubean.wecacount);
                         intent.putExtra("totalamount",bean.totalamount);
                         intent.putExtra("company",hubean.company);
-                        if ("0".equals(totalamount)) {
+                        if (totalamount==null||"0".equals(totalamount)||"null".equals(totalamount)) {
                             intent.putExtra("needpayflag", false);
                         } else {
                             intent.putExtra("needpayflag", true);

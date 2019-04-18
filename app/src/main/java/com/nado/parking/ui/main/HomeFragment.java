@@ -1,5 +1,6 @@
 package com.nado.parking.ui.main;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -20,6 +22,9 @@ import com.nado.parking.adapter.recycler.base.ViewHolder;
 import com.nado.parking.base.BaseFragment;
 import com.nado.parking.bean.BannerBean;
 import com.nado.parking.bean.CarChoiceBean;
+import com.nado.parking.bean.LocEvent;
+import com.nado.parking.bean.OrderEvent;
+import com.nado.parking.constant.HomepageConstant;
 import com.nado.parking.manager.AccountManager;
 import com.nado.parking.manager.RequestManager;
 import com.nado.parking.net.RetrofitCallBack;
@@ -27,6 +32,7 @@ import com.nado.parking.net.RetrofitRequestInterface;
 import com.nado.parking.ui.pay.PhonePayActivity;
 import com.nado.parking.ui.pay.ShuiDianPayMenuActivity;
 import com.nado.parking.ui.pay.YouKaPayActivity;
+import com.nado.parking.ui.user.PeccancyQueryActivity;
 import com.nado.parking.ui.user.account.LoginActivity;
 import com.nado.parking.util.DisplayUtil;
 import com.nado.parking.util.LogUtil;
@@ -35,6 +41,9 @@ import com.nado.parking.util.ToastUtil;
 import com.nado.parking.widget.BannerLayout;
 import com.nado.parking.widget.DividerItemDecoration;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -69,6 +78,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private static final int STATUS_LOAD = 2;
     private int mPage = 1;
     private RecyclerCommonAdapter<CarChoiceBean> mCarBeanAdapter;
+    private android.widget.TextView changeCity;
 
 
     @Override
@@ -80,6 +90,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View v) {
 
     }
+
+
+
+
 
     @Override
     public void initView() {
@@ -96,16 +110,45 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         rlMore = (RelativeLayout) byId(R.id.rl_more);
         rvFragmentHomeAll = (RecyclerView) byId(R.id.rv_fragment_home_all);
 
+        changeCity = (TextView) findViewById(R.id.changeCity);
     }
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRefreshEvent(LocEvent wechatPayEvent) {
+        changeCity.setText(HomepageConstant.mLocationCity.replace("市",""));
+    }
     @Override
     public void initData() {
+        EventBus.getDefault().register(this);
         getHomeBanner();
         getChoice();
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==100){
+            if(resultCode== Activity.RESULT_OK){
+                changeCity.setText(data.getStringExtra("city"));
+                HomepageConstant.mLocationCity=data.getStringExtra("city");
+                HomepageConstant.mLocationProvince=data.getStringExtra("province");
+            }
+        }
+    }
+
+    @Override
     public void initEvent() {
+        changeCity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(v.getContext(), ChooseCityActivityNoCopy.class).putExtra("now",changeCity.getText().toString()),100);
+            }
+        });
+        liWzcx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mActivity, PeccancyQueryActivity.class));
+            }
+        });
         trlFragmentHome.setOnRefreshListener(new RefreshListenerAdapter() {
             @Override
             public void onRefresh(TwinklingRefreshLayout refreshLayout) {
@@ -357,6 +400,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         }
 
     }
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 
 }

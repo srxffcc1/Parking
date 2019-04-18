@@ -16,7 +16,6 @@ import com.nado.parking.R;
 import com.nado.parking.adapter.recycler.RecyclerCommonAdapter;
 import com.nado.parking.adapter.recycler.base.ViewHolder;
 import com.nado.parking.base.BaseActivity;
-import com.nado.parking.bean.CompanyCity;
 import com.nado.parking.bean.ParkCityBean;
 import com.nado.parking.constant.HomepageConstant;
 import com.nado.parking.manager.AccountManager;
@@ -26,6 +25,7 @@ import com.nado.parking.net.RetrofitRequestInterface;
 import com.nado.parking.util.NetworkUtil;
 import com.nado.parking.util.ToastUtil;
 import com.nado.parking.widget.LetterListView;
+import com.zaaach.citypicker.CityPicker;
 import com.zaaach.citypicker.adapter.OnPickListener;
 import com.zaaach.citypicker.model.City;
 import com.zaaach.citypicker.model.LocatedCity;
@@ -43,7 +43,7 @@ import java.util.Map;
  * 作者：Constantine on 2018/9/6.
  * 邮箱：2534159288@qq.com
  */
-public class ChooseCityActivity extends BaseActivity {
+public class ChooseCityActivityNoCopy extends BaseActivity {
     private static final String TAG = "ChooseCityActivity";
 
     private LinearLayout mBackLL;
@@ -89,7 +89,9 @@ public class ChooseCityActivity extends BaseActivity {
     public void initData() {
 //        mTitleTV.setText(getString(R.string.location_place, place));
 //        getPCA();
-        initCity();
+//        initCity();
+
+        showFragment();
 
 
     }
@@ -116,17 +118,12 @@ public class ChooseCityActivity extends BaseActivity {
                                     } catch (PinyinException e) {
                                         e.printStackTrace();
                                     }
-                                    CompanyCity bean=new CompanyCity(jsonObject.optString("city"),jsonObject.optString("city"),pinyin,i+"");
-                                    bean.city=jsonObject.optString("city");
-                                    bean.company=jsonObject.optString("company");
-                                    bean.letter=jsonObject.optString("letter");
-                                    bean.is_hot=jsonObject.optString("is_hot");
+                                    City bean=new City(jsonObject.optString("city"),jsonObject.optString("province"),pinyin,jsonObject.optString("company"));
                                     list.add(bean);
                                 }
 
                             } else {
                             }
-                            showFragment();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -148,15 +145,14 @@ public class ChooseCityActivity extends BaseActivity {
 
     }
     public void showFragment(){
-        CityPickerCopy.from(ChooseCityActivity.this) //activity或者fragment
+        CityPicker.from(ChooseCityActivityNoCopy.this) //activity或者fragment
                 .enableAnimation(false)	//启用动画效果，默认无
-                .setLocatedCity(new LocatedCity(HomepageConstant.mLocationCity.replace("市",""), HomepageConstant.mLocationProvince, ""))  //APP自身已定位的城市，传null会自动定位（默认）
+                .setLocatedCity(new LocatedCity(getIntent().getStringExtra("now"), HomepageConstant.mLocationProvince, ""))  //APP自身已定位的城市，传null会自动定位（默认）
                 .setOnPickListener(new OnPickListener() {
                     @Override
                     public void onPick(int position, City data) {
 //                        Toast.makeText(getApplicationContext(), data.getName(), Toast.LENGTH_SHORT).show();
-                        CompanyCity bean= (CompanyCity) data;
-                        setResult(Activity.RESULT_OK,new Intent().putExtra("city",bean.city).putExtra("company",bean.company));
+                        setResult(Activity.RESULT_OK,new Intent().putExtra("city",data.getName()).putExtra("province",data.getProvince()));
                         finish();
                     }
 
@@ -171,7 +167,7 @@ public class ChooseCityActivity extends BaseActivity {
 
                     }
                 })
-                .show(list);
+                .show();
     }
     @Override
     public void initEvent() {

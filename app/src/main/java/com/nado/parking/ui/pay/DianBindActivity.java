@@ -31,7 +31,6 @@ public class DianBindActivity extends BaseActivity {
     private android.widget.TextView tvLayoutTopBackBarTitle;
     private android.widget.TextView tvLayoutTopBackBarEnd;
     private android.widget.TextView tvLayoutBackTopBarOperate;
-    private com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout tflActivityParkLot;
     private android.widget.LinearLayout passjigou;
     private android.widget.EditText et;
     private android.widget.CheckBox check;
@@ -39,6 +38,8 @@ public class DianBindActivity extends BaseActivity {
     private android.widget.TextView save;
     private TextView pleasechose;
     private String product_id;
+    private TextView tvLayoutTopBackBarStart;
+    private TextView whichfei;
 
     @Override
     protected int getContentViewId() {
@@ -53,19 +54,22 @@ public class DianBindActivity extends BaseActivity {
         tvLayoutTopBackBarTitle = (TextView) findViewById(R.id.tv_layout_top_back_bar_title);
         tvLayoutTopBackBarEnd = (TextView) findViewById(R.id.tv_layout_top_back_bar_end);
         tvLayoutBackTopBarOperate = (TextView) findViewById(R.id.tv_layout_back_top_bar_operate);
-        tflActivityParkLot = (TwinklingRefreshLayout) findViewById(R.id.tfl_activity_park_lot);
         passjigou = (LinearLayout) findViewById(R.id.passjigou);
         et = (EditText) findViewById(R.id.et);
         check = (CheckBox) findViewById(R.id.check);
         tip = (TextView) findViewById(R.id.tip);
         save = (TextView) findViewById(R.id.save);
-        tvLayoutTopBackBarTitle.setText("绑定缴费账户");
+
         pleasechose = (TextView) findViewById(R.id.pleasechose);
+        tvLayoutTopBackBarStart = (TextView) findViewById(R.id.tv_layout_top_back_bar_start);
+        whichfei = (TextView) findViewById(R.id.whichfei);
+        tvLayoutTopBackBarTitle.setText("绑定缴费账户");
     }
 
     @Override
     public void initData() {
 
+        whichfei.setText("电费");
     }
 
     @Override
@@ -75,8 +79,7 @@ public class DianBindActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-
-                startActivityForResult(new Intent(v.getContext(), ShuiChoseJGActivity.class).putExtra("type",getIntent().getStringExtra("type")),100);
+                startActivityForResult(new Intent(v.getContext(), DianChoseJGActivity.class).putExtra("type",getIntent().getStringExtra("type")),100);
             }
         });
         save.setOnClickListener(new View.OnClickListener() {
@@ -90,10 +93,11 @@ public class DianBindActivity extends BaseActivity {
 
     private void bind() {
         Map<String, String> map = new HashMap<>();
-        map.put("customer_id", AccountManager.sUserBean.getId());
-        map.put("product_id",product_id);
-        map.put("wecaccount",et.getText().toString());
-        RequestManager.mRetrofitManager.createRequest(RetrofitRequestInterface.class).getCanPhonePay(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
+        map.put("userid", AccountManager.sUserBean.getId());
+        map.put("productid",product_id);
+        map.put("company",pleasechose.getText().toString());
+        map.put("wecacount",et.getText().toString());
+        RequestManager.mRetrofitManager.createRequest(RetrofitRequestInterface.class).bindDianHu(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
             @Override
             public void onSuccess(String response) {
                 try {

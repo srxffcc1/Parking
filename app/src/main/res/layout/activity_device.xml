@@ -34,7 +34,7 @@
                 <RadioGroup
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#FAececec"
+                    android:background="#55303030"
                     android:orientation="horizontal">
 
                     <RadioButton

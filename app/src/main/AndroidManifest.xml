@@ -177,6 +177,9 @@
         <activity android:name=".ui.user.AddressListActivity" />
         <activity android:name=".ui.user.AddressActivity" />
         <activity android:name=".ui.device.DeviceBindActivity" />
+        <activity android:name=".ui.device.DeviceListActivity" />
+        <activity android:name=".ui.main.ChooseCityActivityNoCopy"  android:theme="@style/DefaultCityPickerTheme"/>
+        <activity android:name=".ui.pay.PhonePayHistoryActivity" />
     </application>
 
 </manifest>

@@ -1,7 +1,12 @@
 package com.nado.parking.ui.pay;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Color;
+import android.net.Uri;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
@@ -10,13 +15,16 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fondesa.recyclerviewdivider.RecyclerViewDivider;
 import com.nado.parking.R;
 import com.nado.parking.adapter.recycler.RecyclerCommonAdapter;
 import com.nado.parking.adapter.recycler.base.ViewHolder;
@@ -59,6 +67,8 @@ public class PhonePayActivity extends BaseActivity {
     private RecyclerView rvPayAll;
     private android.support.design.widget.TextInputLayout layoutAccount;
     private android.widget.EditText et;
+    private TextView tvLayoutTopBackBarStart;
+    private android.widget.ImageView passtongxunlu;
 
     @Override
     protected int getContentViewId() {
@@ -74,10 +84,13 @@ public class PhonePayActivity extends BaseActivity {
         tvLayoutTopBackBarTitle = (TextView) findViewById(R.id.tv_layout_top_back_bar_title);
         tvLayoutTopBackBarEnd = (TextView) findViewById(R.id.tv_layout_top_back_bar_end);
         tvLayoutBackTopBarOperate = (TextView) findViewById(R.id.tv_layout_back_top_bar_operate);
-        rvPayAll = (RecyclerView) findViewById(R.id.rv_pay_all);
-        tvLayoutTopBackBarTitle.setText("手机充值");
         layoutAccount = (TextInputLayout) findViewById(R.id.layout_account);
         et = (EditText) findViewById(R.id.et);
+        tvLayoutTopBackBarStart = (TextView) findViewById(R.id.tv_layout_top_back_bar_start);
+        passtongxunlu = (ImageView) findViewById(R.id.passtongxunlu);
+        rvPayAll = (RecyclerView) findViewById(R.id.rv_pay_all);
+        tvLayoutTopBackBarTitle.setText("话费充值");
+        tvLayoutTopBackBarEnd.setText("充值记录");
     }
 
     @Override
@@ -87,6 +100,19 @@ public class PhonePayActivity extends BaseActivity {
 
     @Override
     public void initEvent() {
+        tvLayoutTopBackBarEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mActivity,PhonePayHistoryActivity.class));
+            }
+        });
+        passtongxunlu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+                startActivityForResult(intent,1000);
+            }
+        });
         et.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -102,9 +128,11 @@ public class PhonePayActivity extends BaseActivity {
             public void afterTextChanged(Editable s) {
                 if (!isMobileNO(s.toString())) {
                     //显示错误提示
+                    layoutAccount.setHint("请输入手机号");
                     layoutAccount.setError("手机号输入错误");
                     layoutAccount.setErrorEnabled(true);
                 } else {
+                    layoutAccount.setHint("");
                     layoutAccount.setError("手机号正确");
                     layoutAccount.setErrorEnabled(false);
                 }
@@ -112,7 +140,50 @@ public class PhonePayActivity extends BaseActivity {
         });
 
     }
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==1000){
+            if (resultCode==RESULT_OK){
+                if (data!=null){
+                    Uri uri=data.getData();
+                    String[] contact=getPhoneContacts(uri);
+                    if (contact!=null){
+                        String name=contact[0];//姓名
+                        String number=contact[1].replace("-","");//手机号
+                        et.setText(number);
+                    }
+                }
+            }
+        }
+        if(requestCode==PayAllActivity.START_PAY){
+            if(resultCode==Activity.RESULT_OK){
+                successPay(data);
+            }
+        }
+    }
+    /**
+     * 读取联系人信息
+     * @param uri
+     */
+    private String[] getPhoneContacts(Uri uri){
+        String[] contact = new String[2];
+        //得到ContentResolver对象
+        ContentResolver cr = getContentResolver();
+        Cursor cursor = cr.query(uri, null, null, null, null);
+        if (cursor != null&&cursor.moveToFirst()) {
+            //取得联系人姓名
+            int nameFieldColumnIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+            contact[0] = cursor.getString(nameFieldColumnIndex);
+            contact[1]=cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+            Log.i("contacts",contact[0]);
+            Log.i("contactsUsername",contact[1]);
+            cursor.close();
+        } else {
+            return null;
+        }
+        return contact;
+    }
     public static boolean isMobileNO(String mobiles) {
         String telRegex = "13\\d{9}|14[57]\\d{8}|15[012356789]\\d{8}|18[01256789]\\d{8}|17[0678]\\d{8}";
         if (TextUtils.isEmpty(mobiles)) return false;
@@ -216,16 +287,7 @@ public class PhonePayActivity extends BaseActivity {
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //充值成功的返回
-        if(requestCode==PayAllActivity.START_PAY){
-            if(resultCode==Activity.RESULT_OK){
-                successPay(data);
-            }
-        }
-    }
+
 
     private void successPay(Intent resultdata) {
         Map<String, String> map = new HashMap<>();
@@ -326,7 +388,7 @@ public class PhonePayActivity extends BaseActivity {
             };
 
 
-            rvPayAll.addItemDecoration(new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST, (int) DisplayUtil.dpToPx(mActivity, 1), ContextCompat.getColor(mActivity, R.color.colorLine), false, 2));
+//            rvPayAll.addItemDecoration(RecyclerViewDivider.with(this).build());
             rvPayAll.setAdapter(mCarBeanAdapter);
             rvPayAll.setLayoutManager(new GridLayoutManager(mActivity, 3));
         } else {

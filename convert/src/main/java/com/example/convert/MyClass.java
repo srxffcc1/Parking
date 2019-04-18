@@ -5,12 +5,13 @@ import java.util.regex.Pattern;
 
 public class MyClass {
     public static void main(String[] args) {
-        String org="\"id\":1,\n" +
-                "        \"receiver_name\":\"测试1\",\n" +
-                "        \"receiver_mobile\":\"18556878763\",\n" +
-                "        \"region\":\"666\",\n" +
-                "        \"detailed_address\":\"123\",\n" +
-                "        \"is_default\":1";
+        String org="            \"id\": \"1\",\n" +
+                "            \"user_id\": \"1\",\n" +
+                "            \"telephone\": \"18123145671\",\n" +
+                "            \"create_time\": \"1557277271\",\n" +
+                "            \"telephone_money\": \"50.00\",\n" +
+                "            \"orderid\": \"1111111111\",\n" +
+                "            \"status\": \"1\"";
         //parm参数
         Pattern pattern=null;
         Matcher matcher=null;

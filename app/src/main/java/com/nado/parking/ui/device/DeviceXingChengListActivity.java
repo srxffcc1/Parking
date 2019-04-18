@@ -20,6 +20,8 @@ import android.widget.TextView;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.hss01248.dialog.StyledDialog;
+import com.hss01248.dialog.interfaces.MyDialogListener;
 import com.nado.parking.R;
 import com.nado.parking.adapter.recycler.RecyclerCommonAdapter;
 import com.nado.parking.adapter.recycler.base.ViewHolder;
@@ -70,6 +72,9 @@ public class DeviceXingChengListActivity extends BaseActivity {
     private RecyclerCommonAdapter<XingCheng> myAdapter;
     private List<XingCheng> mBeanList = new ArrayList<>();
     private TextView time;
+    public double sumlichengt=0;
+    public double sumyouhaot=0;
+    public double sumxingshishijiant=0;
 
     @Override
     protected int getContentViewId() {
@@ -93,6 +98,7 @@ public class DeviceXingChengListActivity extends BaseActivity {
         recycler = (RecyclerView) findViewById(R.id.recycler);
         time = (TextView) findViewById(R.id.time);
         tvLayoutTopBackBarTitle.setText("行程");
+        StyledDialog.init(this);
     }
     public void startTimePicker(Activity activity, OnTimeSelectListener listener){
 //        long tenYears = 10L * 365 * 1000 * 60 * 60 * 24L;
@@ -182,9 +188,52 @@ public class DeviceXingChengListActivity extends BaseActivity {
                 });
             }
         });
+        deviceEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeOli();
+            }
+        });
     }
 
+    private void changeOli() {
+        StyledDialog.buildNormalInput("油价修改", "输入数值", "", "确定", "取消", new MyDialogListener() {
+            @Override
+            public void onGetInput(CharSequence input1, CharSequence input2) {
+                super.onGetInput(input1, input2);
+                sumxiaofei.setText((Double.parseDouble(sumyouhao.getText().toString())*Double.parseDouble(input1.toString()))+"");
+            }
+
+            @Override
+            public void onFirst() {
+
+            }
+
+            @Override
+            public void onSecond() {
+
+            }
+        }).show();
+    }
+
+    public String second2hour(int second){
+        String result="";
+        int hour = second/3600;
+        if(hour!=0){
+            result+=hour+"时";
+        }
+        int minute = (second - hour*3600)/60;
+        if(minute!=0){
+            result+=minute+"分";
+        }
+        second = second-hour*300-minute*60;
+        return result;
+    }
     private void initList(String begintime, String endtime) {
+
+         sumlichengt=0;
+         sumyouhaot=0;
+         sumxingshishijiant=0;
         Map<String, String> map = new HashMap<>();
         map.put("method", "getStrokeV3");
         map.put("beginTime", begintime);
@@ -203,6 +252,10 @@ public class DeviceXingChengListActivity extends BaseActivity {
                     String info = res.getString("success");
                     mBeanList.clear();
                     if ("true".equals(info)) {
+                        sumlicheng.setText(res.optString("totalmil"));
+                        sumxingshishijian.setText(second2hour(Integer.parseInt(res.optString("totalDriveTime"))));
+                        sumyouhao.setText(res.optString("totalfuel"));
+                        sumxiaofei.setText((res.optDouble("totalfuel")*res.optDouble("oilPrice"))+"");
                         JSONArray jsonArray = res.getJSONArray("rows");
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -232,6 +285,7 @@ public class DeviceXingChengListActivity extends BaseActivity {
                             bean.BeginTime = jsonObject.optString("BeginTime");
                             bean.EndTime = jsonObject.optString("EndTime");
                             bean.IdlingTime = jsonObject.optString("IdlingTime");
+
                             mBeanList.add(bean);
                         }
                     }

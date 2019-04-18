@@ -1,6 +1,7 @@
 package com.nado.parking.ui.pay;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nado.parking.R;
 import com.nado.parking.adapter.recycler.RecyclerCommonAdapter;
@@ -57,18 +59,25 @@ public class YouKaListActivity extends BaseActivity {
         tvLayoutTopBackBarEnd = (TextView) findViewById(R.id.tv_layout_top_back_bar_end);
         tvLayoutBackTopBarOperate = (TextView) findViewById(R.id.tv_layout_back_top_bar_operate);
         rvPayAll = (RecyclerView) findViewById(R.id.rv_pay_all);
+        tvLayoutTopBackBarTitle.setText("油卡列表");
+        tvLayoutTopBackBarEnd.setText("添加油卡");
     }
 
     @Override
     public void initData() {
-
+        getYouKaList();
     }
 
     @Override
     public void initEvent() {
-
+        tvLayoutTopBackBarEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mActivity,YouKaAddActivity.class));
+            }
+        });
     }
-    private void passToBindYouKa() {
+    private void getYouKaList() {
         Map<String, String> map = new HashMap<>();
         map.put("customer_id", AccountManager.sUserBean.getId());
         map.put("page", "1");
@@ -126,6 +135,12 @@ public class YouKaListActivity extends BaseActivity {
                             saveDefaultCard(carChoiceBean);
                         }
                     });
+                    if("1".equals(carChoiceBean.is_default)){
+                        holder.setVisible(R.id.default_flag,true);
+                    }else{
+
+                        holder.setVisible(R.id.default_flag,false);
+                    }
                 }
 
             };
@@ -151,6 +166,7 @@ public class YouKaListActivity extends BaseActivity {
                     int code = res.getInt("code");
                     String info = res.getString("info");
                     if (code == 0) {
+                        Toast.makeText(mActivity,"设置成功",Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }

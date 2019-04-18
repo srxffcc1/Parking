@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
@@ -124,7 +125,7 @@ public class DeviceActivity extends BaseActivity {
         hideimage = (ImageView) findViewById(R.id.hideimage);
         needhide = (LinearLayout) findViewById(R.id.needhide);
     }
-
+    boolean isnoobddata=false;
     @Override
     public void initData() {
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
@@ -183,7 +184,7 @@ public class DeviceActivity extends BaseActivity {
                         bean.precision = array.get(Integer.parseInt(data.getString("precision"))).toString();
                         getAddress(new LatLonPoint(Double.parseDouble(bean.weidu), Double.parseDouble(bean.jingdu)));
                     } else {
-
+                        isnoobddata=true;
                         DialogUtil.hideProgress();
                     }
                 } catch (JSONException e) {
@@ -214,6 +215,7 @@ public class DeviceActivity extends BaseActivity {
             @Override
             public View getInfoWindow(Marker marker) {
                 TextView info = new TextView(DeviceActivity.this);
+                info.setTextSize(10);
                 String infostring = ""
 //                        + "名称：" + AccountManager.sUserBean.obd_macid + "\n"
                         + "设备号：" + bean.sim_id + "\n"
@@ -256,24 +258,40 @@ public class DeviceActivity extends BaseActivity {
             public void onClick(View v) {
 //                initGuiJi();
 //                initWeiLan();
+                if(isnoobddata){
+                    Toast.makeText(mActivity,"当前设备未启用",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 startActivity(new Intent(v.getContext(), DeviceGuiJiActivity.class));
             }
         });
         liDh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(isnoobddata){
+                    Toast.makeText(mActivity,"当前设备未启用",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Nav();
             }
         });
         liJc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(isnoobddata){
+                    Toast.makeText(mActivity,"当前设备未启用",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 startActivity(new Intent(v.getContext(), DeviceCheckActivity.class));
             }
         });
         liWl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(isnoobddata){
+                    Toast.makeText(mActivity,"当前设备未启用",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 startActivity(new Intent(v.getContext(), DeviceWeiLanListActivity.class));
 
             }
@@ -281,27 +299,40 @@ public class DeviceActivity extends BaseActivity {
         liXc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(isnoobddata){
+                    Toast.makeText(mActivity,"当前设备未启用",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 startActivity(new Intent(v.getContext(), DeviceXingChengListActivity.class));
             }
         });
         liBj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(isnoobddata){
+                    Toast.makeText(mActivity,"当前设备未启用",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 startActivity(new Intent(v.getContext(), DeviceBaoJingListActivity.class));
             }
         });
         liXq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(isnoobddata){
+                    Toast.makeText(mActivity,"当前设备未启用",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 startActivity(new Intent(v.getContext(), DeviceDetailActivity.class));
             }
         });
         liCk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(isnoobddata){
+                    Toast.makeText(mActivity,"当前设备未启用",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 startActivity(new Intent(v.getContext(), DeviceCarDetailActivity.class));
             }
         });

@@ -34,6 +34,7 @@ import com.nado.parking.base.BaseFragment;
 import com.nado.parking.bean.BannerBean;
 import com.nado.parking.bean.CarBean;
 import com.nado.parking.bean.CarOrderBean;
+import com.nado.parking.bean.LocEvent;
 import com.nado.parking.constant.HomepageConstant;
 import com.nado.parking.event.UpdateLoginStateEvent;
 import com.nado.parking.manager.AccountManager;
@@ -139,10 +140,13 @@ public class PackFragment extends BaseFragment implements View.OnClickListener {
                     //定位的地址显示
                     Log.e(TAG, aMapLocation.getCity());
                     Log.e(TAG, aMapLocation.getProvince());
-                    HomepageConstant.mLocationCity = aMapLocation.getCity();
-                    HomepageConstant.mLocationProvince = aMapLocation.getProvince();
+                    if(HomepageConstant.mLocationCity==null){
+                        HomepageConstant.mLocationCity = aMapLocation.getCity();
+                        HomepageConstant.mLocationProvince = aMapLocation.getProvince();
+                    }
                     Log.e(TAG, "mCurrentPositionTV=" + mCurrentPositionTV.getText().toString().trim());
                     mLocationSuccessFlag=true;
+                    EventBus.getDefault().post(new LocEvent());
                 } else {
                     //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表
                     LogUtil.e(TAG, "location Error, ErrCode:" + aMapLocation.getErrorCode() + ", errInfo:" + aMapLocation.getErrorInfo());

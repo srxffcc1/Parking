@@ -16,7 +16,6 @@ import com.nado.parking.R;
 import com.nado.parking.adapter.recycler.RecyclerCommonAdapter;
 import com.nado.parking.adapter.recycler.base.ViewHolder;
 import com.nado.parking.base.BaseActivity;
-import com.nado.parking.bean.CompanyCity;
 import com.nado.parking.bean.ParkCityBean;
 import com.nado.parking.constant.HomepageConstant;
 import com.nado.parking.manager.AccountManager;
@@ -116,11 +115,7 @@ public class ChooseCityActivity extends BaseActivity {
                                     } catch (PinyinException e) {
                                         e.printStackTrace();
                                     }
-                                    CompanyCity bean=new CompanyCity(jsonObject.optString("city"),jsonObject.optString("city"),pinyin,i+"");
-                                    bean.city=jsonObject.optString("city");
-                                    bean.company=jsonObject.optString("company");
-                                    bean.letter=jsonObject.optString("letter");
-                                    bean.is_hot=jsonObject.optString("is_hot");
+                                    City bean=new City(jsonObject.optString("city"),jsonObject.optString("province"),pinyin,jsonObject.optString("company"));
                                     list.add(bean);
                                 }
 
@@ -150,13 +145,15 @@ public class ChooseCityActivity extends BaseActivity {
     public void showFragment(){
         CityPickerCopy.from(ChooseCityActivity.this) //activity或者fragment
                 .enableAnimation(false)	//启用动画效果，默认无
-                .setLocatedCity(new LocatedCity(HomepageConstant.mLocationCity.replace("市",""), HomepageConstant.mLocationProvince, ""))  //APP自身已定位的城市，传null会自动定位（默认）
+                .setLocatedCity(new LocatedCity(HomepageConstant.mLocationCity.replace("市",""), HomepageConstant.mLocationProvince.replace("省",""), ""))  //APP自身已定位的城市，传null会自动定位（默认）
                 .setOnPickListener(new OnPickListener() {
                     @Override
                     public void onPick(int position, City data) {
-//                        Toast.makeText(getApplicationContext(), data.getName(), Toast.LENGTH_SHORT).show();
-                        CompanyCity bean= (CompanyCity) data;
-                        setResult(Activity.RESULT_OK,new Intent().putExtra("city",bean.city).putExtra("company",bean.company));
+
+                        setResult(Activity.RESULT_OK,new Intent()
+                                .putExtra("province",data.getProvince())
+                                .putExtra("city",data.getName())
+                                .putExtra("company",data.getCode()));
                         finish();
                     }
 

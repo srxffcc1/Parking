@@ -13,10 +13,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
-            android:id="@+id/tfl_activity_park_lot"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -24,25 +21,29 @@
                 android:layout_height="match_parent">
                 <LinearLayout
                     android:id="@+id/needchange"
+                    android:padding="10dp"
                     android:layout_width="match_parent"
                     android:orientation="horizontal"
                     android:layout_height="wrap_content">
                     <TextView
+                        android:id="@+id/bindcard"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:text="绑定的卡号"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="更换油卡"/>
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="更换油卡"/>-->
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:orientation="vertical"
+                    android:layout_margin="10dp"
                     android:layout_height="150dp">
                     <TextView
                         android:id="@+id/youkaadd"
+                        android:background="@drawable/text_boder_r_white"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
@@ -56,7 +57,7 @@
                 </LinearLayout>
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_height="1dp"
                     android:background="#000"/>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -72,6 +73,5 @@
                 </LinearLayout>
 
             </LinearLayout>
-        </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
     </LinearLayout>
 </LinearLayout>

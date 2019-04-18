@@ -1,6 +1,6 @@
 package com.nado.parking.bean;
 
-public class OrderEvent {
+public class LocEvent {
     int result;
 
     public int getResult() {

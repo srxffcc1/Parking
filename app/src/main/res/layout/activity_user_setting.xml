@@ -125,6 +125,41 @@
             android:src="@drawable/right"
             />
     </LinearLayout>
+
+    <View
+        style="@style/HorizontalLine"
+        />
+
+    <LinearLayout
+        android:id="@+id/ll_activity_user_set_obd"
+        style="@style/ItemStyle"
+        android:gravity="center_vertical"
+        android:background="@drawable/selector_item"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我的设备"
+            android:textColor="@color/colorTitle"
+            android:textSize="@dimen/sp_15"
+            />
+
+        <android.support.v4.widget.Space
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:src="@drawable/right"
+            />
+    </LinearLayout>
+
+
     <View
         style="@style/HorizontalLine"
         />
@@ -168,6 +203,7 @@
         style="@style/HorizontalLine"
         />
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/ll_activity_user_set_about_us"
         style="@style/ItemStyle"
         android:background="@drawable/selector_item"
@@ -207,13 +243,16 @@
 
 
     <View
+        android:visibility="gone"
         style="@style/HorizontalLine"
         />
     <View
+        android:visibility="gone"
         style="@style/HorizontalLine10"
         />
 
     <View
+        android:visibility="gone"
         style="@style/HorizontalLine"
         />
     <LinearLayout

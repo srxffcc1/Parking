@@ -5,6 +5,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -45,6 +46,8 @@ public class YouKaAddActivity extends BaseActivity {
     private TwinklingRefreshLayout tflActivityParkLot;
     private TextView tvActivityLoginLoginLogin;
     private android.widget.EditText et;
+    private TextView tvLayoutTopBackBarStart;
+    private android.widget.CheckBox needcheck;
 
     @Override
     protected int getContentViewId() {
@@ -62,6 +65,9 @@ public class YouKaAddActivity extends BaseActivity {
         tflActivityParkLot = (TwinklingRefreshLayout) findViewById(R.id.tfl_activity_park_lot);
         tvActivityLoginLoginLogin = (TextView) findViewById(R.id.tv_activity_login_login_login);
         et = (EditText) findViewById(R.id.et);
+        tvLayoutTopBackBarStart = (TextView) findViewById(R.id.tv_layout_top_back_bar_start);
+        needcheck = (CheckBox) findViewById(R.id.needcheck);
+        tvLayoutTopBackBarTitle.setText("添加油卡");
     }
 
     @Override
@@ -74,7 +80,12 @@ public class YouKaAddActivity extends BaseActivity {
         tvActivityLoginLoginLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addYouKa();
+                if(needcheck.isChecked()){
+
+                    addYouKa();
+                }else{
+                    Toast.makeText(mActivity,"请同意协议",Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

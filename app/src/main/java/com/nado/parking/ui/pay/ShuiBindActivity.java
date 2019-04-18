@@ -31,7 +31,6 @@ public class ShuiBindActivity extends BaseActivity {
     private TextView tvLayoutTopBackBarTitle;
     private TextView tvLayoutTopBackBarEnd;
     private TextView tvLayoutBackTopBarOperate;
-    private TwinklingRefreshLayout tflActivityParkLot;
     private LinearLayout passjigou;
     private EditText et;
     private CheckBox check;
@@ -39,6 +38,8 @@ public class ShuiBindActivity extends BaseActivity {
     private TextView save;
     private TextView pleasechose;
     private String product_id;
+    private TextView tvLayoutTopBackBarStart;
+    private TextView whichfei;
 
     @Override
     protected int getContentViewId() {
@@ -53,19 +54,21 @@ public class ShuiBindActivity extends BaseActivity {
         tvLayoutTopBackBarTitle = (TextView) findViewById(R.id.tv_layout_top_back_bar_title);
         tvLayoutTopBackBarEnd = (TextView) findViewById(R.id.tv_layout_top_back_bar_end);
         tvLayoutBackTopBarOperate = (TextView) findViewById(R.id.tv_layout_back_top_bar_operate);
-        tflActivityParkLot = (TwinklingRefreshLayout) findViewById(R.id.tfl_activity_park_lot);
         passjigou = (LinearLayout) findViewById(R.id.passjigou);
         et = (EditText) findViewById(R.id.et);
         check = (CheckBox) findViewById(R.id.check);
         tip = (TextView) findViewById(R.id.tip);
         save = (TextView) findViewById(R.id.save);
-        tvLayoutTopBackBarTitle.setText("绑定缴费账户");
+
         pleasechose = (TextView) findViewById(R.id.pleasechose);
+        tvLayoutTopBackBarStart = (TextView) findViewById(R.id.tv_layout_top_back_bar_start);
+        whichfei = (TextView) findViewById(R.id.whichfei);
+        tvLayoutTopBackBarTitle.setText("绑定缴费账户");
     }
 
     @Override
     public void initData() {
-
+        whichfei.setText("水费");
     }
 
     @Override
@@ -93,7 +96,7 @@ public class ShuiBindActivity extends BaseActivity {
         map.put("customer_id", AccountManager.sUserBean.getId());
         map.put("product_id",product_id);
         map.put("wecaccount",et.getText().toString());
-        RequestManager.mRetrofitManager.createRequest(RetrofitRequestInterface.class).getCanPhonePay(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
+        RequestManager.mRetrofitManager.createRequest(RetrofitRequestInterface.class).bindShuiHu(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
             @Override
             public void onSuccess(String response) {
                 try {
