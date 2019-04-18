@@ -124,24 +124,26 @@ public class UserCarActivity extends BaseActivity {
                             CarBean carBean = new CarBean();
                             carBean.setId(dataItem.getString("id"));
                             carBean.setPlate(dataItem.getString("plate"));
-                            JSONArray orderArray=dataItem.getJSONArray("orders");
+                            JSONArray orderArray=dataItem.optJSONArray("orders");
                             List<CarOrderBean> carOrderBeanList=new ArrayList<>();
-                            for (int j=0;j<orderArray.length();j++){
-                                JSONObject orderItem=orderArray.getJSONObject(j);
-                                CarOrderBean orderBean = new CarOrderBean();
-                                orderBean.setId(orderItem.getString("id"));
-                                orderBean.setParkName(orderItem.getString("park_name"));
-                                orderBean.setStatus(orderItem.getString("status"));
-                                // status：0入场待付1预付待出2赊账待出 3赊账出场4已完成
-                                orderBean.setUnid(orderItem.getString("unid"));
-                                orderBean.setDerateDuration(orderItem.getString("derate_duration"));
-                                orderBean.setPaidFee(orderItem.getString("paid_fee"));
-                                orderBean.setTotalFee(orderItem.getString("total_fee"));
-                                orderBean.setTicketFee(orderItem.getString("ticket_fee"));
-                                orderBean.setPrice(orderItem.getString("price"));
-                                orderBean.setEntryTime(orderItem.getString("entry_time"));
-                                orderBean.setDuration(orderItem.getString("duration"));
-                                carOrderBeanList.add(orderBean);
+                            if(orderArray!=null){
+                                for (int j=0;j<orderArray.length();j++){
+                                    JSONObject orderItem=orderArray.getJSONObject(j);
+                                    CarOrderBean orderBean = new CarOrderBean();
+                                    orderBean.setId(orderItem.getString("id"));
+                                    orderBean.setParkName(orderItem.getString("park_name"));
+                                    orderBean.setStatus(orderItem.getString("status"));
+                                    // status：0入场待付1预付待出2赊账待出 3赊账出场4已完成
+                                    orderBean.setUnid(orderItem.getString("unid"));
+                                    orderBean.setDerateDuration(orderItem.getString("derate_duration"));
+                                    orderBean.setPaidFee(orderItem.getString("paid_fee"));
+                                    orderBean.setTotalFee(orderItem.getString("total_fee"));
+                                    orderBean.setTicketFee(orderItem.getString("ticket_fee"));
+                                    orderBean.setPrice(orderItem.getString("price"));
+                                    orderBean.setEntryTime(orderItem.getString("entry_time"));
+                                    orderBean.setDuration(orderItem.getString("duration"));
+                                    carOrderBeanList.add(orderBean);
+                                }
                             }
                             if (carOrderBeanList.size()>0){
                                 carBean.setOrder1List(true);

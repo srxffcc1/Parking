@@ -53,20 +53,6 @@ public class ShuiDianPayMenuActivity extends BaseActivity {
 
     }
 
-    private void getTestList() {
-        Map<String, String> map = new HashMap<>();
-        RequestManager.mRetrofitManager.createRequest(RetrofitRequestInterface.class).getCanPhonePay(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
-            @Override
-            public void onSuccess(String response) {
-
-            }
-
-            @Override
-            public void onError(Throwable t) {
-
-            }
-        });
-    }
 
     @Override
     public void initEvent() {
