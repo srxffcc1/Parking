@@ -9,6 +9,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
@@ -18,9 +21,13 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/whichfei"
+                android:drawableLeft="@drawable/dianfei"
+                android:gravity="center"
+                android:drawablePadding="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="水费" />
+                android:text="电费" />
         </LinearLayout>
         <LinearLayout
             android:visibility="gone"
@@ -159,7 +166,7 @@
                     android:id="@+id/zhuzhi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="280" />
+                    android:text="" />
             </LinearLayout>
 
             <LinearLayout

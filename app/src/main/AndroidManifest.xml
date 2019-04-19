@@ -51,7 +51,7 @@
         android:theme="@style/MyTheme">
 
         <!-- tools:replace="android:value" -->
-        <activity android:name=".ui.main.MainActivity">
+        <activity android:name=".ui.main.MainActivity" android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

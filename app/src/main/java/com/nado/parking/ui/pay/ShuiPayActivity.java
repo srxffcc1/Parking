@@ -39,10 +39,12 @@ public class ShuiPayActivity extends BaseActivity {
     private android.widget.TextView zhuzhi;
     private android.widget.TextView tvActivityLoginLoginLogin;
     private boolean needpayflag=true;
+    private TextView tvLayoutTopBackBarStart;
+    private TextView whichfei;
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_sdpay;
+        return R.layout.activity_shuipay;
     }
 
     @Override
@@ -63,6 +65,10 @@ public class ShuiPayActivity extends BaseActivity {
         jiaofeihuhao = (TextView) findViewById(R.id.jiaofeihuhao);
         zhuzhi = (TextView) findViewById(R.id.zhuzhi);
         tvActivityLoginLoginLogin = (TextView) findViewById(R.id.tv_activity_login_login_login);
+        tvLayoutTopBackBarStart = (TextView) findViewById(R.id.tv_layout_top_back_bar_start);
+        whichfei = (TextView) findViewById(R.id.whichfei);
+        tvLayoutTopBackBarTitle.setText("缴纳水费");
+        whichfei.setText("水费");
     }
 
     @Override
@@ -78,7 +84,7 @@ public class ShuiPayActivity extends BaseActivity {
         nojiaogfeidanwei.setText(getIntent().getStringExtra("company"));
         nojiaofeihuhao.setText(getIntent().getStringExtra("wecaccount"));
         year.setText(getIntent().getStringExtra(""));
-        money.setText(getIntent().getStringExtra("totalamount"));
+        money.setText(getIntent().getStringExtra("totalamount")+"元");
         jiaogfeidanwei.setText(getIntent().getStringExtra("company"));
         jiaofeihuhao.setText(getIntent().getStringExtra("wecaccount"));
         zhuzhi.setText(getIntent().getStringExtra(""));

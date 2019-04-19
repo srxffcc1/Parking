@@ -39,10 +39,12 @@ public class DianPayActivity extends BaseActivity {
     private TextView zhuzhi;
     private TextView tvActivityLoginLoginLogin;
     private boolean needpayflag=true;
+    private TextView tvLayoutTopBackBarStart;
+    private TextView whichfei;
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_sdpay;
+        return R.layout.activity_dianpay;
     }
 
     @Override
@@ -63,6 +65,10 @@ public class DianPayActivity extends BaseActivity {
         jiaofeihuhao = (TextView) findViewById(R.id.jiaofeihuhao);
         zhuzhi = (TextView) findViewById(R.id.zhuzhi);
         tvActivityLoginLoginLogin = (TextView) findViewById(R.id.tv_activity_login_login_login);
+        tvLayoutTopBackBarStart = (TextView) findViewById(R.id.tv_layout_top_back_bar_start);
+        whichfei = (TextView) findViewById(R.id.whichfei);
+        tvLayoutTopBackBarTitle.setText("缴纳电费");
+        whichfei.setText("电费");
     }
 
     @Override
@@ -78,7 +84,7 @@ public class DianPayActivity extends BaseActivity {
         nojiaogfeidanwei.setText(getIntent().getStringExtra("company"));
         nojiaofeihuhao.setText(getIntent().getStringExtra("wecaccount"));
         year.setText(getIntent().getStringExtra(""));
-        money.setText(getIntent().getStringExtra("totalamount"));
+        money.setText(getIntent().getStringExtra("totalamount")+"元");
         jiaogfeidanwei.setText(getIntent().getStringExtra("company"));
         jiaofeihuhao.setText(getIntent().getStringExtra("wecaccount"));
         zhuzhi.setText(getIntent().getStringExtra(""));
@@ -101,41 +107,62 @@ public class DianPayActivity extends BaseActivity {
      * 生成订单
      */
     private void buildOrder() {
-        Map<String, String> map = new HashMap<>();
-        map.put("delayfee", getIntent().getStringExtra("delayfee"));
-        map.put("wecaccount", getIntent().getStringExtra("wecaccount"));
-        map.put("wecbillmoney", getIntent().getStringExtra("wecbillmoney"));
-        RequestManager.mRetrofitManager3.createRequest(RetrofitRequestInterface.class).getDianOrder(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
-            @Override
-            public void onSuccess(String response) {
-                try {
-                    JSONObject res = new JSONObject(response);
-                    int code = res.getInt("code");
-                    String info = res.getString("info");
-                    if (code == 0) {
-                        String order_id = res.get("data").toString();//获得的本司订单号
-                        String paytypekey = "pay_type";
-                        String pervalue = getIntent().getStringExtra("totalamount");//充值金额
-                        String url = "index.php?g=app&m=life&a=goodsPay";
-                        Map<String, String> postmap = new HashMap<>();
-                        postmap.put("customer_id",AccountManager.sUserBean.getId());
-                        postmap.put("paymm",pervalue);
-                        postmap.put("url",url);
-                        postmap.put("paytypekey",paytypekey);
-                        postmap.put("order_id",order_id);
-                        PayAllActivity.open(DianPayActivity.this, postmap);//打开充值界面 选择支付类型 然后会访问url交换对应的sign或appid来完成充值
-                    }
+        String wecbillmoney=getIntent().getStringExtra("wecbillmoney");
+        String delayfee=getIntent().getStringExtra("delayfee");
+        String productid=getIntent().getStringExtra("productid");
+        String paytypekey = "flag";
+        String price = getIntent().getStringExtra("totalamount");//充值金额
+        String wecaccount=getIntent().getStringExtra("wecaccount");
+        String url = "index.php?g=app&m=power&a=pay_power";
+        Map<String, String> postmap = new HashMap<>();
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
+        postmap.put("wecbillmoney",wecbillmoney);
+        postmap.put("productid",productid);
+        postmap.put("wecaccount",wecaccount);
+        postmap.put("price",price);
+        postmap.put("delayfee",delayfee);
 
-            @Override
-            public void onError(Throwable t) {
+        postmap.put("paymm",price);
+        postmap.put("url",url);
+        postmap.put("paytypekey",paytypekey);
+        PayAllActivity.open(DianPayActivity.this, postmap);//打开充值界面 选择支付类型 然后会访问url交换对应的sign或appid来完成充值
 
-            }
-        });
+
+//        Map<String, String> map = new HashMap<>();
+//        map.put("delayfee", getIntent().getStringExtra("delayfee"));
+//        map.put("wecaccount", getIntent().getStringExtra("wecaccount"));
+//        map.put("wecbillmoney", getIntent().getStringExtra("wecbillmoney"));
+//        RequestManager.mRetrofitManager3.createRequest(RetrofitRequestInterface.class).getDianOrder(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
+//            @Override
+//            public void onSuccess(String response) {
+//                try {
+//                    JSONObject res = new JSONObject(response);
+//                    int code = res.getInt("code");
+//                    String info = res.getString("info");
+//                    if (code == 0) {
+//                        String order_id = res.get("data").toString();//获得的本司订单号
+//                        String paytypekey = "pay_type";
+//                        String pervalue = getIntent().getStringExtra("totalamount");//充值金额
+//                        String url = "index.php?g=app&m=life&a=goodsPay";
+//                        Map<String, String> postmap = new HashMap<>();
+//                        postmap.put("customer_id",AccountManager.sUserBean.getId());
+//                        postmap.put("paymm",pervalue);
+//                        postmap.put("url",url);
+//                        postmap.put("paytypekey",paytypekey);
+//                        postmap.put("order_id",order_id);
+//                        PayAllActivity.open(DianPayActivity.this, postmap);//打开充值界面 选择支付类型 然后会访问url交换对应的sign或appid来完成充值
+//                    }
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onError(Throwable t) {
+//
+//            }
+//        });
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

@@ -120,7 +120,7 @@ public class AddCarActivity1 extends BaseActivity {
 //                mActivity.unregisterReceiver(this);
             }
         };
-        this.registerReceiver(receiver, finishFilter);
+        registerReceiver(receiver, finishFilter);
     }
 
     private void initKeyBoard() {
@@ -412,6 +412,10 @@ public class AddCarActivity1 extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mActivity.unregisterReceiver(receiver);
+        try {
+            unregisterReceiver(receiver);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

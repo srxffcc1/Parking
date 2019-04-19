@@ -1,6 +1,7 @@
 package com.nado.parking.ui.pay;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fondesa.recyclerviewdivider.RecyclerViewDivider;
 import com.nado.parking.R;
 import com.nado.parking.adapter.recycler.RecyclerCommonAdapter;
 import com.nado.parking.adapter.recycler.base.ViewHolder;
@@ -139,7 +141,7 @@ public class ShuiHuPayListActivity extends BaseActivity {
 
             };
 
-            list.addItemDecoration(new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST, (int) DisplayUtil.dpToPx(mActivity, 1), ContextCompat.getColor(mActivity, R.color.colorLine), false, 2));
+            list.addItemDecoration(RecyclerViewDivider.with(this).color(Color.parseColor("#909090")).build());
             list.setAdapter(myAdapter);
             list.setLayoutManager(new LinearLayoutManager(mActivity));
         }else{
@@ -211,7 +213,10 @@ public class ShuiHuPayListActivity extends BaseActivity {
                         Intent intent=new Intent(getBaseContext(),ShuiPayActivity.class);
                         buildIntent(intent,bean);
                         if (totalamount==null||"0".equals(totalamount)||"null".equals(totalamount)) {
-                            intent.putExtra("needpayflag",false);
+                            //假装欠费
+                            intent.putExtra("needpayflag", true);
+                            intent.putExtra("totalamount","1");
+//                            intent.putExtra("needpayflag",false);
                         }else{
                             intent.putExtra("needpayflag",true);
                         }

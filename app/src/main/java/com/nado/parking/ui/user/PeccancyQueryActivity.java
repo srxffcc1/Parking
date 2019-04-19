@@ -83,7 +83,13 @@ public class PeccancyQueryActivity extends BaseActivity {
 
     @Override
     public void initData() {
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         getPeccancyData();
+
     }
 
     @Override
@@ -110,6 +116,18 @@ public class PeccancyQueryActivity extends BaseActivity {
                 mDataStatus = STATUS_LOAD;
                 mPage++;
                 getPeccancyData();
+            }
+        });
+        findViewById(R.id.tv_activity_user_car_add).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddCarActivity1.open(mActivity);
+            }
+        });
+        findViewById(R.id.tv_activity_user_car_question).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                QuestionActivity.open(mActivity, 12341);
             }
         });
     }
