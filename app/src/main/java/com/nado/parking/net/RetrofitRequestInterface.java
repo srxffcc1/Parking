@@ -108,6 +108,26 @@ public interface RetrofitRequestInterface {
     Call<String> getCanPhonePay(@FieldMap Map<String, String> params);
 
 
+    /*电费充值成功更新数据*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=power&a=save_power")
+    Call<String> successDian(@FieldMap Map<String, String> params);
+
+
+
+    /*解除水绑定*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=life&a=set_del_bin")
+    Call<String> deleteShui(@FieldMap Map<String, String> params);
+
+
+
+    /*解除电绑定*/
+    @FormUrlEncoded
+    @POST("index.php?g=app&m=power&a=setstatus0")
+    Call<String> deleteDian(@FieldMap Map<String, String> params);
+
+
     /*绑定水费户号*/
     @FormUrlEncoded
     @POST("index.php?g=app&m=life&a=set_product_user")
@@ -200,9 +220,11 @@ public interface RetrofitRequestInterface {
     @POST("index.php?g=app&m=life&a=create_order")
     Call<String> getShuiOrder(@FieldMap Map<String, String> params);
 
+
+
     /*电费充值订单*/
     @FormUrlEncoded
-    @POST("index.php?g=app&m=power&a=powercz")
+    @POST("index.php?g=app&m=power&a=create_order")
     Call<String> getDianOrder(@FieldMap Map<String, String> params);
 
 

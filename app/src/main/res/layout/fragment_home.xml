@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="@dimen/dp_23"
-    android:orientation="vertical"
-    android:background="@color/bgcolorGray">
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:background="@color/colorWhite"
@@ -14,18 +14,16 @@
             android:layout_marginLeft="10dp"
             android:id="@+id/changeCity"
             android:padding="5dp"
+            android:textSize="16sp"
             android:gravity="center"
-            android:drawableRight="@drawable/map_head"
+            android:drawableRight="@drawable/down_arrow_black"
+            android:drawablePadding="3dp"
             android:text="苏州"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
 
 
-    <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
-        android:id="@+id/trl_fragment_home"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -83,6 +81,8 @@
                             android:scaleType="fitCenter"
                             android:src="@drawable/ykcz"/>
                         <TextView
+                            android:paddingTop="4dp"
+                            android:textColor="@color/colorBlack"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -100,6 +100,8 @@
                             android:scaleType="fitCenter"
                             android:src="@drawable/hfcz"/>
                         <TextView
+                            android:paddingTop="4dp"
+                            android:textColor="@color/colorBlack"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -117,6 +119,8 @@
                             android:scaleType="fitCenter"
                             android:src="@drawable/sdcz"/>
                         <TextView
+                            android:paddingTop="4dp"
+                            android:textColor="@color/colorBlack"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -134,6 +138,8 @@
                             android:scaleType="fitCenter"
                             android:src="@drawable/wzcx"/>
                         <TextView
+                            android:paddingTop="4dp"
+                            android:textColor="@color/colorBlack"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -158,6 +164,8 @@
                             android:scaleType="fitCenter"
                             android:src="@drawable/wbjl"/>
                         <TextView
+                            android:paddingTop="4dp"
+                            android:textColor="@color/colorBlack"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -175,6 +183,8 @@
                             android:scaleType="fitCenter"
                             android:src="@drawable/wzdj"/>
                         <TextView
+                            android:paddingTop="4dp"
+                            android:textColor="@color/colorBlack"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -192,6 +202,8 @@
                             android:scaleType="fitCenter"
                             android:src="@drawable/gzcx"/>
                         <TextView
+                            android:paddingTop="4dp"
+                            android:textColor="@color/colorBlack"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -209,6 +221,8 @@
                             android:scaleType="fitCenter"
                             android:src="@drawable/cljy"/>
                         <TextView
+                            android:paddingTop="4dp"
+                            android:textColor="@color/colorBlack"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -239,16 +253,19 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:padding="5dp"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorBlack"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="车主精选"/>
+                        android:text="商城推荐"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
                         android:layout_centerVertical="true"
-                        android:text="查看更多>"
+                        android:text="更多>"
                         android:layout_alignParentRight="true" />
 
 
@@ -270,5 +287,4 @@
 
         </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
-    </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
 </LinearLayout>

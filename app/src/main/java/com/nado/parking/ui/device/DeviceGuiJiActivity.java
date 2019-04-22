@@ -92,8 +92,7 @@ public class DeviceGuiJiActivity extends BaseActivity {
         speedkey = (ImageView) findViewById(R.id.speedkey);
         seek = (SeekBar) findViewById(R.id.seek);
         guijierrorneedhide = (FrameLayout) findViewById(R.id.guijierrorneedhide);
-        tvLayoutTopBackBarTitle.setText("轨迹");
-        tvLayoutTopBackBarEnd.setText("选择时间");
+
     }
 
     @Override
@@ -132,6 +131,12 @@ public class DeviceGuiJiActivity extends BaseActivity {
 
     @Override
     public void initEvent() {
+        findViewById(R.id.backli).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         seek.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -150,7 +155,7 @@ public class DeviceGuiJiActivity extends BaseActivity {
 
             }
         });
-        tvLayoutTopBackBarEnd.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.chosetime).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 List<String> strings = new ArrayList<>();

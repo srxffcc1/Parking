@@ -164,27 +164,30 @@ public class ParkRecordActivity extends BaseActivity {
                     JSONObject res = new JSONObject(response);
                     int code = res.getInt("code");
                     String info = res.getString("info");
-                    JSONArray data = res.getJSONArray("data");
+                    JSONArray data = res.optJSONArray("data");
                     if (code == 0) {
                         if (mDataStatus == STATUS_REFRESH) {
                             mOrderList.clear();
                         }
-                        for (int i = 0; i < data.length(); i++) {
-                            JSONObject dataItem = data.getJSONObject(i);
-                            CarOrderBean orderBean = new CarOrderBean();
-                            orderBean.setId(dataItem.getString("id"));
-                            orderBean.setParkName(dataItem.getString("park_name"));
-                            orderBean.setPlate(dataItem.getString("plate"));
-                            orderBean.setStatus(dataItem.getString("status"));
-                            orderBean.setUnid(dataItem.getString("unid"));
-                            orderBean.setDerateDuration(dataItem.getString("derate_duration"));
-                            orderBean.setPaidFee(dataItem.getString("paid_fee"));
-                            orderBean.setTotalFee(dataItem.getString("total_fee"));
-                            orderBean.setTicketFee(dataItem.getString("ticket_fee"));
-                            orderBean.setPrice(dataItem.getString("price"));
-                            orderBean.setEntryTime(dataItem.getString("entry_time"));
-                            orderBean.setDuration(dataItem.getString("duration"));
-                            mOrderList.add(orderBean);
+                        if(data!=null){
+                            for (int i = 0; i < data.length(); i++) {
+                                JSONObject dataItem = data.getJSONObject(i);
+                                CarOrderBean orderBean = new CarOrderBean();
+                                orderBean.setId(dataItem.getString("id"));
+                                orderBean.setParkName(dataItem.getString("park_name"));
+                                orderBean.setPlate(dataItem.getString("plate"));
+                                orderBean.setStatus(dataItem.getString("status"));
+                                orderBean.setUnid(dataItem.getString("unid"));
+                                orderBean.setDerateDuration(dataItem.getString("derate_duration"));
+                                orderBean.setPaidFee(dataItem.getString("paid_fee"));
+                                orderBean.setTotalFee(dataItem.getString("total_fee"));
+                                orderBean.setTicketFee(dataItem.getString("ticket_fee"));
+                                orderBean.setPrice(dataItem.getString("price"));
+                                orderBean.setEntryTime(dataItem.getString("entry_time"));
+                                orderBean.setDuration(dataItem.getString("duration"));
+                                mOrderList.add(orderBean);
+                            }
+
                         }
                         if (mOrderList.size()>0){
                             mNullParkRecordLL.setVisibility(View.GONE);

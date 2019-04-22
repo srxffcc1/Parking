@@ -1,212 +1,252 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/dp_23"
-    android:orientation="vertical"
-    android:background="@color/bgcolorGray">
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
 
-    <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
-        android:id="@+id/trl_fragment_home"
+
+    <include layout="@layout/layout_top_back_bar_noback" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="OBD设备"
+        android:textColor="@color/colorBlack" />
+
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <LinearLayout
                 android:id="@+id/passdevice"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:background="@drawable/obd"
-                android:orientation="horizontal"
-                android:layout_height="wrap_content">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="6"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6" />
+
                 <TextView
                     android:id="@+id/device"
                     android:layout_width="0dp"
-                    android:textColor="#fff"
+                    android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/text_boder_r_gray_r"
                     android:gravity="center"
-                    android:text="绑定九弟智能OBD，\n查看更多信息>"/>
+                    android:padding="2dp"
+                    android:text="绑定九弟智能OBD"
+                    android:textColor="@color/colorBlue" />
 
             </LinearLayout>
+
             <RelativeLayout
                 android:id="@+id/rl_more"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/dp_10"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
+
                 <TextView
-                    android:textSize="16sp"
                     android:layout_width="wrap_content"
-                    android:textStyle="bold"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="实用功能"/>
+                    android:text="实用功能"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
             </RelativeLayout>
+
             <LinearLayout
                 android:id="@+id/needhide"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:paddingTop="15dp"
-                    android:layout_height="match_parent">
+                    android:paddingTop="15dp">
+
                     <LinearLayout
                         android:id="@+id/li_dh"
                         android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_height="wrap_content">
+                        android:orientation="vertical">
+
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/device_daohang"/>
+                            android:src="@drawable/device_daohang" />
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="导航"/>
+                            android:text="导航" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/li_wl"
                         android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_height="wrap_content">
+                        android:orientation="vertical">
+
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/device_weilan"/>
+                            android:src="@drawable/device_weilan" />
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="围栏"/>
+                            android:text="围栏" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/li_gj"
                         android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_height="wrap_content">
+                        android:orientation="vertical">
+
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/device_guiji"/>
+                            android:src="@drawable/device_guiji" />
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="轨迹"/>
+                            android:text="轨迹" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/li_xq"
                         android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_height="wrap_content">
+                        android:orientation="vertical">
+
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/device_xiangqing"/>
+                            android:src="@drawable/device_xiangqing" />
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="详情"/>
+                            android:text="详情" />
                     </LinearLayout>
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:paddingTop="15dp"
-                    android:layout_height="match_parent">
+                    android:paddingTop="15dp">
+
                     <LinearLayout
                         android:id="@+id/li_xc"
                         android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_height="wrap_content">
+                        android:orientation="vertical">
+
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/device_xingcheng"/>
+                            android:src="@drawable/device_xingcheng" />
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="行程"/>
+                            android:text="行程" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/li_jc"
                         android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_height="wrap_content">
+                        android:orientation="vertical">
+
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/device_jiance"/>
+                            android:src="@drawable/device_jiance" />
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="检测"/>
+                            android:text="检测" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/li_ck"
                         android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_height="wrap_content">
+                        android:orientation="vertical">
+
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/device_chekuang"/>
+                            android:src="@drawable/device_chekuang" />
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="车况"/>
+                            android:text="车况" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/li_bj"
                         android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_height="wrap_content">
+                        android:orientation="vertical">
+
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/device_baojing"/>
+                            android:src="@drawable/device_baojing" />
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="报警"/>
+                            android:text="报警" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -221,9 +261,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/dp_10"
-                android:gravity="center"/>
+                android:gravity="center" />
 
         </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
-    </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+    </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

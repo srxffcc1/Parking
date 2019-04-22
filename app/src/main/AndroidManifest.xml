@@ -50,13 +50,16 @@
         android:supportsRtl="true"
         android:theme="@style/MyTheme">
 
-        <!-- tools:replace="android:value" -->
-        <activity android:name=".ui.main.MainActivity" android:launchMode="singleTop">
+        <activity android:name=".ui.main.SplashActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <!-- tools:replace="android:value" -->
+        <activity android:name=".ui.main.MainActivity" android:launchMode="singleTask">
+
         </activity>
         <activity android:name=".ui.user.account.LoginActivity">
         </activity>
@@ -180,6 +183,7 @@
         <activity android:name=".ui.device.DeviceListActivity" />
         <activity android:name=".ui.main.ChooseCityActivityNoCopy"  android:theme="@style/DefaultCityPickerTheme"/>
         <activity android:name=".ui.pay.PhonePayHistoryActivity" />
+        <activity android:name=".ui.user.JingXuanActivity" />
     </application>
 
 </manifest>

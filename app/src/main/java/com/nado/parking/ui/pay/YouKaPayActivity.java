@@ -5,6 +5,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -54,6 +55,7 @@ public class YouKaPayActivity extends BaseActivity {
     private String card_id="";
     private TextView tvLayoutTopBackBarStart;
     private TextView bindcard;
+    private android.widget.ImageView jiayoukaimg;
 
     @Override
     protected int getContentViewId() {
@@ -73,6 +75,7 @@ public class YouKaPayActivity extends BaseActivity {
         rvPayAll = (RecyclerView) findViewById(R.id.rv_pay_all);
         tvLayoutTopBackBarStart = (TextView) findViewById(R.id.tv_layout_top_back_bar_start);
         bindcard = (TextView) findViewById(R.id.bindcard);
+        jiayoukaimg = (ImageView) findViewById(R.id.jiayoukaimg);
         tvLayoutTopBackBarTitle.setText("油卡充值");
     }
 
@@ -97,8 +100,10 @@ public class YouKaPayActivity extends BaseActivity {
                         card_id=res.getJSONObject("data").getJSONObject("card").getString("id");
                         youkaadd.setText("");
                         bindcard.setText("绑定的卡号："+card_number);
-                        youkaadd.setBackgroundResource(R.drawable.jiayouka);
+//                        youkaadd.setBackgroundResource(R.drawable.jiayouka);
+                        youkaadd.setVisibility(View.GONE);
                     }else{
+                        jiayoukaimg.setVisibility(View.GONE);
                         passToBindYouKa();
                     }
                     JSONArray data = res.getJSONObject("data").getJSONArray("money_list");
@@ -179,6 +184,12 @@ public class YouKaPayActivity extends BaseActivity {
                 passToBindYouKa();
             }
         });
+        jiayoukaimg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                passToBindYouKa();
+            }
+        });
     }
 
     private void showRecycleView() {
@@ -189,8 +200,8 @@ public class YouKaPayActivity extends BaseActivity {
 
                 @Override
                 protected void convert(ViewHolder holder, final SupportMoney carChoiceBean, int position) {
-                    holder.setText(R.id.price, carChoiceBean.money + "元");
-                    holder.setText(R.id.old_price, "售价："+carChoiceBean.money + "元");
+                    holder.setText(R.id.price, "售价："+carChoiceBean.money + "元");
+                    holder.setText(R.id.old_price, carChoiceBean.money + "元");
 //                    new GlideImageLoader().displayImage(mActivity,carChoiceBean.picture, (ImageView) holder.getView(R.id.picture));
 //                    new GlideImageLoader().displayImage(mActivity,carChoiceBean.picture, (ImageView) holder.getView(R.id.picture));
                     holder.itemView.setOnClickListener(new View.OnClickListener() {

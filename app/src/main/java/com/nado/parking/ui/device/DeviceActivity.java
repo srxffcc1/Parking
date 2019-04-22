@@ -94,6 +94,7 @@ public class DeviceActivity extends BaseActivity {
     private TextView tvLayoutTopBackBarEnd;
     private ImageView hideimage;
     private LinearLayout needhide;
+    private LinearLayout backli;
 
     @Override
     protected int getContentViewId() {
@@ -103,10 +104,7 @@ public class DeviceActivity extends BaseActivity {
     @Override
     public void initView() {
 
-        rlLayoutTopBackBar = (RelativeLayout) findViewById(R.id.rl_layout_top_back_bar);
-        llLayoutTopBackBarBack = (LinearLayout) findViewById(R.id.ll_layout_top_back_bar_back);
-        tvLayoutTopBackBarTitle = (TextView) findViewById(R.id.tv_layout_top_back_bar_title);
-        tvLayoutBackTopBarOperate = (TextView) findViewById(R.id.tv_layout_back_top_bar_operate);
+
         map = (MapView) findViewById(R.id.map);
         mapmap = (RadioButton) findViewById(R.id.mapmap);
         mapmoom = (RadioButton) findViewById(R.id.mapmoom);
@@ -120,12 +118,13 @@ public class DeviceActivity extends BaseActivity {
         liJc = (LinearLayout) findViewById(R.id.li_jc);
         liCk = (LinearLayout) findViewById(R.id.li_ck);
         liBj = (LinearLayout) findViewById(R.id.li_bj);
-        tvLayoutTopBackBarStart = (TextView) findViewById(R.id.tv_layout_top_back_bar_start);
-        tvLayoutTopBackBarEnd = (TextView) findViewById(R.id.tv_layout_top_back_bar_end);
         hideimage = (ImageView) findViewById(R.id.hideimage);
         needhide = (LinearLayout) findViewById(R.id.needhide);
+        backli = (LinearLayout) findViewById(R.id.backli);
     }
-    boolean isnoobddata=false;
+
+    boolean isnoobddata = false;
+
     @Override
     public void initData() {
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
@@ -184,7 +183,7 @@ public class DeviceActivity extends BaseActivity {
                         bean.precision = array.get(Integer.parseInt(data.getString("precision"))).toString();
                         getAddress(new LatLonPoint(Double.parseDouble(bean.weidu), Double.parseDouble(bean.jingdu)));
                     } else {
-                        isnoobddata=true;
+                        isnoobddata = true;
                         DialogUtil.hideProgress();
                     }
                 } catch (JSONException e) {
@@ -253,13 +252,19 @@ public class DeviceActivity extends BaseActivity {
 
     @Override
     public void initEvent() {
+        findViewById(R.id.backli).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         liGj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                initGuiJi();
 //                initWeiLan();
-                if(isnoobddata){
-                    Toast.makeText(mActivity,"当前设备未启用",Toast.LENGTH_SHORT).show();
+                if (isnoobddata) {
+                    Toast.makeText(mActivity, "当前设备未启用", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 startActivity(new Intent(v.getContext(), DeviceGuiJiActivity.class));
@@ -268,8 +273,8 @@ public class DeviceActivity extends BaseActivity {
         liDh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isnoobddata){
-                    Toast.makeText(mActivity,"当前设备未启用",Toast.LENGTH_SHORT).show();
+                if (isnoobddata) {
+                    Toast.makeText(mActivity, "当前设备未启用", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Nav();
@@ -278,8 +283,8 @@ public class DeviceActivity extends BaseActivity {
         liJc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isnoobddata){
-                    Toast.makeText(mActivity,"当前设备未启用",Toast.LENGTH_SHORT).show();
+                if (isnoobddata) {
+                    Toast.makeText(mActivity, "当前设备未启用", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 startActivity(new Intent(v.getContext(), DeviceCheckActivity.class));
@@ -288,8 +293,8 @@ public class DeviceActivity extends BaseActivity {
         liWl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isnoobddata){
-                    Toast.makeText(mActivity,"当前设备未启用",Toast.LENGTH_SHORT).show();
+                if (isnoobddata) {
+                    Toast.makeText(mActivity, "当前设备未启用", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 startActivity(new Intent(v.getContext(), DeviceWeiLanListActivity.class));
@@ -299,8 +304,8 @@ public class DeviceActivity extends BaseActivity {
         liXc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isnoobddata){
-                    Toast.makeText(mActivity,"当前设备未启用",Toast.LENGTH_SHORT).show();
+                if (isnoobddata) {
+                    Toast.makeText(mActivity, "当前设备未启用", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 startActivity(new Intent(v.getContext(), DeviceXingChengListActivity.class));
@@ -309,8 +314,8 @@ public class DeviceActivity extends BaseActivity {
         liBj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isnoobddata){
-                    Toast.makeText(mActivity,"当前设备未启用",Toast.LENGTH_SHORT).show();
+                if (isnoobddata) {
+                    Toast.makeText(mActivity, "当前设备未启用", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 startActivity(new Intent(v.getContext(), DeviceBaoJingListActivity.class));
@@ -319,8 +324,8 @@ public class DeviceActivity extends BaseActivity {
         liXq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isnoobddata){
-                    Toast.makeText(mActivity,"当前设备未启用",Toast.LENGTH_SHORT).show();
+                if (isnoobddata) {
+                    Toast.makeText(mActivity, "当前设备未启用", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 startActivity(new Intent(v.getContext(), DeviceDetailActivity.class));
@@ -329,8 +334,8 @@ public class DeviceActivity extends BaseActivity {
         liCk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isnoobddata){
-                    Toast.makeText(mActivity,"当前设备未启用",Toast.LENGTH_SHORT).show();
+                if (isnoobddata) {
+                    Toast.makeText(mActivity, "当前设备未启用", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 startActivity(new Intent(v.getContext(), DeviceCarDetailActivity.class));

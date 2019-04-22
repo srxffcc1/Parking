@@ -41,6 +41,7 @@ public class DianPayActivity extends BaseActivity {
     private boolean needpayflag=true;
     private TextView tvLayoutTopBackBarStart;
     private TextView whichfei;
+    private String order_idnoew;
 
     @Override
     protected int getContentViewId() {
@@ -107,71 +108,92 @@ public class DianPayActivity extends BaseActivity {
      * 生成订单
      */
     private void buildOrder() {
-        String wecbillmoney=getIntent().getStringExtra("wecbillmoney");
-        String delayfee=getIntent().getStringExtra("delayfee");
-        String productid=getIntent().getStringExtra("productid");
-        String paytypekey = "flag";
-        String price = getIntent().getStringExtra("totalamount");//充值金额
-        String wecaccount=getIntent().getStringExtra("wecaccount");
-        String url = "index.php?g=app&m=power&a=pay_power";
-        Map<String, String> postmap = new HashMap<>();
-
-        postmap.put("wecbillmoney",wecbillmoney);
-        postmap.put("productid",productid);
-        postmap.put("wecaccount",wecaccount);
-        postmap.put("price",price);
-        postmap.put("delayfee",delayfee);
-
-        postmap.put("paymm",price);
-        postmap.put("url",url);
-        postmap.put("paytypekey",paytypekey);
-        PayAllActivity.open(DianPayActivity.this, postmap);//打开充值界面 选择支付类型 然后会访问url交换对应的sign或appid来完成充值
 
 
-//        Map<String, String> map = new HashMap<>();
-//        map.put("delayfee", getIntent().getStringExtra("delayfee"));
-//        map.put("wecaccount", getIntent().getStringExtra("wecaccount"));
-//        map.put("wecbillmoney", getIntent().getStringExtra("wecbillmoney"));
-//        RequestManager.mRetrofitManager3.createRequest(RetrofitRequestInterface.class).getDianOrder(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
-//            @Override
-//            public void onSuccess(String response) {
-//                try {
-//                    JSONObject res = new JSONObject(response);
-//                    int code = res.getInt("code");
-//                    String info = res.getString("info");
-//                    if (code == 0) {
-//                        String order_id = res.get("data").toString();//获得的本司订单号
-//                        String paytypekey = "pay_type";
-//                        String pervalue = getIntent().getStringExtra("totalamount");//充值金额
-//                        String url = "index.php?g=app&m=life&a=goodsPay";
-//                        Map<String, String> postmap = new HashMap<>();
-//                        postmap.put("customer_id",AccountManager.sUserBean.getId());
-//                        postmap.put("paymm",pervalue);
-//                        postmap.put("url",url);
-//                        postmap.put("paytypekey",paytypekey);
-//                        postmap.put("order_id",order_id);
-//                        PayAllActivity.open(DianPayActivity.this, postmap);//打开充值界面 选择支付类型 然后会访问url交换对应的sign或appid来完成充值
-//                    }
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onError(Throwable t) {
-//
-//            }
-//        });
+
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id",AccountManager.sUserBean.getId());
+        RequestManager.mRetrofitManager3.createRequest(RetrofitRequestInterface.class).getDianOrder(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    JSONObject res = new JSONObject(response);
+                    int code = res.getInt("code");
+                    String info = res.getString("info");
+                    if (code == 0) {
+                        String company=getIntent().getStringExtra("company");
+                        String wecbillmoney=getIntent().getStringExtra("wecbillmoney");
+                        String delayfee=getIntent().getStringExtra("delayfee");
+                        String productid=getIntent().getStringExtra("productid");
+                        String paytypekey = "flag";
+                        String price = getIntent().getStringExtra("totalamount");//充值金额
+                        String wecaccount=getIntent().getStringExtra("wecaccount");
+                        String url = "index.php?g=app&m=power&a=pay_power";
+                        Map<String, String> postmap = new HashMap<>();
+                        postmap.put("company",company);
+                        postmap.put("wecbillmoney",wecbillmoney);
+                        postmap.put("productid",productid);
+                        postmap.put("wecaccount",wecaccount);
+                        postmap.put("order_id",res.optString("data"));
+                        postmap.put("price",price);
+                        postmap.put("delayfee",delayfee);
+                        postmap.put("user_id",AccountManager.sUserBean.getId());
+                        postmap.put("paymm",price);
+                        postmap.put("url",url);
+                        postmap.put("paytypekey",paytypekey);
+                        order_idnoew=res.optString("data");
+                        PayAllActivity.open(DianPayActivity.this, postmap);//打开充值界面 选择支付类型 然后会访问url交换对应的sign或appid来完成充值
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable t) {
+
+            }
+        });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //充值成功的返回
         if(requestCode==PayAllActivity.START_PAY){
             if(resultCode== Activity.RESULT_OK){
+                success();
                 finish();
             }
         }
+    }
+
+    private void success() {
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", AccountManager.sUserBean.getId());
+        map.put("order_sn", order_idnoew);
+        RequestManager.mRetrofitManager.createRequest(RetrofitRequestInterface.class).successDian(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    JSONObject res = new JSONObject(response);
+                    int code = res.getInt("code");
+                    String info = res.getString("info");
+                    if (code == 0) {
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable t) {
+
+            }
+        });
     }
 }

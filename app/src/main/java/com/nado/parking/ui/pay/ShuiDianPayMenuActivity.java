@@ -13,6 +13,7 @@ import com.nado.parking.manager.AccountManager;
 import com.nado.parking.manager.RequestManager;
 import com.nado.parking.net.RetrofitCallBack;
 import com.nado.parking.net.RetrofitRequestInterface;
+import com.nado.parking.util.DialogUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -72,6 +73,7 @@ public class ShuiDianPayMenuActivity extends BaseActivity {
     }
 
     private void checkHasBind(final String type) {//1水2电
+        DialogUtil.showUnCancelableProgress(mActivity, "账户查找中");
         if("水".equals(type)){
             Map<String, String> map = new HashMap<>();
             map.put("customer_id", AccountManager.sUserBean.getId());
@@ -87,14 +89,22 @@ public class ShuiDianPayMenuActivity extends BaseActivity {
                             JSONArray jsonArray=res.getJSONObject("data").getJSONArray("info");
                             if(jsonArray.length()>0){
                                 passCanShuiPay(type);
+
+                                DialogUtil.hideProgress();
                             }else{
                                 passShuiBind(type);
+
+                                DialogUtil.hideProgress();
                             }
                         }else{
                             passShuiBind(type);
+
+                            DialogUtil.hideProgress();
                         }
 
                     } catch (JSONException e) {
+
+                        DialogUtil.hideProgress();
                         e.printStackTrace();
                         passShuiBind(type);
 
@@ -120,15 +130,23 @@ public class ShuiDianPayMenuActivity extends BaseActivity {
                             JSONArray jsonArray=res.getJSONArray("data");
                             if(jsonArray.length()>0){
                                 passCanDianPay(type);
+
+                                DialogUtil.hideProgress();
                             }else{
 
                                 passDianBind(type);
+
+                                DialogUtil.hideProgress();
                             }
                         }else{
                             passDianBind(type);
+
+                            DialogUtil.hideProgress();
                         }
 
                     } catch (JSONException e) {
+
+                        DialogUtil.hideProgress();
                         e.printStackTrace();
                         passDianBind(type);
 
@@ -140,6 +158,7 @@ public class ShuiDianPayMenuActivity extends BaseActivity {
 
                 }
             });
+
         }
 
     }

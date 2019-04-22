@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:paddingTop="@dimen/dp_23"
     android:orientation="vertical"
-    android:background="@color/bgcolorGray">
+    android:background="@drawable/bg_home">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,6 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <android.support.v4.widget.NestedScrollView
+            android:background="@color/colorBgGray"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

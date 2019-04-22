@@ -24,7 +24,6 @@ import com.nado.parking.ui.device.DeviceXingChengListActivity;
  */
 public class DeviceFragment extends BaseFragment implements View.OnClickListener {
     private static final String TAG = "DeviceFragment";
-    private com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout trlFragmentHome;
     private android.widget.LinearLayout passdevice;
     private android.widget.TextView device;
     private android.widget.RelativeLayout rlMore;
@@ -46,6 +45,12 @@ public class DeviceFragment extends BaseFragment implements View.OnClickListener
     private LinearLayout liJc;
     private LinearLayout liCk;
     private LinearLayout liBj;
+    private RelativeLayout rlLayoutTopBackBar;
+    private LinearLayout llLayoutTopBackBarBack;
+    private TextView tvLayoutTopBackBarStart;
+    private TextView tvLayoutTopBackBarTitle;
+    private TextView tvLayoutTopBackBarEnd;
+    private TextView tvLayoutBackTopBarOperate;
 
 
     @Override
@@ -60,8 +65,6 @@ public class DeviceFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void initView() {
-
-        trlFragmentHome = (TwinklingRefreshLayout) byId(R.id.trl_fragment_home);
         passdevice = (LinearLayout) byId(R.id.passdevice);
         device = (TextView) byId(R.id.device);
         rlMore = (RelativeLayout) byId(R.id.rl_more);
@@ -75,6 +78,13 @@ public class DeviceFragment extends BaseFragment implements View.OnClickListener
         liJc = (LinearLayout) findViewById(R.id.li_jc);
         liCk = (LinearLayout) findViewById(R.id.li_ck);
         liBj = (LinearLayout) findViewById(R.id.li_bj);
+        rlLayoutTopBackBar = (RelativeLayout) findViewById(R.id.rl_layout_top_back_bar);
+        llLayoutTopBackBarBack = (LinearLayout) findViewById(R.id.ll_layout_top_back_bar_back);
+        tvLayoutTopBackBarStart = (TextView) findViewById(R.id.tv_layout_top_back_bar_start);
+        tvLayoutTopBackBarTitle = (TextView) findViewById(R.id.tv_layout_top_back_bar_title);
+        tvLayoutTopBackBarEnd = (TextView) findViewById(R.id.tv_layout_top_back_bar_end);
+        tvLayoutBackTopBarOperate = (TextView) findViewById(R.id.tv_layout_back_top_bar_operate);
+        tvLayoutTopBackBarTitle.setText("设备");
     }
 
     @Override
@@ -84,7 +94,7 @@ public class DeviceFragment extends BaseFragment implements View.OnClickListener
     }
     public void initDevice(){
         if (AccountManager.sUserBean != null) {
-            if(AccountManager.sUserBean.obd_id!=null&&!"".equals(AccountManager.sUserBean.obd_id)){
+            if(AccountManager.sUserBean.obd_isbind!=null&&!"0".equals(AccountManager.sUserBean.obd_isbind)){
                 device.setText("查看OBD详情");
             }else{
                 passdevice.setBackgroundResource(R.drawable.noobd);

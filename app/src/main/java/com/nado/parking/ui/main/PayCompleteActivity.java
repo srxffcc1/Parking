@@ -114,7 +114,6 @@ public class PayCompleteActivity extends BaseActivity {
 
    private void completeExit(){
        EventBus.getDefault().post(new UpdatePayStatusEvent());
-       startActivity(new Intent(mActivity,MainActivity.class));
        finish();
    }
 

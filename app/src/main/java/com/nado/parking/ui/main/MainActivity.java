@@ -121,14 +121,14 @@ public class MainActivity extends BaseActivity {
                     iconIV.setImageResource(R.drawable.tab_icon_one);
                     break;
                 case 1:
-                    iconIV.setImageResource(R.drawable.tab_icon_two);
-                    break;
-                case 2:
                     iconIV.setImageResource(R.drawable.tab_icon_three);
                     break;
-                case 3:
+                case 2:
                     iconIV.setImageResource(R.drawable.tab_icon_four);
                     break;
+//                case 3:
+//                    iconIV.setImageResource(R.drawable.tab_icon_four);
+//                    break;
 
             }
             TabLayout.Tab tab = mMainTL.newTab();
@@ -136,7 +136,7 @@ public class MainActivity extends BaseActivity {
             mMainTL.addTab(tab);
         }
         mFragmentList.add(new HomeFragment());
-        mFragmentList.add(new PackFragment());
+//        mFragmentList.add(new PackFragment());
         mFragmentList.add(new DeviceFragment());
         mFragmentList.add(new MineFragment());
         mMainAdapter = new VpFragmentAdapter(getSupportFragmentManager(), mFragmentList);

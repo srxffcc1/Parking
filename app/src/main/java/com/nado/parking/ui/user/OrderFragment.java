@@ -34,6 +34,7 @@ import com.nado.parking.ui.main.PayAllActivity;
 import com.nado.parking.ui.main.PayAllReleaseActivity;
 import com.nado.parking.ui.main.PayCompleteActivity;
 import com.nado.parking.ui.pay.DianPayActivity;
+import com.nado.parking.util.DialogUtil;
 import com.nado.parking.util.DisplayUtil;
 import com.nado.parking.util.LogUtil;
 import com.nado.parking.util.ToastUtil;
@@ -102,6 +103,7 @@ public class OrderFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRefreshEvent(OrderEvent wechatPayEvent) {
         getOrderList(1);
+        DialogUtil.hideProgress();
     }
 
     private void getOrderList(int page) {
@@ -167,6 +169,8 @@ public class OrderFragment extends BaseFragment {
     }
 
     private void cancelOrder(String order_id) {
+
+        DialogUtil.showUnCancelableProgress(mActivity, "订单取消中");
         Map<String, String> map = new HashMap<>();
         if (AccountManager.sUserBean != null) {
             map.put("customer_id", AccountManager.sUserBean.getId());

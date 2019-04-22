@@ -41,7 +41,7 @@ public class ShuiPayActivity extends BaseActivity {
     private boolean needpayflag=true;
     private TextView tvLayoutTopBackBarStart;
     private TextView whichfei;
-
+    private String order_idnoew;
     @Override
     protected int getContentViewId() {
         return R.layout.activity_shuipay;
@@ -109,7 +109,7 @@ public class ShuiPayActivity extends BaseActivity {
     private void buildOrder() {
         Map<String, String> map = new HashMap<>();
         map.put("customer_id", AccountManager.sUserBean.getId());
-        map.put("company_id", getIntent().getStringExtra("company"));
+        map.put("company_id", getIntent().getStringExtra("company_id"));
         map.put("wecaccount", getIntent().getStringExtra("wecaccount"));
         map.put("czmoney", getIntent().getStringExtra("totalamount"));
         map.put("type", "1");
@@ -126,6 +126,7 @@ public class ShuiPayActivity extends BaseActivity {
                         String pervalue = getIntent().getStringExtra("totalamount");//充值金额
                         String url = "index.php?g=app&m=life&a=goodsPay";
                         Map<String, String> postmap = new HashMap<>();
+                        order_idnoew=order_id;
                         postmap.put("customer_id",AccountManager.sUserBean.getId());
                         postmap.put("paymm",pervalue);
                         postmap.put("url",url);
@@ -151,8 +152,35 @@ public class ShuiPayActivity extends BaseActivity {
         //充值成功的返回
         if(requestCode==PayAllActivity.START_PAY){
             if(resultCode== Activity.RESULT_OK){
+                success();
                 finish();
             }
         }
+    }
+    private void success() {
+//        Map<String, String> map = new HashMap<>();
+//        map.put("user_id", AccountManager.sUserBean.getId());
+//        map.put("order_sn", order_idnoew);
+//        RequestManager.mRetrofitManager.createRequest(RetrofitRequestInterface.class).successDian(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
+//            @Override
+//            public void onSuccess(String response) {
+//                try {
+//                    JSONObject res = new JSONObject(response);
+//                    int code = res.getInt("code");
+//                    String info = res.getString("info");
+//                    if (code == 0) {
+//
+//                    }
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onError(Throwable t) {
+//
+//            }
+//        });
     }
 }

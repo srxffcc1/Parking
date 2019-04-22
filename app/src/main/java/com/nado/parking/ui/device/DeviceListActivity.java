@@ -6,6 +6,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.hss01248.dialog.StyledDialog;
+import com.hss01248.dialog.interfaces.MyDialogListener;
 import com.nado.parking.R;
 import com.nado.parking.base.BaseActivity;
 import com.nado.parking.manager.AccountManager;
@@ -67,13 +69,22 @@ public class DeviceListActivity extends BaseActivity {
         hasobd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                unbind();
+                StyledDialog.buildIosAlert("操作", "是否解除绑定", new MyDialogListener() {
+                    @Override
+                    public void onFirst() {
+                        unbind();
+                    }
+
+                    @Override
+                    public void onSecond() {
+
+                    }
+                }).setBtnText("确定","取消").show();
             }
         });
         tvLayoutTopBackBarEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 startActivity(new Intent(mActivity, DeviceBindActivity.class));
             }
         });

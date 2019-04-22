@@ -443,7 +443,6 @@ public class PayAllReleaseActivity extends BaseActivity {
         while (it.hasNext()) {
             String key = it.next();
             if (!"url".equals(key) && !"paytypekey".equals(key) && !"paymm".equals(key)) {
-
                 String value = bundle.getString(key);
                 intent.putExtra(key, value);
 

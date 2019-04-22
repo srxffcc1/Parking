@@ -12,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fondesa.recyclerviewdivider.RecyclerViewDivider;
+import com.hss01248.dialog.StyledDialog;
+import com.hss01248.dialog.interfaces.MyDialogListener;
 import com.nado.parking.R;
 import com.nado.parking.adapter.recycler.RecyclerCommonAdapter;
 import com.nado.parking.adapter.recycler.base.ViewHolder;
@@ -22,6 +24,7 @@ import com.nado.parking.manager.AccountManager;
 import com.nado.parking.manager.RequestManager;
 import com.nado.parking.net.RetrofitCallBack;
 import com.nado.parking.net.RetrofitRequestInterface;
+import com.nado.parking.util.DialogUtil;
 import com.nado.parking.util.DisplayUtil;
 import com.nado.parking.widget.DividerItemDecoration;
 
@@ -62,11 +65,19 @@ public class DianHuPayListActivity extends BaseActivity {
         tvLayoutBackTopBarOperate = (TextView) findViewById(R.id.tv_layout_back_top_bar_operate);
         list = (RecyclerView) findViewById(R.id.list);
         tvLayoutTopBackBarTitle.setText("选择户号缴费");
+        tvLayoutTopBackBarEnd.setText("添加");
     }
 
     @Override
     public void initData() {
+        StyledDialog.init(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         getList();
+
     }
 
     private void getList() {
@@ -113,7 +124,12 @@ public class DianHuPayListActivity extends BaseActivity {
 
     @Override
     public void initEvent() {
-
+        tvLayoutTopBackBarEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mActivity, DianBindActivity.class).putExtra("type","电"));
+            }
+        });
     }
 
     private void showRecycleView() {
@@ -131,7 +147,15 @@ public class DianHuPayListActivity extends BaseActivity {
                         @Override
                         public void onClick(View v) {
 
+                            DialogUtil.showUnCancelableProgress(mActivity, "查询中");
                             sendSearchOrder(carChoiceBean);
+                        }
+                    });
+                    holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            deleteHuHao(carChoiceBean);
+                            return true;
                         }
                     });
                 }
@@ -147,7 +171,50 @@ public class DianHuPayListActivity extends BaseActivity {
         }
     }
 
+    private void deleteHuHao(final DianHuHao carChoiceBean) {
+        StyledDialog.buildIosAlert("操作", "是否解除绑定该户号", new MyDialogListener() {
+            @Override
+            public void onFirst() {
+
+                toDelete(carChoiceBean);
+            }
+
+            @Override
+            public void onSecond() {
+            }
+        }).setBtnText("确定","取消").show();
+    }
+
+    private void toDelete(DianHuHao carChoiceBean) {
+        Map<String, String> map = new HashMap<>();
+        map.put("userid", AccountManager.sUserBean.getId());
+        map.put("id", carChoiceBean.id);
+        RequestManager.mRetrofitManager.createRequest(RetrofitRequestInterface.class).deleteDian(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    JSONObject res = new JSONObject(response);
+                    int code = res.getInt("code");
+                    String info = res.getString("info");
+                    if (code == 0) {
+                        getList();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable t) {
+
+            }
+        });
+    }
+
     public long starttime = 0;
+
+
 
     public void sendSearchOrder(final DianHuHao bean) {
         Map<String, String> map = new HashMap<>();
@@ -164,6 +231,8 @@ public class DianHuPayListActivity extends BaseActivity {
                         String stockordernumber=res.getJSONObject("data").getString("stockordernumber");
                         chechNeedPay(bean,stockordernumber);
                     }else{
+
+                        DialogUtil.hideProgress();
                         Toast.makeText(getBaseContext(), "查询不成功", Toast.LENGTH_SHORT).show();
                     }
 //                    if (Status) {
@@ -174,6 +243,8 @@ public class DianHuPayListActivity extends BaseActivity {
 //                    }
 
                 } catch (JSONException e) {
+
+                    DialogUtil.hideProgress();
                     e.printStackTrace();
                 }
             }
@@ -223,11 +294,10 @@ public class DianHuPayListActivity extends BaseActivity {
                         intent.putExtra("company",hubean.company);
                         intent.putExtra("wecaccount",hubean.wecacount);
                         intent.putExtra("totalamount",bean.totalamount);
-                        intent.putExtra("company",hubean.company);
                         if (totalamount==null||"0".equals(totalamount)||"null".equals(totalamount)) {
 
                             //假装欠费
-                            intent.putExtra("delayfee","0.0.1");
+                            intent.putExtra("delayfee","0.01");
                             intent.putExtra("wecbillmoney","0.01");
                             intent.putExtra("needpayflag", true);
                             intent.putExtra("totalamount","0.01");
@@ -237,12 +307,17 @@ public class DianHuPayListActivity extends BaseActivity {
                         } else {
                             intent.putExtra("needpayflag", true);
                         }
+
+                        DialogUtil.hideProgress();
                         startActivity(intent);
                     } else {
 
+                        DialogUtil.hideProgress();
                     }
 
                 } catch (JSONException e) {
+
+                    DialogUtil.hideProgress();
                     e.printStackTrace();
                 }
             }

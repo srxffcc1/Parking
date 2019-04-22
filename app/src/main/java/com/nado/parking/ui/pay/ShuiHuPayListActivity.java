@@ -12,16 +12,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fondesa.recyclerviewdivider.RecyclerViewDivider;
+import com.hss01248.dialog.StyledDialog;
+import com.hss01248.dialog.interfaces.MyDialogListener;
 import com.nado.parking.R;
 import com.nado.parking.adapter.recycler.RecyclerCommonAdapter;
 import com.nado.parking.adapter.recycler.base.ViewHolder;
 import com.nado.parking.base.BaseActivity;
+import com.nado.parking.bean.DianHuHao;
 import com.nado.parking.bean.ShuiHuHao;
 import com.nado.parking.bean.ShuiQianFei;
 import com.nado.parking.manager.AccountManager;
 import com.nado.parking.manager.RequestManager;
 import com.nado.parking.net.RetrofitCallBack;
 import com.nado.parking.net.RetrofitRequestInterface;
+import com.nado.parking.util.DialogUtil;
 import com.nado.parking.util.DisplayUtil;
 import com.nado.parking.widget.DividerItemDecoration;
 
@@ -62,10 +66,17 @@ public class ShuiHuPayListActivity extends BaseActivity {
         tvLayoutBackTopBarOperate = (TextView) findViewById(R.id.tv_layout_back_top_bar_operate);
         list = (RecyclerView) findViewById(R.id.list);
         tvLayoutTopBackBarTitle.setText("选择户号缴费");
+        tvLayoutTopBackBarEnd.setText("添加");
     }
 
     @Override
     public void initData() {
+        StyledDialog.init(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         getList();
     }
 
@@ -116,7 +127,12 @@ public class ShuiHuPayListActivity extends BaseActivity {
 
     @Override
     public void initEvent() {
-
+        tvLayoutTopBackBarEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mActivity, ShuiBindActivity.class).putExtra("type","水"));
+            }
+        });
     }
     private void showRecycleView() {
         if (myAdapter == null) {
@@ -134,7 +150,15 @@ public class ShuiHuPayListActivity extends BaseActivity {
                         @Override
                         public void onClick(View v) {
 
+                            DialogUtil.showUnCancelableProgress(mActivity, "查询中");
                             sendSearchOrder(carChoiceBean);
+                        }
+                    });
+                    holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            deleteHuHao(carChoiceBean);
+                            return true;
                         }
                     });
                 }
@@ -168,8 +192,54 @@ public class ShuiHuPayListActivity extends BaseActivity {
                         String stockordernumber=res.getJSONObject("data").getString("stockordernumber");
                         starttime=System.currentTimeMillis();
                         chechNeedPay(bean,stockordernumber);
+
                     }else{
+                        DialogUtil.hideProgress();
                         Toast.makeText(getBaseContext(),"查询不成功",Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (JSONException e) {
+                    DialogUtil.hideProgress();
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable t) {
+
+            }
+        });
+
+    }
+
+
+    private void deleteHuHao(final ShuiHuHao carChoiceBean) {
+        StyledDialog.buildIosAlert("操作", "是否解除绑定该户号", new MyDialogListener() {
+            @Override
+            public void onFirst() {
+                toDelete(carChoiceBean);
+            }
+
+            @Override
+            public void onSecond() {
+
+            }
+        }).setBtnText("确定","取消").show();
+    }
+
+    private void toDelete(ShuiHuHao carChoiceBean) {
+        Map<String, String> map = new HashMap<>();
+        map.put("customer_id", AccountManager.sUserBean.getId());
+        map.put("id", carChoiceBean.id);
+        RequestManager.mRetrofitManager.createRequest(RetrofitRequestInterface.class).deleteShui(RequestManager.encryptParams(map)).enqueue(new RetrofitCallBack() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    JSONObject res = new JSONObject(response);
+                    int code = res.getInt("code");
+                    String info = res.getString("info");
+                    if (code == 0) {
+                        getList();
                     }
 
                 } catch (JSONException e) {
@@ -182,8 +252,9 @@ public class ShuiHuPayListActivity extends BaseActivity {
 
             }
         });
-
     }
+
+
     //需要先用一个下单id
     public void chechNeedPay(final ShuiHuHao hubean, final String stockordernumber){
         Map<String, String> map = new HashMap<>();
@@ -194,11 +265,10 @@ public class ShuiHuPayListActivity extends BaseActivity {
             public void onSuccess(String response) {
                 try {
                     JSONObject res = new JSONObject(response);
-                    int code = res.getInt("code");
-                    String info = res.getString("info");
-                    if (code == 0) {
+                    String Status = res.getString("Status");
+                    if (Status.equals(Status)) {
 
-                        JSONObject jsonObject=res.getJSONObject("data");
+                        JSONObject jsonObject=res.getJSONObject("Content");
                         String totalamount=jsonObject.optString("totalamount");
 
                         ShuiQianFei bean=new ShuiQianFei();
@@ -206,22 +276,24 @@ public class ShuiHuPayListActivity extends BaseActivity {
                         bean.totalamount=jsonObject.optString("totalamount");
                         bean.wecbalance=jsonObject.optString("wecbalance");
                         bean.useraddress=jsonObject.optString("useraddress");
-                        bean.company=jsonObject.optString("company");
-                        bean.company_id=jsonObject.optString("company_id");
-                        bean.wecaccount=jsonObject.optString("wecaccount");
+                        bean.company=hubean.company;
+                        bean.company_id=hubean.product_id;
+                        bean.wecaccount=hubean.wecaccount;
 
                         Intent intent=new Intent(getBaseContext(),ShuiPayActivity.class);
                         buildIntent(intent,bean);
                         if (totalamount==null||"0".equals(totalamount)||"null".equals(totalamount)) {
                             //假装欠费
                             intent.putExtra("needpayflag", true);
-                            intent.putExtra("totalamount","1");
+                            intent.putExtra("totalamount","0.01");
 //                            intent.putExtra("needpayflag",false);
                         }else{
                             intent.putExtra("needpayflag",true);
                         }
+                        DialogUtil.hideProgress();
                         startActivity(intent);
                     }else{
+                        DialogUtil.hideProgress();
                         if(System.currentTimeMillis()-starttime>10000){//说明查询失败多半第三方问题
 
                         }else{
@@ -230,6 +302,7 @@ public class ShuiHuPayListActivity extends BaseActivity {
                     }
 
                 } catch (JSONException e) {
+                    DialogUtil.hideProgress();
                     e.printStackTrace();
                 }
             }

@@ -32,6 +32,7 @@ import com.nado.parking.net.RetrofitRequestInterface;
 import com.nado.parking.ui.pay.PhonePayActivity;
 import com.nado.parking.ui.pay.ShuiDianPayMenuActivity;
 import com.nado.parking.ui.pay.YouKaPayActivity;
+import com.nado.parking.ui.user.JingXuanActivity;
 import com.nado.parking.ui.user.PeccancyQueryActivity;
 import com.nado.parking.ui.user.account.LoginActivity;
 import com.nado.parking.util.DisplayUtil;
@@ -58,7 +59,6 @@ import java.util.Map;
  */
 public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private static final String TAG = "HomeFragment";
-    private com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout trlFragmentHome;
     private com.nado.parking.widget.BannerLayout blFragmentHome;
     private android.widget.LinearLayout liYkcz;
     private android.widget.LinearLayout liHfcz;
@@ -97,7 +97,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void initView() {
-        trlFragmentHome = (TwinklingRefreshLayout) byId(R.id.trl_fragment_home);
         blFragmentHome = (BannerLayout) byId(R.id.bl_fragment_home);
         liYkcz = (LinearLayout) byId(R.id.li_ykcz);
         liHfcz = (LinearLayout) byId(R.id.li_hfcz);
@@ -137,6 +136,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void initEvent() {
+        rlMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mActivity, JingXuanActivity.class));
+            }
+        });
         changeCity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,25 +154,25 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 startActivity(new Intent(mActivity, PeccancyQueryActivity.class));
             }
         });
-        trlFragmentHome.setOnRefreshListener(new RefreshListenerAdapter() {
-            @Override
-            public void onRefresh(TwinklingRefreshLayout refreshLayout) {
-                super.onRefresh(refreshLayout);
-                mDataStatus = STATUS_REFRESH;
-                mPage=1;
-                trlFragmentHome.finishLoadmore();
-                trlFragmentHome.finishRefreshing();
-            }
-
-            @Override
-            public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
-                super.onLoadMore(refreshLayout);
-                mPage++;
-                trlFragmentHome.finishLoadmore();
-                trlFragmentHome.finishRefreshing();
-
-            }
-        });
+//        trlFragmentHome.setOnRefreshListener(new RefreshListenerAdapter() {
+//            @Override
+//            public void onRefresh(TwinklingRefreshLayout refreshLayout) {
+//                super.onRefresh(refreshLayout);
+//                mDataStatus = STATUS_REFRESH;
+//                mPage=1;
+//                trlFragmentHome.finishLoadmore();
+//                trlFragmentHome.finishRefreshing();
+//            }
+//
+//            @Override
+//            public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
+//                super.onLoadMore(refreshLayout);
+//                mPage++;
+//                trlFragmentHome.finishLoadmore();
+//                trlFragmentHome.finishRefreshing();
+//
+//            }
+//        });
         liHfcz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -227,7 +232,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 LogUtil.e(TAG, response);
                 switch (mDataStatus) {
                     case STATUS_REFRESH:
-                        trlFragmentHome.finishRefreshing();
+//                        trlFragmentHome.finishRefreshing();
                         break;
 //                    case STATUS_LOAD:
 //                        trlFragmentHome.finishLoadmore();
@@ -324,7 +329,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 LogUtil.e(TAG, response);
                 switch (mDataStatus) {
                     case STATUS_REFRESH:
-                        trlFragmentHome.finishRefreshing();
+//                        trlFragmentHome.finishRefreshing();
                         break;
 //                    case STATUS_LOAD:
 //                        trlFragmentHome.finishLoadmore();

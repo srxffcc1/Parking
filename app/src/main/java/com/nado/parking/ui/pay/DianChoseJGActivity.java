@@ -2,6 +2,7 @@ package com.nado.parking.ui.pay;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.fondesa.recyclerviewdivider.RecyclerViewDivider;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.nado.parking.R;
 import com.nado.parking.adapter.recycler.RecyclerCommonAdapter;
@@ -143,7 +145,7 @@ public class DianChoseJGActivity extends BaseActivity {
 
             };
 
-            list.addItemDecoration(new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST, (int) DisplayUtil.dpToPx(mActivity, 1), ContextCompat.getColor(mActivity, R.color.colorLine), false, 2));
+            list.addItemDecoration(RecyclerViewDivider.with(this).color(Color.parseColor("#909090")).build());
             list.setAdapter(myAdapter);
             list.setLayoutManager(new LinearLayoutManager(mActivity));
         }else{

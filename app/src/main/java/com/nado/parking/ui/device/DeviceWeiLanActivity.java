@@ -103,7 +103,6 @@ public class DeviceWeiLanActivity extends BaseActivity {
         add = (TextView) findViewById(R.id.add);
         submit = (TextView) findViewById(R.id.submit);
         railNamet = (TextView) findViewById(R.id.rail_namet);
-        tvLayoutTopBackBarTitle.setText("围栏");
     }
 
     public void saveWeiLan() {
@@ -173,6 +172,12 @@ public class DeviceWeiLanActivity extends BaseActivity {
 
     @Override
     public void initEvent() {
+        findViewById(R.id.backli).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         sub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

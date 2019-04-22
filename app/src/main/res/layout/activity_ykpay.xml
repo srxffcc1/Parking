@@ -31,16 +31,20 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:text="绑定的卡号"/>
-                    <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:text="更换油卡"/>-->
+
                 </LinearLayout>
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:orientation="vertical"
+                    android:gravity="center_horizontal"
                     android:layout_margin="10dp"
                     android:layout_height="150dp">
+                    <ImageView
+                        android:id="@+id/jiayoukaimg"
+                        android:src="@drawable/jiayouka"
+                        android:layout_width="match_parent"
+                        android:scaleType="fitCenter"
+                        android:layout_height="match_parent" />
                     <TextView
                         android:id="@+id/youkaadd"
                         android:background="@drawable/text_boder_r_white"
@@ -48,13 +52,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="添加油卡+"/>
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
 
-                    </RelativeLayout>
 
-                </LinearLayout>
+                </RelativeLayout>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="1dp"

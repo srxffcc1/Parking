@@ -164,7 +164,6 @@ public class DeviceWeiLanListActivity extends BaseActivity {
                     holder.setText(R.id.name,"名称："+carChoiceBean.rail_name);
                     holder.setText(R.id.radii,"半径"+carChoiceBean.radii+"米");
                     holder.setText(R.id.address,"地址："+carChoiceBean.address);
-                    holder.setText(R.id.name,carChoiceBean.rail_name);
                     if("1".equals(carChoiceBean.report_type)){
                         holder.setChecked(R.id.mapjin,true);
                     }
